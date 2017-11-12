@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="SafeBySimplify.SafeUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SafeBySimplify"
+             xmlns:safeUiLib="clr-namespace:SafeUiLib;assembly=SafeUiLib"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Style="{StaticResource Level1HeadingLableStyle}">
+            <Label.Content>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White"/>
+                    <Label Content="Seetha"></Label>
+                </DockPanel>
+            </Label.Content>
+        </Label>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Add"/>
+            <TextBox Grid.Column="1" safeUiLib:HintingTextProvidingObject.HintText="Search" Style="{StaticResource TextBoxWithHintStyle}"/>
+        </Grid>
+        <local:RecordViewUserControl Grid.Row="2" x:Name="test"/>
+    </Grid>
+</UserControl>
