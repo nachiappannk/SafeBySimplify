@@ -9,7 +9,7 @@ namespace SafeViewModel
 {
     public class WorkFlowViewModel : INotifyPropertyChanged
     {
-        private readonly ISafe _safe;
+        private readonly ISafeProvider _safeProvider;
         private EntryStepViewModel entryStepViewModel = new EntryStepViewModel();
         private readonly SettingsStepViewModel _settingsStepViewModel;
 
@@ -22,23 +22,22 @@ namespace SafeViewModel
             {
                 if (_currentStep != value)
                 {
+                    _currentStep?.OnExit();
                     _currentStep = value;
+                    _currentStep?.OnEntry();
                     FirePropertyChanged();
                 }
             }
         }
 
-        public WorkFlowViewModel(ISafe safe)
+        public WorkFlowViewModel(ISafeProvider safeProvider)
         {
-            _safe = safe;
+            _safeProvider = safeProvider;
             CurrentStep = entryStepViewModel;
-            _settingsStepViewModel = new SettingsStepViewModel(_safe);
-
+            _settingsStepViewModel = new SettingsStepViewModel(_safeProvider);
 
             entryStepViewModel.GoToSettingsRequested += () =>
             {
-                entryStepViewModel.OnExit();
-                _settingsStepViewModel.OnEntry();
                 CurrentStep = _settingsStepViewModel;
             };
         }
@@ -49,19 +48,6 @@ namespace SafeViewModel
         protected virtual void FirePropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public abstract class WorkFlowStepViewModel
-    {
-        public virtual void OnEntry()
-        {
-
-        }
-
-        public virtual void OnExit()
-        {
-
         }
     }
 
@@ -78,22 +64,5 @@ namespace SafeViewModel
                 GoToSettingsRequested?.Invoke();
             });
         }
-    }
-
-    public class SettingsStepViewModel : WorkFlowStepViewModel
-    {
-        private readonly IHasWorkingDirectory _hasWorkingDirectory;
-
-        public SettingsStepViewModel(IHasWorkingDirectory hasWorkingDirectory)
-        {
-            _hasWorkingDirectory = hasWorkingDirectory;
-        }
-
-        public override void OnEntry()
-        {
-            WorkSpaceDirectory = _hasWorkingDirectory.WorkingDirectory;
-        }
-
-        public string WorkSpaceDirectory { get; set; }
     }
 }

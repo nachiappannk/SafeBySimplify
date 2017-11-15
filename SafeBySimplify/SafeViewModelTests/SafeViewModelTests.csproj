@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestTools\PropertyChangedEventExtentions.cs" />
+    <Compile Include="SettingsStepViewModelTests.cs" />
     <Compile Include="WorkflowTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
