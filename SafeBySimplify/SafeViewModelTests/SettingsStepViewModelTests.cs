@@ -50,27 +50,27 @@ namespace SafeViewModelTests
         }
 
         [Test]
-        public void When_changing_the_workspace_and_discarding_changes_we_go_to_initial_state()
+        public void When_changing_workspace_and_discarding_we_go_to_initial_state_and_workspace_is_with_old_value_and_no_write_is_made_to_lib()
         {
             var initalValue = _settingsStepViewModel.WorkSpaceDirectory;
             _hasWorkingDirectory.ClearReceivedCalls();
-
-            _settingsStepViewModel.WorkSpaceDirectory = @"D:\TFS_New";
-
             var saveCommandEventInfoFactory = _settingsStepViewModel.SaveCommand.GetCommandEventInfoFactory();
             var discardCommandEventInfoFactory = _settingsStepViewModel.DiscardCommand.GetCommandEventInfoFactory();
             var okCommandEventInfoFactory = _settingsStepViewModel.OkCommand.GetCommandEventInfoFactory();
-            var s = _settingsStepViewModel.GetPropertyChangedEventInfoFactory<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
+            var propertyChangedEventInfoFactory = _settingsStepViewModel.GetPropertyChangedEventInfoFactory<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
+
+
+            _settingsStepViewModel.WorkSpaceDirectory = @"D:\TFS_New";
+
+
 
             Assume.That(_settingsStepViewModel.DiscardCommand.CanExecute());
             _settingsStepViewModel.DiscardCommand.Execute();
-
             _hasWorkingDirectory.DidNotReceive().WorkingDirectory = Arg.Any<string>();
 
-            var x = s.Invoke();
-
-            Assert.True(x.EventReceived);
-            Assert.AreEqual(initalValue, x.Value);
+            var propertyChangedEventInfo = propertyChangedEventInfoFactory.Invoke();
+            Assert.True(propertyChangedEventInfo.EventReceived);
+            Assert.AreEqual(initalValue, propertyChangedEventInfo.Value);
 
             Assert.AreEqual(initalValue, _settingsStepViewModel.WorkSpaceDirectory);
 
@@ -78,6 +78,36 @@ namespace SafeViewModelTests
             discardCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
             okCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(true);
         }
+
+
+        [Test]
+        public void When_changing_workspace_and_saving_we_go_to_initial_state_and_workspace_is_the_new_value_and_write_is_made_to_lib()
+        {
+            var initalValue = _settingsStepViewModel.WorkSpaceDirectory;
+            _hasWorkingDirectory.ClearReceivedCalls();
+            var saveCommandEventInfoFactory = _settingsStepViewModel.SaveCommand.GetCommandEventInfoFactory();
+            var discardCommandEventInfoFactory = _settingsStepViewModel.DiscardCommand.GetCommandEventInfoFactory();
+            var okCommandEventInfoFactory = _settingsStepViewModel.OkCommand.GetCommandEventInfoFactory();
+            var propertyChangedEventInfoFactory = _settingsStepViewModel.GetPropertyChangedEventInfoFactory<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
+
+
+            var newValueOfWorkSpaceDirectory = @"D:\TFS_New";
+            _settingsStepViewModel.WorkSpaceDirectory = newValueOfWorkSpaceDirectory;
+
+
+
+            Assume.That(_settingsStepViewModel.SaveCommand.CanExecute());
+            _settingsStepViewModel.SaveCommand.Execute();
+            _hasWorkingDirectory.Received().WorkingDirectory = newValueOfWorkSpaceDirectory;
+
+            Assert.AreEqual(newValueOfWorkSpaceDirectory, _settingsStepViewModel.WorkSpaceDirectory);
+
+
+            saveCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
+            discardCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
+            okCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(true);
+        }
+
 
 
         [Test]

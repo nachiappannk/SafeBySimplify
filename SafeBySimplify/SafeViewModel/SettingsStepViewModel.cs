@@ -54,7 +54,7 @@ namespace SafeViewModel
         public SettingsStepViewModel(IHasWorkingDirectory hasWorkingDirectory)
         {
             _hasWorkingDirectory = hasWorkingDirectory;
-            SaveCommand = new DelegateCommand(() => { }, () => !IsInSavedState);
+            SaveCommand = new DelegateCommand(Save, () => !IsInSavedState);
             DiscardCommand = new DelegateCommand(Discard, () => !IsInSavedState);
             OkCommand = new DelegateCommand(() => { }, ()=> IsInSavedState);
         }
@@ -62,6 +62,13 @@ namespace SafeViewModel
         private void Discard()
         {
             WorkSpaceDirectory = _savedValueOfWorkingDirectory;
+            IsInSavedState = true;
+        }
+
+        private void Save()
+        {
+            if (!IsInSavedState) _hasWorkingDirectory.WorkingDirectory = WorkSpaceDirectory;
+            _savedValueOfWorkingDirectory = WorkSpaceDirectory;
             IsInSavedState = true;
         }
 
