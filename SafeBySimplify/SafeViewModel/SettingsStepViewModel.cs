@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Prism.Commands;
 using SafeModel;
@@ -8,6 +9,8 @@ namespace SafeViewModel
 {
     public class SettingsStepViewModel : WorkFlowStepViewModel, INotifyPropertyChanged
     {
+        public event Action GoToEntryStepRequested;
+
         private readonly IHasWorkingDirectory _hasWorkingDirectory;
 
         private bool _isInSavedState = true;
@@ -56,7 +59,7 @@ namespace SafeViewModel
             _hasWorkingDirectory = hasWorkingDirectory;
             SaveCommand = new DelegateCommand(Save, () => !IsInSavedState);
             DiscardCommand = new DelegateCommand(Discard, () => !IsInSavedState);
-            OkCommand = new DelegateCommand(() => { }, ()=> IsInSavedState);
+            OkCommand = new DelegateCommand(Ok, ()=> IsInSavedState);
         }
 
         private void Discard()
@@ -70,6 +73,11 @@ namespace SafeViewModel
             if (!IsInSavedState) _hasWorkingDirectory.WorkingDirectory = WorkSpaceDirectory;
             _savedValueOfWorkingDirectory = WorkSpaceDirectory;
             IsInSavedState = true;
+        }
+
+        private void Ok()
+        {
+            GoToEntryStepRequested?.Invoke();
         }
 
         public override void OnEntry()

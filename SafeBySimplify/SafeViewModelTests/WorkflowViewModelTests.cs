@@ -10,7 +10,7 @@ using SafeViewModel;
 namespace SafeViewModelTests
 {
     [TestFixture]
-    public class WorkflowTests
+    public class WorkflowViewModelTests
     {
         private string InitialWorkingDirectory = @"D:\TFS";
         WorkFlowViewModel _workFlowViewModel;
@@ -49,6 +49,31 @@ namespace SafeViewModelTests
             
             var propertyChangedEventInfo = propertyChangedEventInfoFactory.Invoke();
             Assert.AreEqual(typeof(SettingsStepViewModel), propertyChangedEventInfo.Value.GetType());
+            Assert.AreEqual(true, propertyChangedEventInfo.EventReceived);
+        }
+
+
+        [Test]
+        public void When_in_settings_and_ok_command_is_made_then_the_entry_screen_is_settings()
+        {
+
+            
+            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
+            Assert.NotNull(entryStepViewModel, "Set Up error");
+            var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
+            Assert.AreEqual(true, canExecute, "Set Up error" + "Unable to go to settings");
+            entryStepViewModel.GoToSettingsCommand.Execute();
+            var settingsStepViewModel = _workFlowViewModel.CurrentStep as SettingsStepViewModel;
+            Assert.NotNull(settingsStepViewModel, "Set Up error");
+            var canExecute1 = settingsStepViewModel.OkCommand.CanExecute();
+            Assert.AreEqual(true, canExecute1, "Set Up error" + "Unable to go to entry");
+
+            var propertyChangedEventInfoFactory = _workFlowViewModel.GetPropertyChangedEventInfoFactory<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
+
+
+            settingsStepViewModel.OkCommand.Execute();
+            var propertyChangedEventInfo = propertyChangedEventInfoFactory.Invoke();
+            Assert.AreEqual(typeof(EntryStepViewModel), propertyChangedEventInfo.Value.GetType());
             Assert.AreEqual(true, propertyChangedEventInfo.EventReceived);
         }
     }

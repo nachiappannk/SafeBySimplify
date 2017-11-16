@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Prism.Commands;
 using SafeModel;
 using SafeViewModel.Annotations;
 
@@ -10,7 +8,7 @@ namespace SafeViewModel
     public class WorkFlowViewModel : INotifyPropertyChanged
     {
         private readonly ISafeProvider _safeProvider;
-        private EntryStepViewModel entryStepViewModel = new EntryStepViewModel();
+        private EntryStepViewModel _entryStepViewModel = new EntryStepViewModel();
         private readonly SettingsStepViewModel _settingsStepViewModel;
 
         private WorkFlowStepViewModel _currentStep;
@@ -33,12 +31,17 @@ namespace SafeViewModel
         public WorkFlowViewModel(ISafeProvider safeProvider)
         {
             _safeProvider = safeProvider;
-            CurrentStep = entryStepViewModel;
+            CurrentStep = _entryStepViewModel;
             _settingsStepViewModel = new SettingsStepViewModel(_safeProvider);
 
-            entryStepViewModel.GoToSettingsRequested += () =>
+            _entryStepViewModel.GoToSettingsRequested += () =>
             {
                 CurrentStep = _settingsStepViewModel;
+            };
+
+            _settingsStepViewModel.GoToEntryStepRequested += () =>
+            {
+                CurrentStep = _entryStepViewModel;
             };
         }
 
@@ -48,21 +51,6 @@ namespace SafeViewModel
         protected virtual void FirePropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public class EntryStepViewModel : WorkFlowStepViewModel
-    {
-        public event Action GoToSettingsRequested;
-
-        public DelegateCommand GoToSettingsCommand;
-
-        public EntryStepViewModel()
-        {
-            GoToSettingsCommand = new DelegateCommand(() =>
-            {
-                GoToSettingsRequested?.Invoke();
-            });
         }
     }
 }
