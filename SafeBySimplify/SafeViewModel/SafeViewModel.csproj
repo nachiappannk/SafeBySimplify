@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="EntryStepViewModel.cs" />
     <Compile Include="FileRecord.cs" />
+    <Compile Include="NotifiesPropertyChanged.cs" />
     <Compile Include="PasswordRecord.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

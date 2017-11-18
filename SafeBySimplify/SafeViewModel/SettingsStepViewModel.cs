@@ -7,7 +7,7 @@ using SafeViewModel.Annotations;
 
 namespace SafeViewModel
 {
-    public class SettingsStepViewModel : WorkFlowStepViewModel, INotifyPropertyChanged
+    public class SettingsStepViewModel : WorkFlowStepViewModel
     {
         public event Action GoToEntryStepRequested;
 
@@ -48,7 +48,7 @@ namespace SafeViewModel
                 if(value != _workingDirectory)
                 { 
                     _workingDirectory = value;
-                    OnPropertyChanged();
+                    FirePropertyChanged();
                 }
                 IsInSavedState = _savedValueOfWorkingDirectory == _workingDirectory;
             }
@@ -91,14 +91,6 @@ namespace SafeViewModel
             _savedValueOfWorkingDirectory = _hasWorkingDirectory.WorkingDirectory;
             WorkSpaceDirectory = _savedValueOfWorkingDirectory;
             IsInSavedState = true;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

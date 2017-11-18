@@ -1,6 +1,6 @@
 ﻿namespace SafeViewModel
 {
-    public abstract class WorkFlowStepViewModel
+    public abstract class WorkFlowStepViewModel : NotifiesPropertyChanged
     {
         public bool IsActive { get; private set; }
 

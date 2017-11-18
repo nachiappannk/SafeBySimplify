@@ -76,5 +76,19 @@ namespace SafeViewModelTests
             Assert.AreEqual(typeof(EntryStepViewModel), propertyChangedEventInfo.Value.GetType());
             Assert.AreEqual(true, propertyChangedEventInfo.EventReceived);
         }
+
+        [Test]
+        public void When_signed_up_with_correct_detail_then_safe_holder_is_initialized_and_app_moves_logged_in_mode()
+        {
+            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
+            entryStepViewModel.SignUpUserName = "SomeUserName";
+            entryStepViewModel.SignUpPassword = "SomePassword";
+            entryStepViewModel.SignUpConfirmPassword = "SomePassword";
+            var canExecute = entryStepViewModel.SignUpCommand.CanExecute();
+            entryStepViewModel.SignUpCommand.Execute();
+        }
     }
+
+
+
 }
