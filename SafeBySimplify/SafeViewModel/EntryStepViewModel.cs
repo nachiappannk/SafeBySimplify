@@ -4,31 +4,22 @@ using SafeModel;
 
 namespace SafeViewModel
 {
-    public class EntryStepViewModel : WorkFlowStepViewModel
+    public class SignUpViewModel : NotifiesPropertyChanged
     {
         private readonly ISafeProviderForNonExistingUser _safeProviderForNonExistingUser;
         public const string PasswordMismatchingErrorMessage = "Password and Confirm Password are different";
-        public event Action GoToSettingsRequested;
-
-        public DelegateCommand GoToSettingsCommand;
-
-        public EntryStepViewModel(ISafeProviderForNonExistingUser safeProviderForNonExistingUser)
-        {
-            _safeProviderForNonExistingUser = safeProviderForNonExistingUser;
-            GoToSettingsCommand = new DelegateCommand(() =>
-            {
-                GoToSettingsRequested?.Invoke();
-            });
-
-            SignUpCommand = new DelegateCommand(() =>
-                {
-
-                }, () => _canSignUp);
-        }
-
         private bool _canSignUp = false;
 
-        private string _signUpUserName;
+        public SignUpViewModel(ISafeProviderForNonExistingUser safeProviderForNonExistingUser)
+        {
+            _safeProviderForNonExistingUser = safeProviderForNonExistingUser;
+
+
+            SignUpCommand = new DelegateCommand(() =>
+            {
+
+            }, () => _canSignUp);
+        }
 
         private void ComputeCanSignUp()
         {
@@ -86,10 +77,13 @@ namespace SafeViewModel
             }
         }
 
+        private string _signUpUserName;
+
         public string SignUpUserName
         {
             get { return _signUpUserName; }
-            set {
+            set
+            {
                 if (_signUpUserName != value)
                 {
                     _signUpUserName = value;
@@ -98,14 +92,15 @@ namespace SafeViewModel
             }
         }
 
-        
+
 
         private string _signUpPassword;
 
         public string SignUpPassword
         {
             get { return _signUpPassword; }
-            set {
+            set
+            {
                 if (_signUpPassword != value)
                 {
                     _signUpPassword = value;
@@ -119,7 +114,8 @@ namespace SafeViewModel
         public string SignUpConfirmPassword
         {
             get { return _signUpConfirmPassword; }
-            set {
+            set
+            {
                 if (_signUpConfirmPassword != value)
                 {
                     _signUpConfirmPassword = value;
@@ -129,6 +125,31 @@ namespace SafeViewModel
         }
 
         public DelegateCommand SignUpCommand { get; set; }
+
+    }
+
+
+    public class EntryStepViewModel : WorkFlowStepViewModel
+    {
+        
+        public event Action GoToSettingsRequested;
+
+        public DelegateCommand GoToSettingsCommand;
+
+        public SignUpViewModel SignUpViewModel { get; set; }
+        
+
+        public EntryStepViewModel(ISafeProviderForNonExistingUser safeProviderForNonExistingUser)
+        {
+            GoToSettingsCommand = new DelegateCommand(() =>
+            {
+                GoToSettingsRequested?.Invoke();
+            });
+
+            SignUpViewModel = new SignUpViewModel(safeProviderForNonExistingUser);
+        }
+
+
         
     }
 }

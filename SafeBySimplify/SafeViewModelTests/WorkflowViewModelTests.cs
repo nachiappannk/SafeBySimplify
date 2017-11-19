@@ -80,11 +80,11 @@ namespace SafeViewModelTests
         public void When_signed_up_with_correct_detail_then_safe_holder_is_initialized_and_app_moves_logged_in_mode()
         {
             var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
-            entryStepViewModel.SignUpUserName = "SomeUserName";
-            entryStepViewModel.SignUpPassword = "SomePassword";
-            entryStepViewModel.SignUpConfirmPassword = "SomePassword";
-            var canExecute = entryStepViewModel.SignUpCommand.CanExecute();
-            entryStepViewModel.SignUpCommand.Execute();
+            entryStepViewModel.SignUpViewModel.SignUpUserName = "SomeUserName";
+            entryStepViewModel.SignUpViewModel.SignUpPassword = "SomePassword";
+            entryStepViewModel.SignUpViewModel.SignUpConfirmPassword = "SomePassword";
+            var canExecute = entryStepViewModel.SignUpViewModel.SignUpCommand.CanExecute();
+            entryStepViewModel.SignUpViewModel.SignUpCommand.Execute();
         }
     }
 

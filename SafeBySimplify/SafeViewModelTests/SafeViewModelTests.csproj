@@ -61,12 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntryStepViewModelTests.SignUpTests.cs" />
-    <Compile Include="EntryStepViewModelTests.SignUpTests.InCompleteSignUpTests.cs" />
-    <Compile Include="EntryStepViewModelTests.SignUpTests.PasswordsNonMatchingTests.cs" />
-    <Compile Include="EntryStepViewModelTests.SignUpTests.SunnyTests.cs" />
+    <Compile Include="SignUpViewModelTests.cs" />
+    <Compile Include="SignUpViewModelTests.InCompleteSignUpTests.cs" />
+    <Compile Include="SignUpViewModelTests.InvalidDetailsTests.cs" />
+    <Compile Include="SignUpViewModelTests.PasswordsNonMatchingTests.cs" />
+    <Compile Include="SignUpViewModelTests.SunnyTests.cs" />
     <Compile Include="TestTools\CommandAssertionExtentions.cs" />
-    <Compile Include="EntryStepViewModelTests.cs" />
     <Compile Include="TestTools\PropertyChangedEventExtentions.cs" />
     <Compile Include="SettingsStepViewModelTests.cs" />
     <Compile Include="WorkflowViewModelTests.cs" />
