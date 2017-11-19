@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SafeViewModel;
+using SafeViewModelTests.TestTools;
 
 namespace SafeViewModelTests
 {
@@ -14,17 +16,15 @@ namespace SafeViewModelTests
         public void When_sign_up_user_name_is_empty_sign_up_disabled(string userName, string password, string confirmPassword, bool expected)
         {
             EntryStepViewModel entryStepViewModel = new EntryStepViewModel();
-            var commandEventInfoFactory = entryStepViewModel.SignUpCommand.GetCommandEventInfoFactory();
+            var commandObserver = entryStepViewModel.SignUpCommand.GetDelegateCommandObserver();
 
             entryStepViewModel.SignUpUserName = userName;
             entryStepViewModel.SignUpPassword = password;
             entryStepViewModel.SignUpConfirmPassword = confirmPassword;
 
-            var comand = commandEventInfoFactory.Invoke();
-            Assert.AreEqual(expected,comand.WasEventReceived);
-            Assert.AreEqual(expected, comand.ValueOfCanExecuteOnEvent);
-            if(expected)Assert.True(comand.WasTheSenderCorrect);
-            //Assert.AreEqual(expected, entryStepViewModel.SignUpCommand.CanExecute());
+            Assert.AreEqual(expected, commandObserver.NumberOfEventsRecieved > 0);
+            Assert.AreEqual(expected, commandObserver.ValueOfCanExecuteOnLatestEvent);
+            commandObserver.AssetAllSendersWereCorrect();
         }
 
         public static void UserNameSetter(EntryStepViewModel viewModel, string value)

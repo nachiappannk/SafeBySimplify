@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace SafeViewModelTests
+namespace SafeViewModelTests.TestTools
 {
     public static class PropertyChangedEventExtentions
     {

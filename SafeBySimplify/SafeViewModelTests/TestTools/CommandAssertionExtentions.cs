@@ -1,45 +1,63 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Prism.Commands;
 
-namespace SafeViewModelTests
+namespace SafeViewModelTests.TestTools
 {
     public static  class CommandAssertionExtentions
     {
-        public static Func<CommandEventInfo> GetCommandEventInfoFactory(this DelegateCommand command)
+        public static CommandObserver GetDelegateCommandObserver(this DelegateCommand command)
         {
-            CommandEventInfo eventInfo = new CommandEventInfo();
-            eventInfo.WasEventReceived = false;
-            eventInfo.WasTheSenderCorrect = false;
+            CommandObserver observer = new CommandObserver();
+            
             command.CanExecuteChanged += (obj, e) =>
             {
-                if (command == obj) eventInfo.WasTheSenderCorrect = true;
-                eventInfo.ValueOfCanExecuteOnEvent = command.CanExecute();
-                eventInfo.WasEventReceived = true;
+                if (command == obj) observer.WasTheSendersCorrect.Add(true);
+                observer.ValueOfCanExecuteOnLatestEvent = command.CanExecute();
+                observer.NumberOfEventsRecieved++;
             };
-
-            return () => new CommandEventInfo()
-            {
-                ValueOfCanExecuteOnEvent = eventInfo.ValueOfCanExecuteOnEvent,
-                WasTheSenderCorrect = eventInfo.WasTheSenderCorrect,
-                WasEventReceived = eventInfo.WasEventReceived
-            };
+            return observer;
         }
 
-        public static void AssertCommandEventHappenedWithCorrectParameters(this Func<CommandEventInfo> commandEventInfoFactory,
-            bool expectedValueOfCanExecute)
+
+        public static void AssetAllSendersWereCorrect(this CommandObserver commandObserver)
         {
-            var commandEventInfo = commandEventInfoFactory.Invoke();
-            Assert.True(commandEventInfo.WasEventReceived);
-            Assert.True(commandEventInfo.WasTheSenderCorrect);
-            Assert.AreEqual(expectedValueOfCanExecute, commandEventInfo.ValueOfCanExecuteOnEvent);
+            Assert.AreEqual(0, commandObserver.WasTheSendersCorrect.Count(x => false),"There was atleast one sender for this command that not correct");
+        }
+
+        public static void AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable(this CommandObserver commandObserver)
+        {
+            commandObserver.AssetAllSendersWereCorrect();
+            Assert.AreNotEqual(0,commandObserver.NumberOfEventsRecieved,"No events were recieved");
+            Assert.AreEqual(true, commandObserver.ValueOfCanExecuteOnLatestEvent, "The command is not executable");
+        }
+
+        public static void AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable(this CommandObserver commandObserver)
+        {
+            commandObserver.AssetAllSendersWereCorrect();
+            Assert.AreNotEqual(0, commandObserver.NumberOfEventsRecieved, "No events were recieved");
+            Assert.AreEqual(false, commandObserver.ValueOfCanExecuteOnLatestEvent, "The command is executable");
         }
     }
 
-    public class CommandEventInfo
+    public class CommandObserver
     {
-        public bool ValueOfCanExecuteOnEvent { get; set; }
-        public bool WasEventReceived { get; set; }
-        public bool WasTheSenderCorrect { get; set; }
+        public CommandObserver()
+        {
+            ValueOfCanExecuteOnLatestEvent = false;
+            NumberOfEventsRecieved = 0;
+            WasTheSendersCorrect = new List<bool>();
+        }
+        public bool ValueOfCanExecuteOnLatestEvent { get; set; }
+        public int NumberOfEventsRecieved { get; set; }
+        public List<bool> WasTheSendersCorrect { get; set; }
+
+        public void ClearCommandHistory()
+        {
+            ValueOfCanExecuteOnLatestEvent = false;
+            NumberOfEventsRecieved = 0;
+            WasTheSendersCorrect.Clear();
+        }
     }
 }

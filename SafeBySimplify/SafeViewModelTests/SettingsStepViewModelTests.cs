@@ -3,6 +3,7 @@ using NSubstitute;
 using NUnit.Framework;
 using SafeModel;
 using SafeViewModel;
+using SafeViewModelTests.TestTools;
 
 namespace SafeViewModelTests
 {
@@ -38,13 +39,13 @@ namespace SafeViewModelTests
         [Test]
         public void When_changing_the_workspace_the_commands_change_to_modified_state()
         {
-            var saveCommandEventInfoFactory = _settingsStepViewModel.SaveCommand.GetCommandEventInfoFactory();
-            var discardCommandEventInfoFactory = _settingsStepViewModel.DiscardCommand.GetCommandEventInfoFactory();
-            var okCommandEventInfoFactory = _settingsStepViewModel.OkCommand.GetCommandEventInfoFactory();
+            var saveCommandObserver = _settingsStepViewModel.SaveCommand.GetDelegateCommandObserver();
+            var discardCommandObserver = _settingsStepViewModel.DiscardCommand.GetDelegateCommandObserver();
+            var okayCommandObserver = _settingsStepViewModel.OkCommand.GetDelegateCommandObserver();
             _settingsStepViewModel.WorkSpaceDirectory = @"D:\TFS_New";
-            saveCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(true);
-            discardCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(true);
-            okCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
+            saveCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
+            discardCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
+            okayCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
         }
 
         [Test]
@@ -52,9 +53,9 @@ namespace SafeViewModelTests
         {
             var initalValue = _settingsStepViewModel.WorkSpaceDirectory;
             _hasWorkingDirectory.ClearReceivedCalls();
-            var saveCommandEventInfoFactory = _settingsStepViewModel.SaveCommand.GetCommandEventInfoFactory();
-            var discardCommandEventInfoFactory = _settingsStepViewModel.DiscardCommand.GetCommandEventInfoFactory();
-            var okCommandEventInfoFactory = _settingsStepViewModel.OkCommand.GetCommandEventInfoFactory();
+            var saveCommandObserver = _settingsStepViewModel.SaveCommand.GetDelegateCommandObserver();
+            var discardCommandObserver = _settingsStepViewModel.DiscardCommand.GetDelegateCommandObserver();
+            var okCommandObserver = _settingsStepViewModel.OkCommand.GetDelegateCommandObserver();
             var propertyChangedEventInfoFactory = _settingsStepViewModel.GetPropertyChangedEventInfoFactory<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
 
 
@@ -72,9 +73,9 @@ namespace SafeViewModelTests
 
             Assert.AreEqual(initalValue, _settingsStepViewModel.WorkSpaceDirectory);
 
-            saveCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
-            discardCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
-            okCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(true);
+            saveCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
+            discardCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
+            okCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
         }
 
 
@@ -83,9 +84,9 @@ namespace SafeViewModelTests
         {
             var initalValue = _settingsStepViewModel.WorkSpaceDirectory;
             _hasWorkingDirectory.ClearReceivedCalls();
-            var saveCommandEventInfoFactory = _settingsStepViewModel.SaveCommand.GetCommandEventInfoFactory();
-            var discardCommandEventInfoFactory = _settingsStepViewModel.DiscardCommand.GetCommandEventInfoFactory();
-            var okCommandEventInfoFactory = _settingsStepViewModel.OkCommand.GetCommandEventInfoFactory();
+            var saveCommandObserver = _settingsStepViewModel.SaveCommand.GetDelegateCommandObserver();
+            var discardCommandObserver = _settingsStepViewModel.DiscardCommand.GetDelegateCommandObserver();
+            var okCommandObserver = _settingsStepViewModel.OkCommand.GetDelegateCommandObserver();
             var propertyChangedEventInfoFactory = _settingsStepViewModel.GetPropertyChangedEventInfoFactory<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
 
 
@@ -101,9 +102,9 @@ namespace SafeViewModelTests
             Assert.AreEqual(newValueOfWorkSpaceDirectory, _settingsStepViewModel.WorkSpaceDirectory);
 
 
-            saveCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
-            discardCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(false);
-            okCommandEventInfoFactory.AssertCommandEventHappenedWithCorrectParameters(true);
+            saveCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
+            discardCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
+            okCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
         }
 
 
@@ -118,8 +119,8 @@ namespace SafeViewModelTests
             Assume.That(_settingsStepViewModel.DiscardCommand.CanExecute());
             _settingsStepViewModel.DiscardCommand.Execute();
 
-            
 
+            Assert.Fail();
         }
 
 

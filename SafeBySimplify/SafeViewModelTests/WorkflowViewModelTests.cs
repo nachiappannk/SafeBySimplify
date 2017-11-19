@@ -6,6 +6,7 @@ using NSubstitute;
 using NUnit.Framework;
 using SafeModel;
 using SafeViewModel;
+using SafeViewModelTests.TestTools;
 
 namespace SafeViewModelTests
 {
