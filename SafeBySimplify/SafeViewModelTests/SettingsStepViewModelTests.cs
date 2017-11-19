@@ -56,7 +56,7 @@ namespace SafeViewModelTests
             var saveCommandObserver = _settingsStepViewModel.SaveCommand.GetDelegateCommandObserver();
             var discardCommandObserver = _settingsStepViewModel.DiscardCommand.GetDelegateCommandObserver();
             var okCommandObserver = _settingsStepViewModel.OkCommand.GetDelegateCommandObserver();
-            var propertyChangedEventInfoFactory = _settingsStepViewModel.GetPropertyChangedEventInfoFactory<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
+            var workSpaceDirectoryObserver = _settingsStepViewModel.GetPropertyObserver<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
 
 
             _settingsStepViewModel.WorkSpaceDirectory = @"D:\TFS_New";
@@ -67,9 +67,8 @@ namespace SafeViewModelTests
             _settingsStepViewModel.DiscardCommand.Execute();
             _hasWorkingDirectory.DidNotReceive().WorkingDirectory = Arg.Any<string>();
 
-            var propertyChangedEventInfo = propertyChangedEventInfoFactory.Invoke();
-            Assert.True(propertyChangedEventInfo.EventReceived);
-            Assert.AreEqual(initalValue, propertyChangedEventInfo.Value);
+            workSpaceDirectoryObserver.AssertProperyHasChanged(initalValue);
+
 
             Assert.AreEqual(initalValue, _settingsStepViewModel.WorkSpaceDirectory);
 
@@ -87,7 +86,7 @@ namespace SafeViewModelTests
             var saveCommandObserver = _settingsStepViewModel.SaveCommand.GetDelegateCommandObserver();
             var discardCommandObserver = _settingsStepViewModel.DiscardCommand.GetDelegateCommandObserver();
             var okCommandObserver = _settingsStepViewModel.OkCommand.GetDelegateCommandObserver();
-            var propertyChangedEventInfoFactory = _settingsStepViewModel.GetPropertyChangedEventInfoFactory<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
+            var propertyChangedEventInfoFactory = _settingsStepViewModel.GetPropertyObserver<string>(nameof(_settingsStepViewModel.WorkSpaceDirectory));
 
 
             var newValueOfWorkSpaceDirectory = @"D:\TFS_New";
