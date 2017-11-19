@@ -46,8 +46,14 @@ namespace SafeViewModel
                 return;
             }
 
-            string errorMessage = String.Empty;
+            string errorMessage = string.Empty;
             if (!_safeProviderForNonExistingUser.IsUserNameValidForNonExistingUser(SignUpUserName, out errorMessage))
+            {
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, errorMessage);
+                return;
+            }
+            errorMessage = string.Empty;
+            if (!_safeProviderForNonExistingUser.IsPasswordValidForNonExistingUser(SignUpPassword, out errorMessage))
             {
                 SetUpSignUpCommandStateAndSignUpErrorMessage(false, errorMessage);
                 return;

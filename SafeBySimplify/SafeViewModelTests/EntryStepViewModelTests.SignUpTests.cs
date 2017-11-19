@@ -41,6 +41,13 @@ namespace SafeViewModelTests
                         x[1] = string.Empty;
                         return true;
                     });
+
+                safeProviderForNonExistingUser.IsPasswordValidForNonExistingUser(ValidPassword, out value)
+                    .Returns(x =>
+                    {
+                        x[1] = string.Empty;
+                        return true;
+                    });
                 return safeProviderForNonExistingUser;
             }
 
@@ -48,8 +55,11 @@ namespace SafeViewModelTests
             {
                 public const string InvalidUserName = "%sss";
                 public const string InvalidUserNameErrorMessage = "The user name is invalid";
+                public const string InvalidPassword = "12345678";
+                public const string InvalidPasswordErrorMessage = "The password is too weak";
+
                 [Test]
-                public void When_invalid_details_are_in_signup_form_then_command_is_disabled_with_error_message()
+                public void When_username_in_signup_form_then_command_is_disabled_with_error_message()
                 {
                     string value = "";
                     _safeProviderForNonExistingUser.IsUserNameValidForNonExistingUser(InvalidUserName, out value)
@@ -66,6 +76,28 @@ namespace SafeViewModelTests
 
                     if(_commandObserver.NumberOfEventsRecieved > 0)_commandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
                     Assert.AreEqual(false, _entryStepViewModel.SignUpCommand.CanExecute());
+                    _errorMessagePropertyObserver.AssertProperyHasChanged(InvalidUserNameErrorMessage);
+                }
+
+                [Test]
+                public void When_invalid_password_in_signup_form_then_command_is_disabled_with_error_message()
+                {
+                    string value = "";
+                    _safeProviderForNonExistingUser.IsPasswordValidForNonExistingUser(InvalidPassword, out value)
+                        .Returns(x =>
+                        {
+                            x[1] = InvalidPasswordErrorMessage;
+                            return false;
+                        });
+
+
+                    _entryStepViewModel.SignUpUserName = ValidUserName;
+                    _entryStepViewModel.SignUpPassword = InvalidPassword;
+                    _entryStepViewModel.SignUpConfirmPassword = InvalidPassword;
+
+                    if (_commandObserver.NumberOfEventsRecieved > 0) _commandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
+                    Assert.AreEqual(false, _entryStepViewModel.SignUpCommand.CanExecute());
+                    _errorMessagePropertyObserver.AssertProperyHasChanged(InvalidPasswordErrorMessage);
                 }
             }
         }
