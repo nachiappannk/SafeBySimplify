@@ -43,9 +43,9 @@ namespace SafeViewModelTests
             var discardCommandObserver = _settingsStepViewModel.DiscardCommand.GetDelegateCommandObserver();
             var okayCommandObserver = _settingsStepViewModel.OkCommand.GetDelegateCommandObserver();
             _settingsStepViewModel.WorkSpaceDirectory = @"D:\TFS_New";
-            saveCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
-            discardCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
-            okayCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
+            saveCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsExecutable();
+            discardCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsExecutable();
+            okayCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
         }
 
         [Test]
@@ -72,9 +72,9 @@ namespace SafeViewModelTests
 
             Assert.AreEqual(initalValue, _settingsStepViewModel.WorkSpaceDirectory);
 
-            saveCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
-            discardCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
-            okCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
+            saveCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
+            discardCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
+            okCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsExecutable();
         }
 
 
@@ -101,9 +101,9 @@ namespace SafeViewModelTests
             Assert.AreEqual(newValueOfWorkSpaceDirectory, _settingsStepViewModel.WorkSpaceDirectory);
 
 
-            saveCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
-            discardCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
-            okCommandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable();
+            saveCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
+            discardCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
+            okCommandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsExecutable();
         }
 
 

@@ -26,18 +26,24 @@ namespace SafeViewModelTests.TestTools
             Assert.AreEqual(0, commandObserver.WasTheSendersCorrect.Count(x => false),"There was atleast one sender for this command that not correct");
         }
 
-        public static void AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsExecutable(this CommandObserver commandObserver)
+        public static void AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsExecutable(this CommandObserver commandObserver)
         {
-            commandObserver.AssetAllSendersWereCorrect();
-            Assert.AreNotEqual(0,commandObserver.NumberOfEventsRecieved,"No events were recieved");
-            Assert.AreEqual(true, commandObserver.ValueOfCanExecuteOnLatestEvent, "The command is not executable");
+            commandObserver.
+                AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs(true);
         }
 
-        public static void AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable(this CommandObserver commandObserver)
+        public static void AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable(this CommandObserver commandObserver)
+        {
+            commandObserver.
+                AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs(false);
+        }
+
+        public static void AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs
+            (this CommandObserver commandObserver, bool executableState)
         {
             commandObserver.AssetAllSendersWereCorrect();
             Assert.AreNotEqual(0, commandObserver.NumberOfEventsRecieved, "No events were recieved");
-            Assert.AreEqual(false, commandObserver.ValueOfCanExecuteOnLatestEvent, "The command is executable");
+            Assert.AreEqual(executableState, commandObserver.ValueOfCanExecuteOnLatestEvent, "The command is executable");
         }
     }
 

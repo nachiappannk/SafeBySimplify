@@ -12,19 +12,69 @@ namespace SafeViewModelTests
     {
         #region ConfirmPasswordMismatchingCase
 
-        [Test]
-        public void When_all_signup_parameters_are_filled_and_both_passwords_dont_match_then_command_is_disabled_with_error_message()
+        public static IEnumerable GetErrorMessageTestCases()
+        {
+            yield return new TestCaseData(
+                new List<Action<EntryStepViewModel>>
+                {
+                    entryStepViewModel => entryStepViewModel.SignUpUserName = "SomeUserName",
+                    entryStepViewModel => entryStepViewModel.SignUpPassword = "Password",
+                    entryStepViewModel => entryStepViewModel.SignUpConfirmPassword = "DifferentPassword",
+                },EntryStepViewModel.PasswordMismatchingErrorMessage, false);
+
+            yield return new TestCaseData(
+                new List<Action<EntryStepViewModel>>
+                {
+                    entryStepViewModel => entryStepViewModel.SignUpConfirmPassword = "Password",
+                    entryStepViewModel => entryStepViewModel.SignUpUserName = "SomeUserName",
+                    entryStepViewModel => entryStepViewModel.SignUpPassword = "Password",
+                    entryStepViewModel => entryStepViewModel.SignUpConfirmPassword = "DifferentPassword",
+                }, EntryStepViewModel.PasswordMismatchingErrorMessage, false);
+
+            yield return new TestCaseData(
+                new List<Action<EntryStepViewModel>>
+                {
+                    entryStepViewModel => entryStepViewModel.SignUpUserName = "SomeUserName",
+                    entryStepViewModel => entryStepViewModel.SignUpPassword = "Password",
+                    entryStepViewModel => entryStepViewModel.SignUpConfirmPassword = "Password",
+                }, string.Empty, true);
+
+            yield return new TestCaseData(
+                new List<Action<EntryStepViewModel>>
+                {
+                    entryStepViewModel => entryStepViewModel.SignUpPassword = "Password",
+                    entryStepViewModel => entryStepViewModel.SignUpConfirmPassword = "Password",
+                    entryStepViewModel => entryStepViewModel.SignUpUserName = "SomeUserName",
+
+                }, string.Empty, true);
+
+            yield return new TestCaseData(
+                new List<Action<EntryStepViewModel>>
+                {
+                    entryStepViewModel => entryStepViewModel.SignUpPassword = "Password",
+                    entryStepViewModel => entryStepViewModel.SignUpConfirmPassword = "SomeOtherPassword",
+                    entryStepViewModel => entryStepViewModel.SignUpUserName = "SomeUserName",
+                    entryStepViewModel => entryStepViewModel.SignUpConfirmPassword = "Password",
+                }, string.Empty, true);
+        }
+
+        [TestCaseSource(nameof(GetErrorMessageTestCases))]
+        public void When_all_signup_parameters_are_filled_and_both_passwords_dont_match_then_command_is_disabled_with_error_message
+            (List<Action<EntryStepViewModel>> actions,string errorMessage, bool commandExecutableState)
         {
             EntryStepViewModel entryStepViewModel = new EntryStepViewModel();
             var commandObserver = entryStepViewModel.SignUpCommand.GetDelegateCommandObserver();
-            var errorMessagePropertyObserver = entryStepViewModel.GetPropertyObserver<string>("ErrorMessage");
+            var errorMessagePropertyObserver = entryStepViewModel.GetPropertyObserver<string>(nameof(entryStepViewModel.ErrorMessage));
 
-            entryStepViewModel.SignUpUserName = "SomeUserName";
-            entryStepViewModel.SignUpPassword = "Password";
-            entryStepViewModel.SignUpConfirmPassword = "ConfirmPassword";
+            foreach (var action in actions)
+            {
+                action.Invoke(entryStepViewModel);
+            }
 
-            if(commandObserver.NumberOfEventsRecieved >0)commandObserver.AssetThereWasAtleastOnCanExecuteChangedEventAndCommandIsNotExecutable();
-            errorMessagePropertyObserver.AssertProperyHasChanged(EntryStepViewModel.PasswordMismatchingErrorMessage);
+            if(commandObserver.NumberOfEventsRecieved >0)
+                commandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs(commandExecutableState);
+            if(!string.IsNullOrWhiteSpace(errorMessage))
+                errorMessagePropertyObserver.AssertProperyHasChanged(errorMessage);
         }
 
         #endregion
