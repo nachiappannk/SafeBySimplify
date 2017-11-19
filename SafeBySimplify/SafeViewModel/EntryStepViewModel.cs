@@ -1,17 +1,20 @@
 ﻿using System;
 using Prism.Commands;
+using SafeModel;
 
 namespace SafeViewModel
 {
     public class EntryStepViewModel : WorkFlowStepViewModel
     {
+        private readonly ISafeProviderForNonExistingUser _safeProviderForNonExistingUser;
         public const string PasswordMismatchingErrorMessage = "Password and Confirm Password are different";
         public event Action GoToSettingsRequested;
 
         public DelegateCommand GoToSettingsCommand;
 
-        public EntryStepViewModel()
+        public EntryStepViewModel(ISafeProviderForNonExistingUser safeProviderForNonExistingUser)
         {
+            _safeProviderForNonExistingUser = safeProviderForNonExistingUser;
             GoToSettingsCommand = new DelegateCommand(() =>
             {
                 GoToSettingsRequested?.Invoke();
@@ -40,6 +43,13 @@ namespace SafeViewModel
             if (SignUpConfirmPassword != SignUpPassword)
             {
                 SetUpSignUpCommandStateAndSignUpErrorMessage(false, PasswordMismatchingErrorMessage);
+                return;
+            }
+
+            string errorMessage = String.Empty;
+            if (!_safeProviderForNonExistingUser.IsUserNameValidForNonExistingUser(SignUpUserName, out errorMessage))
+            {
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, errorMessage);
                 return;
             }
             SetUpSignUpCommandStateAndSignUpErrorMessage(true, string.Empty);

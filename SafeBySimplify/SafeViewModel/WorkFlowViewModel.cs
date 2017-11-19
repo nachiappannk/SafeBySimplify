@@ -8,7 +8,7 @@ namespace SafeViewModel
     public class WorkFlowViewModel : INotifyPropertyChanged
     {
         private readonly ISafeProvider _safeProvider;
-        private EntryStepViewModel _entryStepViewModel = new EntryStepViewModel();
+        private EntryStepViewModel _entryStepViewModel;
         private readonly SettingsStepViewModel _settingsStepViewModel;
 
         private WorkFlowStepViewModel _currentStep;
@@ -31,8 +31,11 @@ namespace SafeViewModel
         public WorkFlowViewModel(ISafeProvider safeProvider)
         {
             _safeProvider = safeProvider;
-            CurrentStep = _entryStepViewModel;
+
             _settingsStepViewModel = new SettingsStepViewModel(_safeProvider);
+            _entryStepViewModel = new EntryStepViewModel(_safeProvider);
+
+            CurrentStep = _entryStepViewModel;
 
             _entryStepViewModel.GoToSettingsRequested += () =>
             {
