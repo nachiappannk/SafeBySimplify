@@ -52,19 +52,19 @@ namespace SafeViewModel
                 _canSignUp = canSignUp;
                 SignUpCommand.RaiseCanExecuteChanged();
             }
-            ErrorMessage = errorMessage;
+            SignUpErrorMessage = errorMessage;
         }
 
-        private string _errorMessage = string.Empty;
+        private string _signUpErrorMessage = string.Empty;
 
-        public string ErrorMessage
+        public string SignUpErrorMessage
         {
-            get { return _errorMessage; }
+            get { return _signUpErrorMessage; }
             set
             {
-                if (_errorMessage != value)
+                if (_signUpErrorMessage != value)
                 {
-                    _errorMessage = value;
+                    _signUpErrorMessage = value;
                     FirePropertyChanged();
                 }
             }

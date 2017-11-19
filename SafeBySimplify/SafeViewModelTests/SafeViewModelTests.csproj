@@ -61,6 +61,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntryStepViewModelTests.SignUpTests.cs" />
+    <Compile Include="EntryStepViewModelTests.SignUpTests.InCompleteSignUpTests.cs" />
+    <Compile Include="EntryStepViewModelTests.SignUpTests.PasswordsNonMatchingTests.cs" />
+    <Compile Include="EntryStepViewModelTests.SignUpTests.SunnyTests.cs" />
     <Compile Include="TestTools\CommandAssertionExtentions.cs" />
     <Compile Include="EntryStepViewModelTests.cs" />
     <Compile Include="TestTools\PropertyChangedEventExtentions.cs" />
