@@ -5,6 +5,7 @@ namespace SafeViewModel
 {
     public class EntryStepViewModel : WorkFlowStepViewModel
     {
+        public const string PasswordMismatchingErrorMessage = "Password and Confirm Password are different";
         public event Action GoToSettingsRequested;
 
         public DelegateCommand GoToSettingsCommand;
@@ -19,24 +20,53 @@ namespace SafeViewModel
             SignUpCommand = new DelegateCommand(() =>
                 {
 
-                }, () => canSignUp);
+                }, () => _canSignUp);
         }
 
-        private bool canSignUp = false;
+        private bool _canSignUp = false;
 
         private string _signUpUserName;
 
         private void ComputeCanSignUp()
         {
-            var newValue = false;
-            if (string.IsNullOrWhiteSpace(SignUpUserName)) newValue = false;
-            else if (string.IsNullOrWhiteSpace(SignUpPassword)) newValue = false;
-            else if (string.IsNullOrWhiteSpace(SignUpConfirmPassword)) newValue = false;
-            else newValue = true;
-            if (newValue != canSignUp)
+            if (string.IsNullOrWhiteSpace(SignUpUserName)
+                || string.IsNullOrWhiteSpace(SignUpPassword)
+                || string.IsNullOrWhiteSpace(SignUpConfirmPassword))
             {
-                canSignUp = newValue;
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, string.Empty);
+                return;
+            }
+
+            if (SignUpConfirmPassword != SignUpPassword)
+            {
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, PasswordMismatchingErrorMessage);
+                return;
+            }
+            SetUpSignUpCommandStateAndSignUpErrorMessage(true, string.Empty);
+        }
+
+        private void SetUpSignUpCommandStateAndSignUpErrorMessage(bool canSignUp, string errorMessage)
+        {
+            if (_canSignUp != canSignUp)
+            {
+                _canSignUp = canSignUp;
                 SignUpCommand.RaiseCanExecuteChanged();
+            }
+            ErrorMessage = errorMessage;
+        }
+
+        private string _errorMessage = string.Empty;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                if (_errorMessage != value)
+                {
+                    _errorMessage = value;
+                    FirePropertyChanged();
+                }
             }
         }
 

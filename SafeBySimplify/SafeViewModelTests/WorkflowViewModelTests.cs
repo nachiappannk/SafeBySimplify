@@ -32,31 +32,32 @@ namespace SafeViewModelTests
             Assert.True(_workFlowViewModel.CurrentStep.IsActive);
         }
 
-        
 
         [Test]
         public void When_in_entry_screen_and_asked_to_go_to_settings_then_the_current_screen_is_settings()
         {
-         
+
             var currentStepProperyObserver = _workFlowViewModel.GetPropertyObserver<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
-            
+
             var currentStep = _workFlowViewModel.CurrentStep;
             var entryStepViewModel = currentStep as EntryStepViewModel;
             Assert.NotNull(entryStepViewModel, "Set Up error");
             var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
-            Assert.AreEqual(true, canExecute, "Set Up error"+"Unable to go to settings");
+            Assert.AreEqual(true, canExecute, "Set Up error" + "Unable to go to settings");
             entryStepViewModel.GoToSettingsCommand.Execute();
-            
+
             Assert.AreEqual(typeof(SettingsStepViewModel), currentStepProperyObserver.PropertyValue.GetType());
             Assert.AreNotEqual(0, currentStepProperyObserver.NumberOfTimesPropertyChanged);
         }
+
 
 
         [Test]
         public void When_in_settings_and_ok_command_is_made_then_the_entry_screen_is_settings()
         {
 
-            
+            var currentStepPropertyObserver = _workFlowViewModel.GetPropertyObserver<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
+
             var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
             Assert.NotNull(entryStepViewModel, "Set Up error");
             var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
@@ -67,8 +68,7 @@ namespace SafeViewModelTests
             var canExecute1 = settingsStepViewModel.OkCommand.CanExecute();
             Assert.AreEqual(true, canExecute1, "Set Up error" + "Unable to go to entry");
 
-            var currentStepPropertyObserver = _workFlowViewModel.GetPropertyObserver<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
-
+            currentStepPropertyObserver.ResetObserver();
 
             settingsStepViewModel.OkCommand.Execute();
             
@@ -76,7 +76,7 @@ namespace SafeViewModelTests
             Assert.AreNotEqual(0, currentStepPropertyObserver.NumberOfTimesPropertyChanged);
         }
 
-        [Test]
+        [Test, Ignore("Feature not developer")]
         public void When_signed_up_with_correct_detail_then_safe_holder_is_initialized_and_app_moves_logged_in_mode()
         {
             var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
