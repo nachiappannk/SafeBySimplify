@@ -14,6 +14,8 @@ namespace SafeViewModel
 
         public SignUpViewModel SignUpViewModel { get; set; }
 
+        public SignInViewModel SignInViewModel { get; set; }
+
         private void OnSignUpCompletion()
         {
             GoToOperationsRequested?.Invoke();            

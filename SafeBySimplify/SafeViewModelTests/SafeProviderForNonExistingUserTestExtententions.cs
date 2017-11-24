@@ -3,7 +3,7 @@ using SafeModel;
 
 namespace SafeViewModelTests
 {
-    public static class SafeProviderForNonExistingUserTestExtententions
+    public static class SafeProviderTestExtententions
     {
         public static void StubUserNameValidity(this ISafeProviderForNonExistingUser safeProvider,
             string username, bool expectedValue, string expectedErrorMessage)
@@ -27,5 +27,27 @@ namespace SafeViewModelTests
             });
         }
 
+
+        public static void StubUserNameValidityForExistingUser(this ISafeProviderForExistingUser safeProvider, string validUserName)
+        {
+            var errorMessage = string.Empty;
+            safeProvider.IsUserNameValidForExistingUser(validUserName, out errorMessage)
+                .Returns(x =>
+                {
+                    x[1] = string.Empty;
+                    return true;
+                });
+        }
+
+        public static void StubCreateSafeForExistingUser(this ISafeProviderForExistingUser safeProvider, string validUserName, string validPassword, ISafe safe)
+        {
+            ISafe outSafe;
+            safeProvider.TryCreateSafeForExistingUser(validUserName, validPassword, out outSafe)
+                .Returns(x =>
+                {
+                    x[2] = safe;
+                    return true;
+                });
+        }
     }
 }
