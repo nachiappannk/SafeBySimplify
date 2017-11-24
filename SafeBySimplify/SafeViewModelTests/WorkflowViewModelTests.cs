@@ -76,15 +76,29 @@ namespace SafeViewModelTests
             Assert.AreNotEqual(0, currentStepPropertyObserver.NumberOfTimesPropertyChanged);
         }
 
-        [Test, Ignore("Feature not developer")]
+        [Test]
         public void When_signed_up_with_correct_detail_then_safe_holder_is_initialized_and_app_moves_logged_in_mode()
         {
+            const string validUserName = "SomeUserName";
+            const string validPassword = "SomePassword";
+
+            var safe = Substitute.For<ISafe>();
+            _safeProvider.CreateSafe(validUserName, validPassword).Returns(safe);
+            var errorMessage = string.Empty;
+            
+
+            var currentStepPropertyObserver = _workFlowViewModel.GetPropertyObserver<WorkFlowStepViewModel>("CurrentStep");
+
             var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
-            entryStepViewModel.SignUpViewModel.SignUpUserName = "SomeUserName";
-            entryStepViewModel.SignUpViewModel.SignUpPassword = "SomePassword";
-            entryStepViewModel.SignUpViewModel.SignUpConfirmPassword = "SomePassword";
+            entryStepViewModel.SignUpViewModel.SignUpUserName = validUserName;
+            entryStepViewModel.SignUpViewModel.SignUpPassword = validPassword;
+            entryStepViewModel.SignUpViewModel.SignUpConfirmPassword = validPassword;
             var canExecute = entryStepViewModel.SignUpViewModel.SignUpCommand.CanExecute();
             entryStepViewModel.SignUpViewModel.SignUpCommand.Execute();
+
+            Assert.AreEqual(typeof(OperationStepViewModel),currentStepPropertyObserver.PropertyValue.GetType());
+            var operationStepViewModel = currentStepPropertyObserver.PropertyValue as OperationStepViewModel;
+            Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
     }
 

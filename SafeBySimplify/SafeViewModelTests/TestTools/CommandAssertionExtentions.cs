@@ -26,13 +26,13 @@ namespace SafeViewModelTests.TestTools
             Assert.AreEqual(0, commandObserver.WasTheSendersCorrect.Count(x => false),"There was atleast one sender for this command that not correct");
         }
 
-        public static void AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsExecutable(this CommandObserver commandObserver)
+        public static void AssertTheCommandBecameExecutable(this CommandObserver commandObserver)
         {
             commandObserver.
                 AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs(true);
         }
 
-        public static void AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable(this CommandObserver commandObserver)
+        public static void AssertTheCommandBecameNonExecutable(this CommandObserver commandObserver)
         {
             commandObserver.
                 AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs(false);

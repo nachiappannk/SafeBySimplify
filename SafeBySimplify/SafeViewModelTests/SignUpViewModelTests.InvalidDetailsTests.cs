@@ -29,7 +29,7 @@ namespace SafeViewModelTests
                 _signUpViewModel.SignUpPassword = ValidPassword;
                 _signUpViewModel.SignUpConfirmPassword = ValidPassword;
 
-                if(_commandObserver.NumberOfEventsRecieved > 0)_commandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
+                if(_commandObserver.NumberOfEventsRecieved > 0)_commandObserver.AssertTheCommandBecameNonExecutable();
                 Assert.AreEqual(false, _signUpViewModel.SignUpCommand.CanExecute());
                 _errorMessagePropertyObserver.AssertProperyHasChanged(InvalidUserNameErrorMessage);
             }
@@ -50,7 +50,7 @@ namespace SafeViewModelTests
                 _signUpViewModel.SignUpPassword = InvalidPassword;
                 _signUpViewModel.SignUpConfirmPassword = InvalidPassword;
 
-                if (_commandObserver.NumberOfEventsRecieved > 0) _commandObserver.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandIsNotExecutable();
+                if (_commandObserver.NumberOfEventsRecieved > 0) _commandObserver.AssertTheCommandBecameNonExecutable();
                 Assert.AreEqual(false, _signUpViewModel.SignUpCommand.CanExecute());
                 _errorMessagePropertyObserver.AssertProperyHasChanged(InvalidPasswordErrorMessage);
             }
