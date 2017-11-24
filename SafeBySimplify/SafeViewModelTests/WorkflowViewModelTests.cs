@@ -100,7 +100,6 @@ namespace SafeViewModelTests
 
             var safe = Substitute.For<ISafe>();
             _safeProvider.StubCreateSafeForExistingUser(validUserName, validPassword, safe);
-            _safeProvider.StubUserNameValidityForExistingUser(validUserName);
             _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
 
             AssumeInEntryStepAndThenGoToOperationsBySignIn(validUserName, validPassword);

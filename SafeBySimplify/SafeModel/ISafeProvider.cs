@@ -1,4 +1,6 @@
-﻿namespace SafeModel
+﻿using System.Collections.Generic;
+
+namespace SafeModel
 {
     public interface ISafeProvider : IHasWorkingDirectory , ISafeProviderForNonExistingUser , ISafeProviderForExistingUser
     {
@@ -13,9 +15,8 @@
 
     public interface ISafeProviderForExistingUser
     {
-        bool IsUserNameValidForExistingUser(string userName, out string errorMessage);
-        bool IsPasswordValidForExistingUser(string password, out string errorMessage);
         bool TryCreateSafeForExistingUser(string userName, string password, out ISafe safe);
+        List<string> GetUserNames();
     }
 
     public interface ISafe

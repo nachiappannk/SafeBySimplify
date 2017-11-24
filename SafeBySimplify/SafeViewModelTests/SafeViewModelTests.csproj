@@ -62,6 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SafeProviderForNonExistingUserTestExtententions.cs" />
+    <Compile Include="SignInViewModelTests.cs" />
+    <Compile Include="SignInViewModelTests.NoRegisteredUsersTests.cs" />
+    <Compile Include="SignInViewModelTests.RegisteredUserAvailableTests.cs" />
     <Compile Include="SignUpViewModelTests.cs" />
     <Compile Include="SignUpViewModelTests.InCompleteSignUpTests.cs" />
     <Compile Include="SignUpViewModelTests.InvalidDetailsTests.cs" />

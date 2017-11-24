@@ -21,7 +21,7 @@ namespace SafeViewModelTests
                     action.Invoke(_signUpViewModel);
                 }
 
-                CommandAssertionExtentions.AssetAllSendersWereCorrect(_commandObserver);
+                _commandObserver.AssetAllSendersWereCorrect();
                 if (isCommandChangeExpected) Assert.AreNotEqual(0, _commandObserver.NumberOfEventsRecieved);
                 if (_commandObserver.NumberOfEventsRecieved > 0) Assert.AreEqual(isCommandExecutable, _commandObserver.ValueOfCanExecuteOnLatestEvent);
                 if (_errorMessagePropertyObserver.NumberOfTimesPropertyChanged > 0) Assert.True(String.IsNullOrWhiteSpace(_errorMessagePropertyObserver.PropertyValue));
