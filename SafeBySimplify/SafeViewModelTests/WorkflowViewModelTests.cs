@@ -16,6 +16,7 @@ namespace SafeViewModelTests
         private string InitialWorkingDirectory = @"D:\TFS";
         WorkFlowViewModel _workFlowViewModel;
         private ISafeProvider _safeProvider;
+        private ViewModelPropertyObserver<WorkFlowStepViewModel> _currentStepProperyObserver;
 
         [SetUp]
         public void SetUp()
@@ -23,6 +24,10 @@ namespace SafeViewModelTests
             _safeProvider = Substitute.For<ISafeProvider>();
             _safeProvider.WorkingDirectory.Returns(InitialWorkingDirectory);
             _workFlowViewModel = new WorkFlowViewModel(_safeProvider);
+
+            _currentStepProperyObserver = _workFlowViewModel
+                .GetPropertyObserver<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
+
         }
 
         [Test]
@@ -36,44 +41,38 @@ namespace SafeViewModelTests
         [Test]
         public void When_in_entry_screen_and_asked_to_go_to_settings_then_the_current_screen_is_settings()
         {
-
-            var currentStepProperyObserver = _workFlowViewModel.GetPropertyObserver<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
-
-            var currentStep = _workFlowViewModel.CurrentStep;
-            var entryStepViewModel = currentStep as EntryStepViewModel;
-            Assert.NotNull(entryStepViewModel, "Set Up error");
-            var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
-            Assert.AreEqual(true, canExecute, "Set Up error" + "Unable to go to settings");
-            entryStepViewModel.GoToSettingsCommand.Execute();
-
-            Assert.AreEqual(typeof(SettingsStepViewModel), currentStepProperyObserver.PropertyValue.GetType());
-            Assert.AreNotEqual(0, currentStepProperyObserver.NumberOfTimesPropertyChanged);
+            AssumeInEntryStepAndThenGoToSettings();
+            Assert.AreEqual(typeof(SettingsStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
+            Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
         }
-
-
 
         [Test]
         public void When_in_settings_and_ok_command_is_made_then_the_entry_screen_is_settings()
         {
+            AssumeInEntryStepAndThenGoToSettings();
+            _currentStepProperyObserver.ResetObserver();
+            AssumeInSettingStepAndThenGoToEntryStep();
+            Assert.AreEqual(typeof(EntryStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
+            Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
+        }
 
-            var currentStepPropertyObserver = _workFlowViewModel.GetPropertyObserver<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
-
-            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
-            Assert.NotNull(entryStepViewModel, "Set Up error");
-            var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
-            Assert.AreEqual(true, canExecute, "Set Up error" + "Unable to go to settings");
-            entryStepViewModel.GoToSettingsCommand.Execute();
+        private void AssumeInSettingStepAndThenGoToEntryStep()
+        {
             var settingsStepViewModel = _workFlowViewModel.CurrentStep as SettingsStepViewModel;
-            Assert.NotNull(settingsStepViewModel, "Set Up error");
-            var canExecute1 = settingsStepViewModel.OkCommand.CanExecute();
-            Assert.AreEqual(true, canExecute1, "Set Up error" + "Unable to go to entry");
-
-            currentStepPropertyObserver.ResetObserver();
-
+            Assume.That(settingsStepViewModel != null, "Not in setting step");
+            var canExecute = settingsStepViewModel.OkCommand.CanExecute();
+            Assume.That(canExecute, "Unable to command okay");
             settingsStepViewModel.OkCommand.Execute();
-            
-            Assert.AreEqual(typeof(EntryStepViewModel), currentStepPropertyObserver.PropertyValue.GetType());
-            Assert.AreNotEqual(0, currentStepPropertyObserver.NumberOfTimesPropertyChanged);
+        }
+
+
+        private void AssumeInEntryStepAndThenGoToSettings()
+        {
+            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
+            Assume.That(entryStepViewModel != null, "Not in entry step");
+            var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
+            Assume.That(canExecute, "go to settings command is disabled");
+            entryStepViewModel.GoToSettingsCommand.Execute();
         }
 
         [Test]
