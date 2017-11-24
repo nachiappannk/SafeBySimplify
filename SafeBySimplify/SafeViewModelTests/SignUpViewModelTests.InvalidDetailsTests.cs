@@ -16,14 +16,7 @@ namespace SafeViewModelTests
             [Test]
             public void When_username_in_signup_form_then_command_is_disabled_with_error_message()
             {
-                string value = "";
-                _safeProviderForNonExistingUser.IsUserNameValidForNonExistingUser(InvalidUserName, out value)
-                    .Returns(x =>
-                    {
-                        x[1] = InvalidUserNameErrorMessage;
-                        return false;
-                    });
-
+                _safeProviderForNonExistingUser.StubUserNameValidity(InvalidUserName, false, InvalidUserNameErrorMessage);
 
                 _signUpViewModel.SignUpUserName = InvalidUserName;
                 _signUpViewModel.SignUpPassword = ValidPassword;
@@ -37,14 +30,8 @@ namespace SafeViewModelTests
             [Test]
             public void When_invalid_password_in_signup_form_then_command_is_disabled_with_error_message()
             {
-                string value = "";
-                _safeProviderForNonExistingUser.IsPasswordValidForNonExistingUser(InvalidPassword, out value)
-                    .Returns(x =>
-                    {
-                        x[1] = InvalidPasswordErrorMessage;
-                        return false;
-                    });
 
+                _safeProviderForNonExistingUser.StubPasswordNameValidity(InvalidPassword, false, InvalidPasswordErrorMessage);
 
                 _signUpViewModel.SignUpUserName = ValidUserName;
                 _signUpViewModel.SignUpPassword = InvalidPassword;

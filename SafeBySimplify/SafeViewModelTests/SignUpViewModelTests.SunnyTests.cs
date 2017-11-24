@@ -22,7 +22,7 @@ namespace SafeViewModelTests
                     action.Invoke(_signUpViewModel);
                 }
 
-                CommandAssertionExtentions.AssetAllSendersWereCorrect(_commandObserver);
+                _commandObserver.AssetAllSendersWereCorrect();
                 Assert.AreNotEqual(0, _commandObserver.NumberOfEventsRecieved);
                 if (_commandObserver.NumberOfEventsRecieved > 0)
                     Assert.AreEqual(true, _commandObserver.ValueOfCanExecuteOnLatestEvent);

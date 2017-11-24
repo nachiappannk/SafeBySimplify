@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,24 +84,28 @@ namespace SafeViewModelTests
 
             var safe = Substitute.For<ISafe>();
             _safeProvider.CreateSafe(validUserName, validPassword).Returns(safe);
-            var errorMessage = string.Empty;
-            
+            string errorMessage = String.Empty;
 
-            var currentStepPropertyObserver = _workFlowViewModel.GetPropertyObserver<WorkFlowStepViewModel>("CurrentStep");
+            _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
+            _safeProvider.StubPasswordNameValidity(validPassword, true, string.Empty);
 
-            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
-            entryStepViewModel.SignUpViewModel.SignUpUserName = validUserName;
-            entryStepViewModel.SignUpViewModel.SignUpPassword = validPassword;
-            entryStepViewModel.SignUpViewModel.SignUpConfirmPassword = validPassword;
-            var canExecute = entryStepViewModel.SignUpViewModel.SignUpCommand.CanExecute();
-            entryStepViewModel.SignUpViewModel.SignUpCommand.Execute();
-
-            Assert.AreEqual(typeof(OperationStepViewModel),currentStepPropertyObserver.PropertyValue.GetType());
-            var operationStepViewModel = currentStepPropertyObserver.PropertyValue as OperationStepViewModel;
+            AssumeInEntryStepAndThenGoToOperationsBySignUp(validUserName, validPassword);
+            Assert.AreEqual(typeof(OperationStepViewModel),_currentStepProperyObserver.PropertyValue.GetType());
+            var operationStepViewModel = _currentStepProperyObserver.PropertyValue as OperationStepViewModel;
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
+
+        private void AssumeInEntryStepAndThenGoToOperationsBySignUp(string validUserName, string validPassword)
+        {
+            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
+            Assume.That(entryStepViewModel != null, "Not in entry step");
+            var signUpViewModel = entryStepViewModel.SignUpViewModel;
+            signUpViewModel.SignUpUserName = validUserName;
+            signUpViewModel.SignUpPassword = validPassword;
+            signUpViewModel.SignUpConfirmPassword = validPassword;
+            var canExecute = signUpViewModel.SignUpCommand.CanExecute();
+            Assume.That(canExecute, "Unable to hit the signup button");
+            signUpViewModel.SignUpCommand.Execute();
+        }
     }
-
-
-
 }
