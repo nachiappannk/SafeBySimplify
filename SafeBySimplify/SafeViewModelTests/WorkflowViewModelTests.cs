@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System.Collections.Generic;
+using NSubstitute;
 using NUnit.Framework;
 using SafeModel;
 using SafeViewModel;
@@ -19,6 +20,7 @@ namespace SafeViewModelTests
         {
             _safeProvider = Substitute.For<ISafeProvider>();
             _safeProvider.WorkingDirectory.Returns(InitialWorkingDirectory);
+            _safeProvider.GetUserNames().Returns(new List<string>() {"one", "two"});
             _workFlowViewModel = new WorkFlowViewModel(_safeProvider);
 
             _currentStepProperyObserver = _workFlowViewModel
@@ -92,7 +94,7 @@ namespace SafeViewModelTests
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
 
-        [Test, Ignore("Feature to be implemented")]
+        [Test]
         public void When_signed_in_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step()
         {
             const string validUserName = "SomeUserName";
@@ -100,7 +102,6 @@ namespace SafeViewModelTests
 
             var safe = Substitute.For<ISafe>();
             _safeProvider.StubCreateSafeForExistingUser(validUserName, validPassword, safe);
-            _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
 
             AssumeInEntryStepAndThenGoToOperationsBySignIn(validUserName, validPassword);
             Assert.AreEqual(typeof(OperationStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());

@@ -21,7 +21,8 @@ namespace SafeViewModelTests
             {
                 _registeredUserNames = new List<string> {"UserName1", "UserName2", "UserName3",};
                 _safeProviderForExistingUser.GetUserNames().Returns(_registeredUserNames);
-                _signInViewModel = new SignInViewModel(_safeProviderForExistingUser);
+                _signInViewModel = new SignInViewModel(_safeProviderForExistingUser, Substitute.For<IHasSafe>(),
+                    () => { });
                 _commandObserver = _signInViewModel.SignInCommand.GetDelegateCommandObserver();
                 _errorMessagePropertyObserver = _signInViewModel.GetPropertyObserver<string>(nameof(_signInViewModel.ErrorMessage));
 

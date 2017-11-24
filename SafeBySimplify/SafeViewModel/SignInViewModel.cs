@@ -10,28 +10,38 @@ namespace SafeViewModel
     public class SignInViewModel : NotifiesPropertyChanged
     {
         private readonly ISafeProviderForExistingUser _safeProviderForExistingUser;
+        private readonly IHasSafe _iHasSafe;
+        private readonly Action _signUpCompletionCallback;
 
-        public SignInViewModel(ISafeProviderForExistingUser safeProviderForExistingUser)
+        public SignInViewModel(ISafeProviderForExistingUser safeProviderForExistingUser, IHasSafe iHasSafe,
+            Action signUpCompletionCallback)
         {
             _safeProviderForExistingUser = safeProviderForExistingUser;
+            _iHasSafe = iHasSafe;
+            _signUpCompletionCallback = signUpCompletionCallback;
 
             AvailableUserNames = _safeProviderForExistingUser.GetUserNames().ToList();
             IsEnabled = AvailableUserNames.Count != 0;
             if(IsEnabled) _signInUserName = AvailableUserNames.ElementAt(0);
             _signInPassword = string.Empty;
-            SignInCommand = new DelegateCommand(Login, CanLogIn);
+            SignInCommand = new DelegateCommand(SignIn, CanSignIn);
         }
 
-        private void Login()
+        private void SignIn()
         {
             ISafe safe;
             if (!_safeProviderForExistingUser.TryCreateSafeForExistingUser(SignInUserName, SignInPassword, out safe))
             {
                 ErrorMessage = WrongPasswordErrorMessage;
             }
+            else
+            {
+                _iHasSafe.Safe = safe;
+                _signUpCompletionCallback.Invoke();
+            }
         }
 
-        private bool CanLogIn()
+        private bool CanSignIn()
         {
             return SignInPassword.Length != 0;
         }

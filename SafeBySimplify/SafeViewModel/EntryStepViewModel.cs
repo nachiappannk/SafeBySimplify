@@ -16,19 +16,22 @@ namespace SafeViewModel
 
         public SignInViewModel SignInViewModel { get; set; }
 
-        private void OnSignUpCompletion()
+        private void OnLoginCompletion()
         {
             GoToOperationsRequested?.Invoke();            
         }
 
-        public EntryStepViewModel(ISafeProviderForNonExistingUser safeProviderForNonExistingUser, IHasSafe hasSafe)
+        public EntryStepViewModel(
+            ISafeProvider safeProvider,
+            IHasSafe hasSafe)
         {
             GoToSettingsCommand = new DelegateCommand(() =>
             {
                 GoToSettingsRequested?.Invoke();
             }); 
 
-            SignUpViewModel = new SignUpViewModel(safeProviderForNonExistingUser, hasSafe, OnSignUpCompletion);
+            SignUpViewModel = new SignUpViewModel(safeProvider, hasSafe, OnLoginCompletion);
+            SignInViewModel = new SignInViewModel(safeProvider, hasSafe, OnLoginCompletion);
         }
 
 
