@@ -14,7 +14,7 @@ namespace SafeViewModelTests
             public const string InvalidPasswordErrorMessage = "The password is too weak";
 
             [Test]
-            public void When_username_in_signup_form_then_command_is_disabled_with_error_message()
+            public void When_username_in_signup_form_invalid_then_command_is_disabled_with_error_message()
             {
                 _safeProviderForNonExistingUser.StubUserNameValidity(InvalidUserName, false, InvalidUserNameErrorMessage);
 
@@ -28,7 +28,7 @@ namespace SafeViewModelTests
             }
 
             [Test]
-            public void When_invalid_password_in_signup_form_then_command_is_disabled_with_error_message()
+            public void When_invalid_password_in_signup_form_is_invalid_then_command_is_disabled_with_error_message()
             {
 
                 _safeProviderForNonExistingUser.StubPasswordNameValidity(InvalidPassword, false, InvalidPasswordErrorMessage);

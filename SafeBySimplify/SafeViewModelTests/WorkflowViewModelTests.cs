@@ -37,7 +37,7 @@ namespace SafeViewModelTests
 
 
         [Test]
-        public void When_in_entry_screen_and_asked_to_go_to_settings_then_the_current_screen_is_settings()
+        public void When_in_entry_screen_and_go_to_settings_command_is_executed_then_the_app_moves_to_settings()
         {
             AssumeInEntryStepAndThenGoToSettings();
             Assert.AreEqual(typeof(SettingsStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
@@ -45,34 +45,13 @@ namespace SafeViewModelTests
         }
 
         [Test]
-        public void When_in_settings_and_ok_command_is_made_then_the_entry_screen_is_settings()
+        public void When_in_settings_and_ok_command_is_made_then_the_app_moves_to_entry()
         {
             AssumeInEntryStepAndThenGoToSettings();
             _currentStepProperyObserver.ResetObserver();
             AssumeInSettingStepAndThenGoToEntryStep();
             Assert.AreEqual(typeof(EntryStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
             Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
-        }
-
-        private void AssumeInSettingStepAndThenGoToEntryStep()
-        {
-            var settingsStepViewModel = _workFlowViewModel.CurrentStep as SettingsStepViewModel;
-            Assume.That(settingsStepViewModel != null, "Not in setting step");
-            // ReSharper disable once PossibleNullReferenceException
-            var canExecute = settingsStepViewModel.OkCommand.CanExecute();
-            Assume.That(canExecute, "Unable to command okay");
-            settingsStepViewModel.OkCommand.Execute();
-        }
-
-
-        private void AssumeInEntryStepAndThenGoToSettings()
-        {
-            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
-            Assume.That(entryStepViewModel != null, "Not in entry step");
-            // ReSharper disable once PossibleNullReferenceException
-            var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
-            Assume.That(canExecute, "go to settings command is disabled");
-            entryStepViewModel.GoToSettingsCommand.Execute();
         }
 
         [Test]
@@ -110,7 +89,26 @@ namespace SafeViewModelTests
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
 
+        private void AssumeInSettingStepAndThenGoToEntryStep()
+        {
+            var settingsStepViewModel = _workFlowViewModel.CurrentStep as SettingsStepViewModel;
+            Assume.That(settingsStepViewModel != null, "Not in setting step");
+            // ReSharper disable once PossibleNullReferenceException
+            var canExecute = settingsStepViewModel.OkCommand.CanExecute();
+            Assume.That(canExecute, "Unable to command okay");
+            settingsStepViewModel.OkCommand.Execute();
+        }
 
+
+        private void AssumeInEntryStepAndThenGoToSettings()
+        {
+            var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
+            Assume.That(entryStepViewModel != null, "Not in entry step");
+            // ReSharper disable once PossibleNullReferenceException
+            var canExecute = entryStepViewModel.GoToSettingsCommand.CanExecute();
+            Assume.That(canExecute, "go to settings command is disabled");
+            entryStepViewModel.GoToSettingsCommand.Execute();
+        }
 
         private void AssumeInEntryStepAndThenGoToOperationsBySignIn(string validUserName, string validPassword)
         {
