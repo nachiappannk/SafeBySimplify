@@ -83,6 +83,9 @@
     <Compile Include="SafeUserControl.xaml.cs">
       <DependentUpon>SafeUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsUserControl.xaml.cs">
+      <DependentUpon>SettingsUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SignInUserControl.xaml.cs">
       <DependentUpon>SignInUserControl.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SafeUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,6 +170,9 @@
       <Project>{28b42120-2f47-4c8d-9c24-f1ebe00ecb01}</Project>
       <Name>SafeViewModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\settings.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

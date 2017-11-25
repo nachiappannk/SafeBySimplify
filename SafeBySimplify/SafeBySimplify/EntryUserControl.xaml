@@ -13,7 +13,17 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Label Content="Welcome" Style="{StaticResource Level1HeadingLableStyle}"></Label>
+        <!--<Label Content="Welcome" Style="{StaticResource Level1HeadingLableStyle}"></Label>-->
+        <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}" LastChildFill="False">
+            <TextBlock Text="Welcome" DockPanel.Dock="Left" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
+            <Button DockPanel.Dock="Right" Margin="1" Command="{Binding GoToSettingsCommand }">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Image.Source>
+                        <BitmapImage UriSource="images/settings.png" />
+                    </Image.Source>
+                </Image>
+            </Button>
+        </DockPanel>
         <Grid Row="1">
             <Grid Margin="30">
                 <Grid.ColumnDefinitions>

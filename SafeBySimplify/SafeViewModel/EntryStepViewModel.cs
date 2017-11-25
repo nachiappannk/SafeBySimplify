@@ -10,7 +10,7 @@ namespace SafeViewModel
         public event Action GoToSettingsRequested;
         public event Action GoToOperationsRequested;
 
-        public DelegateCommand GoToSettingsCommand;
+        public DelegateCommand GoToSettingsCommand { get; set; }
 
         public SignUpViewModel SignUpViewModel { get; set; }
 
