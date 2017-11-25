@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAccountGateway.cs" />
+    <Compile Include="ICryptor.cs" />
     <Compile Include="IHasWorkingDirectory.cs" />
     <Compile Include="ISafeProvider.cs" />
     <Compile Include="ISettingGateway.cs" />

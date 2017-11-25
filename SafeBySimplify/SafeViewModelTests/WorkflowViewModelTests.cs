@@ -61,7 +61,7 @@ namespace SafeViewModelTests
             const string validPassword = "SomePassword";
 
             var safe = Substitute.For<ISafe>();
-            _safeProvider.CreateSafeForNonExistingUser(validUserName, validPassword).Returns(safe);
+            _safeProvider.CreateSafeForNonExistingUser(validUserName, validPassword, validPassword).Returns(safe);
 
             _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
             _safeProvider.StubPasswordNameValidity(validPassword, true, string.Empty);

@@ -15,6 +15,8 @@ namespace SafeModel
 
         public const string UserNameProbablyExistsErrorMessage = "The username probably exists";
 
+        public const string PasswordTooShortErrorMessage = "Password has to be 8 or more characters";
+
         public SafeProvider()
         {
             SettingGateway = new SettingGateway();
@@ -22,6 +24,8 @@ namespace SafeModel
 
         public ISettingGateway SettingGateway { get; set; }
         public IAccountGateway AccountGateway { get; set; }
+
+        public ICryptor  Cryptor { get; set; }
 
         public string WorkingDirectory
         {
@@ -47,7 +51,7 @@ namespace SafeModel
                 errorMessage = UserNameHasToAlphaNumericWithNoSpecialCharactersErrorMessage;
                 return false;
             }
-            if (!AccountGateway.IsUsernameCreatable(userName))
+            if (!AccountGateway.IsUsernameCreatable(WorkingDirectory, userName))
             {
                 errorMessage = UserNameProbablyExistsErrorMessage;
                 return false;
@@ -58,10 +62,10 @@ namespace SafeModel
 
         public bool IsPasswordValidForNonExistingUser(string password, out string errorMessage)
         {
-            //TBD
+            errorMessage = PasswordTooShortErrorMessage;
+            if (password.Length < 8) return false;
             errorMessage = string.Empty;
-            if (password.Length > 4) return true;
-            return false;
+            return true;
         }
 
         public class SafeXXX : ISafe
@@ -69,9 +73,20 @@ namespace SafeModel
 
         }
 
-        public ISafe CreateSafeForNonExistingUser(string userName, string password)
+        public ISafe CreateSafeForNonExistingUser(string userName, string masterpassword, string password)
         {
+
+            var masterPassBytes = GetEncryptedBytes(masterpassword, password);
+            var verifyingWord = "SafeBySimplify";
+            var veriyfingWordEncryptedBytes = GetEncryptedBytes(verifyingWord, password);
+            AccountGateway.WriteUserRecord(userName, masterPassBytes, verifyingWord, veriyfingWordEncryptedBytes);
+
             return new SafeXXX();
+        }
+
+        private byte[] GetEncryptedBytes<T>(T content, string password)
+        {
+            return Cryptor.GetEncryptedBytes(content, password);
         }
 
         public bool TryCreateSafeForExistingUser(string userName, string password, out ISafe safe)
@@ -82,7 +97,7 @@ namespace SafeModel
 
         public List<string> GetUserNames()
         {
-            return new List<string>() {"one", "two", "three"};
+            return AccountGateway.GetUserNames(WorkingDirectory);
         }
     }
 }

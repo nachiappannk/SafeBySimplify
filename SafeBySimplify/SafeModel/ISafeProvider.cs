@@ -10,7 +10,7 @@ namespace SafeModel
     {
         bool IsUserNameValidForNonExistingUser(string userName, out string errorMessage);
         bool IsPasswordValidForNonExistingUser(string password, out string errorMessage);
-        ISafe CreateSafeForNonExistingUser(string userName, string password);
+        ISafe CreateSafeForNonExistingUser(string userName, string masterpassword, string password);
     }
 
     public interface ISafeProviderForExistingUser

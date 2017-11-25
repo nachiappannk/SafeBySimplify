@@ -23,7 +23,8 @@ namespace SafeViewModel
             SignUpCommand = new DelegateCommand(
                 () =>
                 {
-                    iHasSafe.Safe = _safeProviderForNonExistingUser.CreateSafeForNonExistingUser(SignUpUserName, SignUpPassword);
+                    iHasSafe.Safe = _safeProviderForNonExistingUser
+                    .CreateSafeForNonExistingUser(SignUpUserName, SignUpPassword, SignUpPassword);
                     _signUpCompletionCallback.Invoke();
                 }, 
                 () => _canSignUp);
