@@ -1,6 +1,8 @@
-﻿namespace SafeModel
+﻿using System.Collections.Generic;
+
+namespace SafeModel
 {
-    public class SafeProvider : IHasWorkingDirectory, ISafeProviderForNonExistingUser
+    public class SafeProvider : ISafeProvider
     {
         private readonly ISettingGateway _settingGateway;
 
@@ -44,6 +46,17 @@
         public ISafe CreateSafeForNonExistingUser(string userName, string password)
         {
             return new SafeXXX();
+        }
+
+        public bool TryCreateSafeForExistingUser(string userName, string password, out ISafe safe)
+        {
+            safe = new SafeXXX();
+            return true;
+        }
+
+        public List<string> GetUserNames()
+        {
+            return new List<string>() {"one", "two", "three"};
         }
     }
 }

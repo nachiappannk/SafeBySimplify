@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SafeViewModel;
 
 namespace SafeBySimplify
 {
@@ -23,6 +24,14 @@ namespace SafeBySimplify
         public SignInUserControl()
         {
             InitializeComponent();
+            PasswordBox.PasswordChanged += PasswordChanged;
+        }
+
+        private void PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            var signInViewModel = this.DataContext as SignInViewModel;
+            if(signInViewModel == null)return;
+            signInViewModel.SignInPassword = PasswordBox.Password;
         }
     }
 }
