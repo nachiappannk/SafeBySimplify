@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BootStrapper\ViewModelFactory.cs" />
     <Compile Include="EntryUserControl.xaml.cs">
       <DependentUpon>EntryUserControl.xaml</DependentUpon>
     </Compile>

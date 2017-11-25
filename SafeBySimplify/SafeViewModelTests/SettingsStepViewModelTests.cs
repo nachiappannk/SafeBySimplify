@@ -22,12 +22,9 @@ namespace SafeViewModelTests
         [SetUp]
         public void SetUp()
         {
-            //_hasWorkingDirectory = Substitute.For<IHasWorkingDirectory>();
-            _settingGateway = Substitute.For<ISettingGateway>();
+            _settingGateway = new SettingGatewayForTests();
             _hasWorkingDirectory = new SafeProvider(_settingGateway);
-            _settingGateway.IsWorkingDirectoryAvailable().Returns(true);
-            _settingGateway.GetWorkingDirectory().Returns(InitialWorkingDirectory);
-            //_hasWorkingDirectory.WorkingDirectory = InitialWorkingDirectory;
+            _settingGateway.SetWorkingDirectory(InitialWorkingDirectory);
 
             _settingsStepViewModel = new SettingsStepViewModel(_hasWorkingDirectory);
             _settingsStepViewModel.OnEntry();
@@ -69,7 +66,7 @@ namespace SafeViewModelTests
 
             Assume.That(_settingsStepViewModel.DiscardCommand.CanExecute(),"Discard is in disabled state");
             _settingsStepViewModel.DiscardCommand.Execute();
-            _settingGateway.DidNotReceive().PutWorkingDirectory(Arg.Any<string>());
+            Assert.AreEqual(InitialWorkingDirectory, _settingGateway.GetWorkingDirectory());
             _workSpaceDirectoryObserver.AssertProperyHasChanged(initalValue);
             Assert.AreEqual(initalValue, _settingsStepViewModel.WorkSpaceDirectory);
 
@@ -81,15 +78,12 @@ namespace SafeViewModelTests
         [Test]
         public void When_changing_workspace_and_saving_we_go_to_initial_state_and_workspace_is_the_new_value_and_write_is_made_to_lib()
         {
-            //_hasWorkingDirectory.ClearReceivedCalls();
-
-
             var newValueOfWorkSpaceDirectory = @"D:\TFS_New";
             _settingsStepViewModel.WorkSpaceDirectory = newValueOfWorkSpaceDirectory;
 
             Assume.That(_settingsStepViewModel.SaveCommand.CanExecute());
             _settingsStepViewModel.SaveCommand.Execute();
-            _settingGateway.Received().PutWorkingDirectory(newValueOfWorkSpaceDirectory);
+            Assert.AreEqual(newValueOfWorkSpaceDirectory,_settingGateway.GetWorkingDirectory());
 
             Assert.AreEqual(newValueOfWorkSpaceDirectory, _settingsStepViewModel.WorkSpaceDirectory);
             AssertTheCommandsMovedToInitialState();

@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using SafeViewModel;
-using SafeModel;
+﻿using System.Windows;
+using SafeBySimplify.BootStrapper;
 
 namespace SafeBySimplify
 {
@@ -25,15 +11,8 @@ namespace SafeBySimplify
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new WorkFlowViewModel(new SafeProvider(new SettingGateway()));
-            //Test.DataContext = new SignUpViewModel(new SafeProvider(null), new HasSafe(), () => { });
-            //Test.DataContext = new SignInViewModel(new SafeProvider(null), new HasSafe(), () => { });
+            //this.DataContext = ViewModelFactory.CreateWorkFlowViewModelWithTestSetting();
+            this.DataContext = ViewModelFactory.CreateWorkFlowViewModel();
         }
-
-        public class HasSafe : IHasSafe
-        {
-            public ISafe Safe { get; set; }
-        }
-
     }
 }

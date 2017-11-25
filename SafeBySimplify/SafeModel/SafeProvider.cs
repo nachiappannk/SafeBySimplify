@@ -13,13 +13,8 @@ namespace SafeModel
 
         public string WorkingDirectory
         {
-            get
-            {
-                if (_settingGateway.IsWorkingDirectoryAvailable())
-                    return _settingGateway.GetWorkingDirectory();
-                return "";
-            }
-            set { _settingGateway.PutWorkingDirectory(value); }
+            get { return _settingGateway.GetWorkingDirectory(); }
+            set { _settingGateway.SetWorkingDirectory(value); }
         }
 
         public bool IsUserNameValidForNonExistingUser(string userName, out string errorMessage)
