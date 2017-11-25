@@ -17,12 +17,17 @@ namespace SafeViewModelTests
         private CommandObserver _discardCommandObserver;
         private CommandObserver _okayCommandObserver;
         private ViewModelPropertyObserver<string> _workSpaceDirectoryObserver;
+        private ISettingGateway _settingGateway;
 
         [SetUp]
         public void SetUp()
         {
-            _hasWorkingDirectory = Substitute.For<IHasWorkingDirectory>();
-            _hasWorkingDirectory.WorkingDirectory = InitialWorkingDirectory;
+            //_hasWorkingDirectory = Substitute.For<IHasWorkingDirectory>();
+            _settingGateway = Substitute.For<ISettingGateway>();
+            _hasWorkingDirectory = new SafeProvider(_settingGateway);
+            _settingGateway.IsWorkingDirectoryAvailable().Returns(true);
+            _settingGateway.GetWorkingDirectory().Returns(InitialWorkingDirectory);
+            //_hasWorkingDirectory.WorkingDirectory = InitialWorkingDirectory;
 
             _settingsStepViewModel = new SettingsStepViewModel(_hasWorkingDirectory);
             _settingsStepViewModel.OnEntry();
@@ -60,12 +65,11 @@ namespace SafeViewModelTests
         public void When_changing_workspace_and_discarding_we_go_to_initial_state_and_workspace_is_with_old_value_and_no_write_is_made_to_lib()
         {
             var initalValue = InitialWorkingDirectory;
-            _hasWorkingDirectory.ClearReceivedCalls();
             _settingsStepViewModel.WorkSpaceDirectory = @"D:\TFS_New";
 
-            Assume.That(_settingsStepViewModel.DiscardCommand.CanExecute());
+            Assume.That(_settingsStepViewModel.DiscardCommand.CanExecute(),"Discard is in disabled state");
             _settingsStepViewModel.DiscardCommand.Execute();
-            _hasWorkingDirectory.DidNotReceive().WorkingDirectory = Arg.Any<string>();
+            _settingGateway.DidNotReceive().PutWorkingDirectory(Arg.Any<string>());
             _workSpaceDirectoryObserver.AssertProperyHasChanged(initalValue);
             Assert.AreEqual(initalValue, _settingsStepViewModel.WorkSpaceDirectory);
 
@@ -77,7 +81,7 @@ namespace SafeViewModelTests
         [Test]
         public void When_changing_workspace_and_saving_we_go_to_initial_state_and_workspace_is_the_new_value_and_write_is_made_to_lib()
         {
-            _hasWorkingDirectory.ClearReceivedCalls();
+            //_hasWorkingDirectory.ClearReceivedCalls();
 
 
             var newValueOfWorkSpaceDirectory = @"D:\TFS_New";
@@ -85,7 +89,7 @@ namespace SafeViewModelTests
 
             Assume.That(_settingsStepViewModel.SaveCommand.CanExecute());
             _settingsStepViewModel.SaveCommand.Execute();
-            _hasWorkingDirectory.Received().WorkingDirectory = newValueOfWorkSpaceDirectory;
+            _settingGateway.Received().PutWorkingDirectory(newValueOfWorkSpaceDirectory);
 
             Assert.AreEqual(newValueOfWorkSpaceDirectory, _settingsStepViewModel.WorkSpaceDirectory);
             AssertTheCommandsMovedToInitialState();

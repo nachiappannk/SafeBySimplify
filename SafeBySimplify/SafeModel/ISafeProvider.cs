@@ -6,6 +6,27 @@ namespace SafeModel
     {
     }
 
+    public class SafeProvider : IHasWorkingDirectory
+    {
+        private readonly ISettingGateway _settingGateway;
+
+        public SafeProvider(ISettingGateway settingGateway)
+        {
+            _settingGateway = settingGateway;
+        }
+
+        public string WorkingDirectory
+        {
+            get
+            {
+                if (_settingGateway.IsWorkingDirectoryAvailable())
+                    return _settingGateway.GetWorkingDirectory();
+                return "";
+            }
+            set { _settingGateway.PutWorkingDirectory(value); }
+        }
+    }
+
     public interface ISafeProviderForNonExistingUser
     {
         bool IsUserNameValidForNonExistingUser(string userName, out string errorMessage);
