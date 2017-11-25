@@ -15,7 +15,7 @@
                 <local:EntryUserControl></local:EntryUserControl>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:SettingsStepViewModel}">
-                <Grid></Grid>
+                <local:SettingsUserControl></local:SettingsUserControl>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:OperationStepViewModel}">
                 <Grid></Grid>

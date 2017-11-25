@@ -17,17 +17,20 @@ namespace SafeModel
         {
             var processName = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
             var currentDirectory = Directory.GetCurrentDirectory();
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return "";
         }
 
         public string PutWorkingDirectory(string workingDirectory)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
+            return "";
         }
 
         public bool IsWorkingDirectoryAvailable()
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
+            return true;
         }
     }
 }

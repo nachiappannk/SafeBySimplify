@@ -25,7 +25,7 @@ namespace SafeBySimplify
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new WorkFlowViewModel(new SafeProvider(null));
+            this.DataContext = new WorkFlowViewModel(new SafeProvider(new SettingGateway()));
             //Test.DataContext = new SignUpViewModel(new SafeProvider(null), new HasSafe(), () => { });
             //Test.DataContext = new SignInViewModel(new SafeProvider(null), new HasSafe(), () => { });
         }
