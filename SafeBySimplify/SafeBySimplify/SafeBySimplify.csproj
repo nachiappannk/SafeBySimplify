@@ -151,6 +151,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SafeModel\SafeModel.csproj">
+      <Project>{CCC41549-8A57-4F3D-A119-6E1834B79F40}</Project>
+      <Name>SafeModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SafeUiLib\SafeUiLib.csproj">
       <Project>{38913cf4-2071-4b76-81cb-7bb64be6d77c}</Project>
       <Name>SafeUiLib</Name>

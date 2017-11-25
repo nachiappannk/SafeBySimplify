@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SafeViewModel;
+using SafeModel;
 
 namespace SafeBySimplify
 {
@@ -23,7 +25,13 @@ namespace SafeBySimplify
         public MainWindow()
         {
             InitializeComponent();
+            Test.DataContext = new SignUpViewModel(new SafeProvider(null), new HasSafe(), () => { });
         }
-        
+
+        public class HasSafe : IHasSafe
+        {
+            public ISafe Safe { get; set; }
+        }
+
     }
 }

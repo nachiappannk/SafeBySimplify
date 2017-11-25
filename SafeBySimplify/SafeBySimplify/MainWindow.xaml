@@ -8,6 +8,6 @@
         mc:Ignorable="d"
         Title="Safe By Simplify" Height="350" Width="525">
     <Grid>
-        <local:SafeUserControl Margin="2"/>
+        <local:SignUpUserControl x:Name="Test"></local:SignUpUserControl>
     </Grid>
 </Window>
