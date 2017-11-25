@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAccountGateway.cs" />
     <Compile Include="IHasWorkingDirectory.cs" />
     <Compile Include="ISafeProvider.cs" />
     <Compile Include="ISettingGateway.cs" />

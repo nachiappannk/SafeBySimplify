@@ -23,7 +23,9 @@ namespace SafeViewModelTests
         public void SetUp()
         {
             _settingGateway = new SettingGatewayForTests();
-            _hasWorkingDirectory = new SafeProvider(_settingGateway);
+            var safeProvider = new SafeProvider();
+            safeProvider.SettingGateway = _settingGateway;
+            _hasWorkingDirectory = safeProvider;
             _settingGateway.SetWorkingDirectory(InitialWorkingDirectory);
 
             _settingsStepViewModel = new SettingsStepViewModel(_hasWorkingDirectory);

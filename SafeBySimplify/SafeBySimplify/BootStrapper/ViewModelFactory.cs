@@ -13,14 +13,17 @@ namespace SafeBySimplify.BootStrapper
 
         public static WorkFlowViewModel CreateWorkFlowViewModel()
         {
-            return new WorkFlowViewModel(new SafeProvider(new SettingGateway()));
+            var safeProvider = new SafeProvider();
+            return new WorkFlowViewModel(safeProvider);
         }
 
         public static WorkFlowViewModel CreateWorkFlowViewModelWithTestSetting()
         {
             var settings = new SettingGatewayForTests();
             settings.SetWorkingDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-            return new WorkFlowViewModel(new SafeProvider(settings));
+            var safeProvider = new SafeProvider();
+            safeProvider.SettingGateway = settings;
+            return new WorkFlowViewModel(safeProvider);
         }
     }
 }
