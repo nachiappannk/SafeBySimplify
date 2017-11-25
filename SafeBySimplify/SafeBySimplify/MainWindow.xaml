@@ -5,9 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SafeBySimplify"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance  safeViewModel:WorkFlowViewModel }"
         Title="Safe By Simplify" Height="350" Width="525">
     <Grid>
-        <local:SignInUserControl x:Name="Test"></local:SignInUserControl>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type safeViewModel:EntryStepViewModel}">
+                <local:EntryUserControl></local:EntryUserControl>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type safeViewModel:SettingsStepViewModel}">
+                <Grid></Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type safeViewModel:OperationStepViewModel}">
+                <Grid></Grid>
+            </DataTemplate>
+        </Grid.Resources>
+            <ContentControl Content="{Binding CurrentStep}"/>
     </Grid>
 </Window>

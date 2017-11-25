@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SafeBySimplify"
+             xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance safeViewModel:EntryStepViewModel}"
              d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
         <Grid.RowDefinitions>
@@ -18,8 +20,9 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <local:SignInUserControl Grid.Column="0" Margin="0,0,15,0"/>
-                <local:SignUpUserControl Grid.Column="1" Margin="15,0,0,0"/>
+                <local:SignUpUserControl Grid.Column="0" Margin="0,0,15,0" DataContext="{Binding SignUpViewModel}"/>
+                <local:SignInUserControl Grid.Column="1" Margin="15,0,0,0" DataContext="{Binding SignInViewModel}"/>
+
             </Grid>
         </Grid>
     </Grid>
