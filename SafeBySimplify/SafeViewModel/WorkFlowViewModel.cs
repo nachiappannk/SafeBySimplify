@@ -53,6 +53,11 @@ namespace SafeViewModel
             {
                 CurrentStep = _entryStepViewModel;
             };
+
+            _operationStepViewModel.GoToEntryStepRequested += () =>
+            {
+                CurrentStep = _entryStepViewModel;
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

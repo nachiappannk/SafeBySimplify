@@ -89,6 +89,30 @@ namespace SafeViewModelTests
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
 
+        [Test]
+        public void When_in_operation_screen_and_logged_out_then_app_returns_to_entry_screen()
+        {
+            const string validUserName = "SomeUserName";
+            const string validPassword = "SomePassword";
+
+            var safe = Substitute.For<ISafe>();
+            _safeProvider.CreateSafeForNonExistingUser(validUserName, validPassword, validPassword).Returns(safe);
+
+            _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
+            _safeProvider.StubPasswordNameValidity(validPassword, true, string.Empty);
+            AssumeInEntryStepAndThenGoToOperationsBySignUp(validUserName, validPassword);
+
+
+            var operationStepViewModel = _workFlowViewModel.CurrentStep as OperationStepViewModel;
+
+            Assert.AreEqual(true,operationStepViewModel.SignOutCommand.CanExecute());
+            operationStepViewModel.SignOutCommand.Execute();
+            Assert.AreEqual(typeof(EntryStepViewModel),_currentStepProperyObserver.PropertyValue.GetType());
+
+        }
+
+
+
         private void AssumeInSettingStepAndThenGoToEntryStep()
         {
             var settingsStepViewModel = _workFlowViewModel.CurrentStep as SettingsStepViewModel;
