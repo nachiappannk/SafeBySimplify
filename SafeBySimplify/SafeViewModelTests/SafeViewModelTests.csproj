@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OperationStepViewModelTests.cs" />
     <Compile Include="SafeProviderForNonExistingUserTestExtententions.cs" />
     <Compile Include="SignInViewModelTests.cs" />
     <Compile Include="SignInViewModelTests.NoRegisteredUsersTests.cs" />

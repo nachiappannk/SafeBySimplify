@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SafeModel
 {
@@ -20,6 +22,11 @@ namespace SafeModel
     }
 
     public interface ISafe
+    {
+        Task<List<RecordHeader>> GetRecordsAsync(string searchText, CancellationToken token);
+    }
+
+    public class RecordHeader
     {
 
     }

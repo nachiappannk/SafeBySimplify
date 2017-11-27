@@ -107,6 +107,7 @@ namespace SafeViewModelTests
 
             Assert.AreEqual(true,operationStepViewModel.SignOutCommand.CanExecute());
             operationStepViewModel.SignOutCommand.Execute();
+            Assert.IsNull(operationStepViewModel.Safe);
             Assert.AreEqual(typeof(EntryStepViewModel),_currentStepProperyObserver.PropertyValue.GetType());
 
         }

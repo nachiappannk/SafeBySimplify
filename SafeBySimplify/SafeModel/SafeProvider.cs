@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SafeModel
 {
@@ -71,7 +73,11 @@ namespace SafeModel
 
         public class SafeXXX : ISafe
         {
-
+            
+            public Task<List<RecordHeader>> GetRecordsAsync(string searchText, CancellationToken token)
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
         public ISafe CreateSafeForNonExistingUser(string userName, string masterpassword, string password)
