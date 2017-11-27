@@ -11,8 +11,8 @@ namespace SafeBySimplify
         public MainWindow()
         {
             InitializeComponent();
-            //this.DataContext = ViewModelFactory.CreateWorkFlowViewModelWithTestSetting();
-            this.DataContext = ViewModelFactory.CreateWorkFlowViewModel();
+            this.DataContext = ViewModelFactory.CreateWorkFlowViewModelWithTestSetting();
+            //this.DataContext = ViewModelFactory.CreateWorkFlowViewModel();
         }
     }
 }

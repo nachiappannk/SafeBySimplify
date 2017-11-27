@@ -20,6 +20,7 @@ namespace SafeModel
         public SafeProvider()
         {
             SettingGateway = new SettingGateway();
+            AccountGateway = new AccountGatway();
         }
 
         public ISettingGateway SettingGateway { get; set; }
