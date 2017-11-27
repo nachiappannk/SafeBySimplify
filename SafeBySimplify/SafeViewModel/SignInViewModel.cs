@@ -10,14 +10,12 @@ namespace SafeViewModel
     public class SignInViewModel : NotifiesPropertyChanged
     {
         private readonly ISafeProviderForExistingUser _safeProviderForExistingUser;
-        private readonly IHasSafe _iHasSafe;
-        private readonly Action _signUpCompletionCallback;
+        private readonly Action<ISafe> _signUpCompletionCallback;
 
-        public SignInViewModel(ISafeProviderForExistingUser safeProviderForExistingUser, IHasSafe iHasSafe,
-            Action signUpCompletionCallback)
+        public SignInViewModel(ISafeProviderForExistingUser safeProviderForExistingUser,
+            Action<ISafe> signUpCompletionCallback)
         {
             _safeProviderForExistingUser = safeProviderForExistingUser;
-            _iHasSafe = iHasSafe;
             _signUpCompletionCallback = signUpCompletionCallback;
 
             AvailableUserNames = _safeProviderForExistingUser.GetUserNames().ToList();
@@ -36,8 +34,7 @@ namespace SafeViewModel
             }
             else
             {
-                _iHasSafe.Safe = safe;
-                _signUpCompletionCallback.Invoke();
+                _signUpCompletionCallback.Invoke(safe);
             }
         }
 

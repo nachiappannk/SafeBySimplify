@@ -6,10 +6,10 @@ namespace SafeViewModel
 {
     public class OperationStepViewModel : WorkFlowStepViewModel, IHasSafe
     {
-        public event Action GoToEntryStepRequested;
-        public OperationStepViewModel()
+        public OperationStepViewModel(ISafe safe, Action goToEntryStepAction)
         {
-            SignOutCommand = new DelegateCommand(() => { GoToEntryStepRequested?.Invoke();});
+            Safe = safe;
+            SignOutCommand = new DelegateCommand(goToEntryStepAction);
         }
 
         public ISafe Safe { get; set; }

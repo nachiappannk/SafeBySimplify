@@ -9,12 +9,12 @@ namespace SafeViewModel
         
 
         private readonly ISafeProviderForNonExistingUser _safeProviderForNonExistingUser;
-        private readonly Action _signUpCompletionCallback;
+        private readonly Action<ISafe> _signUpCompletionCallback;
         public const string PasswordMismatchingErrorMessage = "Password and Confirm Password are different";
         private bool _canSignUp = false;
 
-        public SignUpViewModel(ISafeProviderForNonExistingUser safeProviderForNonExistingUser, IHasSafe iHasSafe,
-            Action signUpCompletionCallback)
+        public SignUpViewModel(ISafeProviderForNonExistingUser safeProviderForNonExistingUser,
+            Action<ISafe> signUpCompletionCallback)
         {
             _safeProviderForNonExistingUser = safeProviderForNonExistingUser;
             _signUpCompletionCallback = signUpCompletionCallback;
@@ -23,9 +23,9 @@ namespace SafeViewModel
             SignUpCommand = new DelegateCommand(
                 () =>
                 {
-                    iHasSafe.Safe = _safeProviderForNonExistingUser
+                    var safe = _safeProviderForNonExistingUser
                     .CreateSafeForNonExistingUser(SignUpUserName, SignUpPassword, SignUpPassword);
-                    _signUpCompletionCallback.Invoke();
+                    _signUpCompletionCallback.Invoke(safe);
                 }, 
                 () => _canSignUp);
         }

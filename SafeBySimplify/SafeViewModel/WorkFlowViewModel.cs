@@ -8,9 +8,6 @@ namespace SafeViewModel
     public class WorkFlowViewModel : INotifyPropertyChanged
     {
         private readonly ISafeProvider _safeProvider;
-        private readonly EntryStepViewModel _entryStepViewModel;
-        private readonly SettingsStepViewModel _settingsStepViewModel;
-        private readonly OperationStepViewModel _operationStepViewModel;
 
         private WorkFlowStepViewModel _currentStep;
 
@@ -32,32 +29,22 @@ namespace SafeViewModel
         public WorkFlowViewModel(ISafeProvider safeProvider)
         {
             _safeProvider = safeProvider;
+            GoToEnryStep();
+        }
 
-            _operationStepViewModel = new OperationStepViewModel();
-            _settingsStepViewModel = new SettingsStepViewModel(_safeProvider);
-            _entryStepViewModel = new EntryStepViewModel(_safeProvider, _operationStepViewModel);
+        private void GoToOperationStep(ISafe safe)
+        {
+            CurrentStep = new OperationStepViewModel(safe, GoToEnryStep);
+        }
 
-            CurrentStep = _entryStepViewModel;
+        private void GoToSettingStep()
+        {
+            CurrentStep = new SettingsStepViewModel(_safeProvider, GoToEnryStep);
+        }
 
-            _entryStepViewModel.GoToSettingsRequested += () =>
-            {
-                CurrentStep = _settingsStepViewModel;
-            };
-
-            _entryStepViewModel.GoToOperationsRequested += () =>
-            {
-                CurrentStep = _operationStepViewModel;
-            };
-
-            _settingsStepViewModel.GoToEntryStepRequested += () =>
-            {
-                CurrentStep = _entryStepViewModel;
-            };
-
-            _operationStepViewModel.GoToEntryStepRequested += () =>
-            {
-                CurrentStep = _entryStepViewModel;
-            };
+        private void GoToEnryStep()
+        {
+            CurrentStep = new EntryStepViewModel(_safeProvider, GoToSettingStep, GoToOperationStep);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

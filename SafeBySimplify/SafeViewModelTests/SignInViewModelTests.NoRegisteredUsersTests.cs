@@ -13,8 +13,8 @@ namespace SafeViewModelTests
             public void Setup()
             {
                 _safeProviderForExistingUser.GetUserNames().Returns(new List<string>());
-                _signInViewModel = new SignInViewModel(_safeProviderForExistingUser, Substitute.For<IHasSafe>(),
-                    () => { });
+                _signInViewModel = new SignInViewModel(_safeProviderForExistingUser, 
+                    (s) => { });
             }
 
             [Test]

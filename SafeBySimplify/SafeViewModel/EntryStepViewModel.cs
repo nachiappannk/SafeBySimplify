@@ -6,32 +6,19 @@ namespace SafeViewModel
 {
     public class EntryStepViewModel : WorkFlowStepViewModel
     {
-        
-        public event Action GoToSettingsRequested;
-        public event Action GoToOperationsRequested;
-
         public DelegateCommand GoToSettingsCommand { get; set; }
 
         public SignUpViewModel SignUpViewModel { get; set; }
 
         public SignInViewModel SignInViewModel { get; set; }
 
-        private void OnLoginCompletion()
-        {
-            GoToOperationsRequested?.Invoke();            
-        }
-
         public EntryStepViewModel(
-            ISafeProvider safeProvider,
-            IHasSafe hasSafe)
+            ISafeProvider safeProvider, Action goToSettingStepAction, Action<ISafe> goToOperationStep)
         {
-            GoToSettingsCommand = new DelegateCommand(() =>
-            {
-                GoToSettingsRequested?.Invoke();
-            }); 
+            GoToSettingsCommand = new DelegateCommand(goToSettingStepAction); 
 
-            SignUpViewModel = new SignUpViewModel(safeProvider, hasSafe, OnLoginCompletion);
-            SignInViewModel = new SignInViewModel(safeProvider, hasSafe, OnLoginCompletion);
+            SignUpViewModel = new SignUpViewModel(safeProvider, goToOperationStep);
+            SignInViewModel = new SignInViewModel(safeProvider, goToOperationStep);
         }
 
 

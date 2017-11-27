@@ -9,9 +9,9 @@ namespace SafeViewModel
 {
     public class SettingsStepViewModel : WorkFlowStepViewModel
     {
-        public event Action GoToEntryStepRequested;
 
         private readonly IHasWorkingDirectory _hasWorkingDirectory;
+        private readonly Action _gotToEntryStepAction;
 
         private bool _isInSavedState = true;
 
@@ -54,9 +54,10 @@ namespace SafeViewModel
             }
         }
 
-        public SettingsStepViewModel(IHasWorkingDirectory hasWorkingDirectory)
+        public SettingsStepViewModel(IHasWorkingDirectory hasWorkingDirectory, Action gotToEntryStepAction)
         {
             _hasWorkingDirectory = hasWorkingDirectory;
+            _gotToEntryStepAction = gotToEntryStepAction;
             SaveCommand = new DelegateCommand(Save, () => !IsInSavedState);
             DiscardCommand = new DelegateCommand(Discard, () => !IsInSavedState);
             OkCommand = new DelegateCommand(Ok, ()=> IsInSavedState);
@@ -77,7 +78,7 @@ namespace SafeViewModel
 
         private void Ok()
         {
-            GoToEntryStepRequested?.Invoke();
+            _gotToEntryStepAction.Invoke();
         }
 
         public override void OnEntry()

@@ -28,7 +28,7 @@ namespace SafeViewModelTests
             _hasWorkingDirectory = safeProvider;
             _settingGateway.SetWorkingDirectory(InitialWorkingDirectory);
 
-            _settingsStepViewModel = new SettingsStepViewModel(_hasWorkingDirectory);
+            _settingsStepViewModel = new SettingsStepViewModel(_hasWorkingDirectory, () => { });
             _settingsStepViewModel.OnEntry();
 
             _saveCommandObserver = _settingsStepViewModel.SaveCommand.GetDelegateCommandObserver();
