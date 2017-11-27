@@ -19,12 +19,10 @@ namespace SafeViewModelTests
         protected ViewModelPropertyObserver<string> _errorMessagePropertyObserver;
 
         protected ISafeProviderForNonExistingUser _safeProviderForNonExistingUser;
-        protected IHasSafe _hasSafe;
 
         [SetUp]
         public void SetUp()
         {
-            _hasSafe = Substitute.For<IHasSafe>();
             _safeProviderForNonExistingUser = CreateSafeProviderForNonExistingUser();
             _signUpViewModel = new SignUpViewModel(_safeProviderForNonExistingUser, (safe) => { });
             _commandObserver = _signUpViewModel.SignUpCommand.GetDelegateCommandObserver();

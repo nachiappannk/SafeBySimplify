@@ -4,7 +4,7 @@ using SafeModel;
 
 namespace SafeViewModel
 {
-    public class OperationStepViewModel : WorkFlowStepViewModel, IHasSafe
+    public class OperationStepViewModel : WorkFlowStepViewModel
     {
         public OperationStepViewModel(ISafe safe, Action goToEntryStepAction)
         {
@@ -14,10 +14,5 @@ namespace SafeViewModel
 
         public ISafe Safe { get; set; }
         public DelegateCommand SignOutCommand { get; set; }
-    }
-
-    public interface IHasSafe
-    {
-        ISafe Safe { get; set; }    
     }
 }
