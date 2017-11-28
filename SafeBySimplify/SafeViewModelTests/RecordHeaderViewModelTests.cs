@@ -20,7 +20,7 @@ namespace SafeViewModelTests
                 Name = _recordName,
                 Tags = _tags,
             };
-            _recordHeaderViewModel = new RecordHeaderViewModel(recordHeader);
+            _recordHeaderViewModel = new RecordHeaderViewModel(recordHeader, () => { });
         }
 
         [Test]

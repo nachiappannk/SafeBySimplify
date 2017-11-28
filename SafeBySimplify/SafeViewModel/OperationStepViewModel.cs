@@ -49,7 +49,7 @@ namespace SafeViewModel
             {
                 var headers = await Safe.GetRecordsAsync(value, _tokenSource.Token);
                 SearchResults = new ObservableCollection<RecordHeaderViewModel>
-                    (headers.Select(x => new RecordHeaderViewModel(x)));
+                    (headers.Select(x => new RecordHeaderViewModel(x, () => { SelectedResult = new ResultViewModel(x);})));
             }
             catch (Exception e)
             {
@@ -58,8 +58,35 @@ namespace SafeViewModel
         }
 
         public bool IsOperationsBarVisible { get; set; }
-        public ObservableCollection<RecordHeaderViewModel> SearchResults { get; set; }
+
+        private ObservableCollection<RecordHeaderViewModel> _searchResult;
+
+        public ObservableCollection<RecordHeaderViewModel> SearchResults
+        {
+            get { return _searchResult; }
+            set
+            {
+                if (_searchResult != value)
+                {
+                    _searchResult = value;
+                    FirePropertyChanged();
+                }
+            }
+        }
+
+        private ResultViewModel _selectedResult;
+
+        public ResultViewModel SelectedResult
+        {
+            get { return _selectedResult; }
+            set
+            {
+                if (_selectedResult != value)
+                {
+                    _selectedResult = value;
+                    FirePropertyChanged();
+                }
+            }
+        }
     }
-
-
 }
