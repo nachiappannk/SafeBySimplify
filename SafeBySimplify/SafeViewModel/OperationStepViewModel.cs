@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using Prism.Commands;
 using SafeModel;
@@ -16,6 +18,7 @@ namespace SafeViewModel
                 Safe = null;
             });
             IsOperationsBarVisible = true;
+            SearchResults = new ObservableCollection<RecordHeaderViewModel>();
         }
 
         public ISafe Safe { get; set; }
@@ -38,16 +41,15 @@ namespace SafeViewModel
 
         private CancellationTokenSource _tokenSource;
 
-        private void OnSearchTextChanged(string value)
+        private async void OnSearchTextChanged(string value)
         {
-            if (_tokenSource != null)
-            {
-                _tokenSource.Cancel();
-            }
+            _tokenSource?.Cancel();
             _tokenSource = new CancellationTokenSource();
             try
             {
-                Safe.GetRecordsAsync(value, _tokenSource.Token);
+                var headers = await Safe.GetRecordsAsync(value, _tokenSource.Token);
+                SearchResults = new ObservableCollection<RecordHeaderViewModel>
+                    (headers.Select(x => new RecordHeaderViewModel(x)));
             }
             catch (Exception e)
             {
@@ -56,6 +58,7 @@ namespace SafeViewModel
         }
 
         public bool IsOperationsBarVisible { get; set; }
+        public ObservableCollection<RecordHeaderViewModel> SearchResults { get; set; }
     }
 
 

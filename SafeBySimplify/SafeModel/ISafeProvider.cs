@@ -28,6 +28,7 @@ namespace SafeModel
 
     public class RecordHeader
     {
-
+        public string Name { get; set; }
+        public List<string> Tags { get; set; }
     }
 }
