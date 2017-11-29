@@ -84,6 +84,9 @@
     <Compile Include="OperationUserControl.xaml.cs">
       <DependentUpon>OperationUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SearchResultUserControl.xaml.cs">
+      <DependentUpon>SearchResultUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsUserControl.xaml.cs">
       <DependentUpon>SettingsUserControl.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="OperationUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchResultUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
