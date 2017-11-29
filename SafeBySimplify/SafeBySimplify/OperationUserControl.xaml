@@ -13,9 +13,9 @@
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <DataTemplate DataType="{x:Type safeViewModel:EmptyOperationViewModel}">
-                <Grid>
+                <Grid Background="Pink">
                     <Grid.InputBindings>
-                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding HighlightCommand}" />
+                        <MouseBinding Gesture="LeftClick" Command="{Binding HighlightCommand}" />
                     </Grid.InputBindings>
                 </Grid>
             </DataTemplate>

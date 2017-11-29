@@ -97,7 +97,7 @@ namespace SafeViewModelTests
             Assume.That(_operationStepViewModel.SearchResults.Count == headers.Count);
             Assume.That(_operationStepViewModel.SelectedOperation.HighlightCommand.CanExecute());
             _operationStepViewModel.SelectedOperation.HighlightCommand.Execute();
-            Assert.AreEqual(true,_operationStepViewModel.IsSearchResultVisible);
+            Assert.AreEqual(false,_operationStepViewModel.IsSearchResultVisible);
         }
 
 
