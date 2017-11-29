@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -76,7 +77,18 @@ namespace SafeModel
             
             public Task<List<RecordHeader>> GetRecordsAsync(string searchText, CancellationToken token)
             {
-                throw new System.NotImplementedException();
+                return Task.Run(() =>
+                {
+                    var charArray = searchText.ToCharArray();
+                    var stringArray = charArray.Select((x, y) => x.ToString() + y.ToString());
+                    var recordHeaders = stringArray.Select(x => new RecordHeader()
+                    {
+                        Name = x,
+                        Tags = new List<string>() { "one", "two", "three"}
+                    }).ToList();
+                    return recordHeaders;
+
+                });
             }
         }
 

@@ -12,11 +12,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}">
-                    <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White"/>
-                    <TextBlock Text="Seetha" Style="{StaticResource Level1HeadingTextBlockStyle}"></TextBlock>
+            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White"/>
+            <TextBlock Text="Seetha" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
         </DockPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -27,11 +27,48 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search" 
+            <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
                      Style="{StaticResource TextBoxWithHintStyle}"
-                     Text="{Binding SearchText}"/>
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" Grid.Row="0" Content="Add"/>
             <local:RecordViewUserControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="1" BorderBrush="Black">
+                    <Grid VerticalAlignment="Top">
+                        <ItemsControl  ItemsSource="{Binding SearchResults}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="Auto" HorizontalAlignment="Stretch">
+                                        <Border BorderThickness="1" BorderBrush="Azure" CornerRadius="4" Margin="1" Background="BlanchedAlmond">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="DemiBold"/>
+                                                <ItemsControl ItemsSource="{Binding Tags}" Grid.Row="1">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="Yellow" CornerRadius="5" Margin="2,0">
+                                                                <TextBlock Text="{Binding}" Margin="1,0"/>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Horizontal"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                </ItemsControl>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>
