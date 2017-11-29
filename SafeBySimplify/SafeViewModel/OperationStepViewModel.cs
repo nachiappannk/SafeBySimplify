@@ -49,7 +49,11 @@ namespace SafeViewModel
             {
                 var headers = await Safe.GetRecordsAsync(value, _tokenSource.Token);
                 SearchResults = new ObservableCollection<RecordHeaderViewModel>
-                    (headers.Select(x => new RecordHeaderViewModel(x, () => { SelectedResult = new ResultViewModel(x);})));
+                    (headers.Select(x => new RecordHeaderViewModel(x, () =>
+                {
+
+                    SelectedResult = new ResultViewModel(x);
+                })));
             }
             catch (Exception e)
             {

@@ -2,10 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SafeBySimplify"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance}"
+             d:DataContext="{d:DesignInstance safeViewModel:RecordHeaderViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Height="Auto" HorizontalAlignment="Stretch">
         <Border BorderThickness="1" BorderBrush="Azure" CornerRadius="4" Margin="1" Background="BlanchedAlmond">
@@ -14,7 +14,13 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="DemiBold"/>
+                <DockPanel>
+                    <DockPanel.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding SelectCommand}" />
+                    </DockPanel.InputBindings>
+                    <Button Content="Select" DockPanel.Dock="Right" Height="20" Margin="2,1" Command="{Binding SelectCommand}" ToolTip="You can also select by double clicking the result"/>
+                    <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="DemiBold"/>
+                </DockPanel>
                 <ItemsControl ItemsSource="{Binding Tags}" Grid.Row="1">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
