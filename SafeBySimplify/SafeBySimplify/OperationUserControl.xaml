@@ -10,12 +10,22 @@
              d:DataContext="{d:DesignInstance safeViewModel:OperationStepViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <DataTemplate DataType="{x:Type safeViewModel:EmptyOperationViewModel}">
+                <Grid>
+                    <Grid.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding HighlightCommand}" />
+                    </Grid.InputBindings>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}">
-            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White"/>
+            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White" Command="{Binding SignOutCommand}"/>
             <TextBlock Text="Seetha" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
         </DockPanel>
         <Grid Grid.Row="1">
@@ -31,8 +41,9 @@
                      Style="{StaticResource TextBoxWithHintStyle}"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" Grid.Row="0" Content="Add"/>
-            <local:RecordViewUserControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
-            <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White">
+            <ContentControl Content="{Binding SelectedOperation}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
+                    Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="1" BorderBrush="Black">
                     <Grid VerticalAlignment="Top">
                         <ItemsControl  ItemsSource="{Binding SearchResults}">

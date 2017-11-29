@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmptyOperationViewModel.cs" />
     <Compile Include="EntryStepViewModel.cs" />
     <Compile Include="FileRecord.cs" />
     <Compile Include="NotifiesPropertyChanged.cs" />
