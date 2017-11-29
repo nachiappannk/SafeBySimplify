@@ -18,7 +18,7 @@
                 <local:SettingsUserControl></local:SettingsUserControl>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:OperationStepViewModel}">
-                <Grid></Grid>
+                <local:OperationUserControl></local:OperationUserControl>
             </DataTemplate>
         </Grid.Resources>
             <ContentControl Content="{Binding CurrentStep}"/>

@@ -20,9 +20,9 @@ namespace SafeBySimplify
     /// <summary>
     /// Interaction logic for SafeUserControl.xaml
     /// </summary>
-    public partial class SafeUserControl : UserControl
+    public partial class OperationUserControl : UserControl
     {
-        public SafeUserControl()
+        public OperationUserControl()
         {
             InitializeComponent();
             var x = new RecordViewModel();
@@ -41,7 +41,6 @@ namespace SafeBySimplify
                     
                 }
             };
-            test.DataContext = x;
         }
 
         public void Delete()

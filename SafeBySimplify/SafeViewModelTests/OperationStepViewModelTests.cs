@@ -76,7 +76,10 @@ namespace SafeViewModelTests
             Assert.AreEqual(1,selectedResultObserver.NumberOfTimesPropertyChanged);
         }
 
-
+        //Clicking of the SelectedResult should clear Search
+        //Search Result should be closable
+        //Search Result should disable Search
+        //Add new result
 
         [Test]
         public void When_search_text_is_changed_then_a_new_search_query_is_made_and_the_old_is_cancelled()
