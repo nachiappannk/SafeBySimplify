@@ -19,6 +19,7 @@ namespace SafeViewModel
             });
             IsOperationsBarVisible = true;
             SearchResults = new ObservableCollection<RecordHeaderViewModel>();
+            SelectedOperation = new EmptyOperationViewModel(null);
         }
 
         public ISafe Safe { get; set; }
@@ -52,8 +53,9 @@ namespace SafeViewModel
                     (headers.Select(x => new RecordHeaderViewModel(x, () =>
                 {
 
-                    SelectedResult = new ResultViewModel(x);
+                    SelectedOperation = new RecordAlteringOperationViewModel(x);
                 })));
+                IsSearchResultVisible = true;
             }
             catch (Exception e)
             {
@@ -78,16 +80,31 @@ namespace SafeViewModel
             }
         }
 
-        private ResultViewModel _selectedResult;
+        private SingleOperationViewModel _selectedOperation;
 
-        public ResultViewModel SelectedResult
+        public SingleOperationViewModel SelectedOperation
         {
-            get { return _selectedResult; }
+            get { return _selectedOperation; }
             set
             {
-                if (_selectedResult != value)
+                if (_selectedOperation != value)
                 {
-                    _selectedResult = value;
+                    _selectedOperation = value;
+                    FirePropertyChanged();
+                }
+            }
+        }
+
+        private bool _isSearchResultVisible;
+
+        public bool IsSearchResultVisible
+        {
+            get { return _isSearchResultVisible; }
+            set
+            {
+                if (_isSearchResultVisible != value)
+                {
+                    _isSearchResultVisible = value;
                     FirePropertyChanged();
                 }
             }

@@ -28,9 +28,10 @@ namespace SafeViewModelTests
         }
 
         [Test]
-        public void Selected_result_is_initially_null()
+        public void Selected_result_is_initially_empty_operation_and_search_result_is_invisible()
         {
-            Assert.Null(_operationStepViewModel.SelectedResult);
+            Assert.AreEqual(typeof(EmptyOperationViewModel),_operationStepViewModel.SelectedOperation.GetType());
+            Assert.AreEqual(false, _operationStepViewModel.IsSearchResultVisible);
         }
 
 
@@ -47,11 +48,14 @@ namespace SafeViewModelTests
             MockGetRecordAsync(_safe, searchText, 100, () => { semaphore.Release(); }, headers );
             var resultObserver = _operationStepViewModel.GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>(
                 nameof(_operationStepViewModel.SearchResults));
+            var resultVisibilityObserver = _operationStepViewModel
+                .GetPropertyObserver<bool>(nameof(_operationStepViewModel.IsSearchResultVisible));
             _operationStepViewModel.SearchText = searchText;
             semaphore.WaitOne(10000);
             await Task.Run(() => { Thread.Sleep(100);});
             var actualHeaders = resultObserver.PropertyValue.Select(x => x.RecordHeader).ToList();
             CollectionAssert.AreEqual(headers, actualHeaders);
+            Assert.AreEqual(true, resultVisibilityObserver.PropertyValue);
         }
 
         [Test]
@@ -69,12 +73,34 @@ namespace SafeViewModelTests
             semaphore.WaitOne(10000);
             await Task.Run(() => { Thread.Sleep(100); });
             Assume.That(_operationStepViewModel.SearchResults.Count == headers.Count);
-            var selectedResultObserver = _operationStepViewModel.GetPropertyObserver<ResultViewModel>
-                (nameof(_operationStepViewModel.SelectedResult));
+            var selectedResultObserver = _operationStepViewModel.GetPropertyObserver<SingleOperationViewModel>
+                (nameof(_operationStepViewModel.SelectedOperation));
             _operationStepViewModel.SearchResults.ElementAt(1).SelectCommand.Execute();
-            Assert.NotNull(selectedResultObserver.PropertyValue);
+            Assert.AreEqual(typeof(RecordAlteringOperationViewModel),selectedResultObserver.PropertyValue.GetType());
             Assert.AreEqual(1,selectedResultObserver.NumberOfTimesPropertyChanged);
         }
+
+        [Test]
+        public async Task When_search_is_result_is_available_and_command_is_made_to_crear_then_search_results_are_removed_and_search_text_is_removed()
+        {
+            Semaphore semaphore = new Semaphore(0, 1);
+            var searchText = "ss";
+            var headers = new List<RecordHeader>()
+            {
+                new RecordHeader() {Name = "1", Tags = new List<string>()},
+                new RecordHeader() {Name = "2", Tags = new List<string>()}
+            };
+            MockGetRecordAsync(_safe, searchText, 100, () => { semaphore.Release(); }, headers);
+            _operationStepViewModel.SearchText = searchText;
+            semaphore.WaitOne(10000);
+            await Task.Run(() => { Thread.Sleep(100); });
+            Assume.That(_operationStepViewModel.SearchResults.Count == headers.Count);
+            Assume.That(_operationStepViewModel.SelectedOperation.HighlightCommand.CanExecute());
+            _operationStepViewModel.SelectedOperation.HighlightCommand.Execute();
+            Assert.AreEqual(true,_operationStepViewModel.IsSearchResultVisible);
+        }
+
+
 
         //Clicking of the SelectedResult should clear Search
         //Search Result should be closable
