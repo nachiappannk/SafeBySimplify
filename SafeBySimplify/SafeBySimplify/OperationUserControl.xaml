@@ -35,7 +35,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}">
-            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White" Command="{Binding SignOutCommand}"/>
+            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White" Command="{Binding SignOutCommand}" IsEnabled="{Binding IsOperationsChangingPossible}"/>
             <TextBlock Text="Seetha" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
         </DockPanel>
         <Grid Grid.Row="1">
@@ -49,8 +49,8 @@
             </Grid.RowDefinitions>
             <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
                      Style="{StaticResource TextBoxWithHintStyle}"
-                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Grid.Column="1" Grid.Row="0" Content="Add" Command="{Binding AddCommand}"/>
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsOperationsChangingPossible}"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="Add" Command="{Binding AddCommand}" IsEnabled="{Binding IsOperationsChangingPossible}"/>
             <ContentControl Content="{Binding SelectedOperation}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
             <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
                     Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
