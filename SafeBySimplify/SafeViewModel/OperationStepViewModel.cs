@@ -17,12 +17,13 @@ namespace SafeViewModel
                 goToEntryStepAction.Invoke();
                 Safe = null;
             });
-            IsOperationsBarVisible = true;
+            IsOperationsChangingPossible = true;
             SearchResults = new ObservableCollection<RecordHeaderViewModel>();
             SelectedOperation = new EmptyOperationViewModel(() => { IsSearchResultVisible = false; });
             AddCommand = new DelegateCommand(
                 () =>
                 {
+                    IsOperationsChangingPossible = false;
                     SelectedOperation = new AddOperationViewModel();
                 });
         }
@@ -70,7 +71,19 @@ namespace SafeViewModel
             }
         }
 
-        public bool IsOperationsBarVisible { get; set; }
+        private bool _isOperationChangeingPossible;
+
+        public bool IsOperationsChangingPossible
+        {
+            get { return _isOperationChangeingPossible; }
+            set {
+                if (_isOperationChangeingPossible != value)
+                {
+                    _isOperationChangeingPossible = value;
+                    FirePropertyChanged();
+                }
+            }
+        }
 
         private ObservableCollection<RecordHeaderViewModel> _searchResult;
 

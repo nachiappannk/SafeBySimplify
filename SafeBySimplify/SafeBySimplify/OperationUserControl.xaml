@@ -26,6 +26,9 @@
                     </Grid.InputBindings>
                 </Grid>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type safeViewModel:AddOperationViewModel}">
+                <Grid Background="Brown"/>
+            </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -47,7 +50,7 @@
             <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
                      Style="{StaticResource TextBoxWithHintStyle}"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Grid.Column="1" Grid.Row="0" Content="Add"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="Add" Command="{Binding AddCommand}"/>
             <ContentControl Content="{Binding SelectedOperation}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
             <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
                     Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">

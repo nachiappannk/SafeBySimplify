@@ -21,6 +21,7 @@ namespace SafeViewModelTests
         private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
         private ViewModelPropertyObserver<SingleOperationViewModel> _selectedOperationPropertyObserver;
         private ViewModelPropertyObserver<string> _searchTextPropertyObserver;
+        private ViewModelPropertyObserver<bool> _operationChangingPossibilityObserver;
 
         [SetUp]
         public void SetUp()
@@ -43,7 +44,9 @@ namespace SafeViewModelTests
             _searchTextPropertyObserver = _operationStepViewModel.GetPropertyObserver<string>
                 (nameof(_operationStepViewModel.SearchText));
 
-
+            _operationChangingPossibilityObserver = _operationStepViewModel
+                .GetPropertyObserver<bool>
+                (nameof(_operationStepViewModel.IsOperationsChangingPossible));
         }
 
         [Test]
@@ -146,7 +149,14 @@ namespace SafeViewModelTests
             Assert.AreEqual(typeof(AddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
         }
 
-        
+        [Test]
+        public void When_add_command_is_made_then_operation_changing_is_disabled()
+        {
+            Assume.That(_operationStepViewModel.AddCommand.CanExecute());
+            _operationStepViewModel.AddCommand.Execute();
+            Assert.NotZero(_operationChangingPossibilityObserver.NumberOfTimesPropertyChanged);
+            Assert.False(_operationChangingPossibilityObserver.PropertyValue);
+        }
 
         //Clicking of the SelectedResult should clear Search
         //Search Result should be closable
@@ -204,9 +214,9 @@ namespace SafeViewModelTests
         }
 
         [Test]
-        public void IsOperationBarVisibile()
+        public void Operantion_modification_possibility()
         {
-            Assert.AreEqual(true,_operationStepViewModel.IsOperationsBarVisible);
+            Assert.AreEqual(true,_operationStepViewModel.IsOperationsChangingPossible);
         }
     }
 }
