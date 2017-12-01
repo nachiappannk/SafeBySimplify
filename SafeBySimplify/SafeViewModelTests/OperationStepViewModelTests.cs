@@ -75,13 +75,27 @@ namespace SafeViewModelTests
             Assume.That(_operationStepViewModel.SearchResults.Count == headers.Count);
             var selectedResultObserver = _operationStepViewModel.GetPropertyObserver<SingleOperationViewModel>
                 (nameof(_operationStepViewModel.SelectedOperation));
+
+            var searchResultVisibilityObserver = _operationStepViewModel.GetPropertyObserver<bool>
+                (nameof(_operationStepViewModel.IsSearchResultVisible));
+
+            var searchTextPropertyObserver = _operationStepViewModel.GetPropertyObserver<string>
+                (nameof(_operationStepViewModel.SearchText));
+
             _operationStepViewModel.SearchResults.ElementAt(1).SelectCommand.Execute();
             Assert.AreEqual(typeof(RecordAlteringOperationViewModel),selectedResultObserver.PropertyValue.GetType());
             Assert.AreEqual(1,selectedResultObserver.NumberOfTimesPropertyChanged);
+
+
+            Assert.False(searchResultVisibilityObserver.PropertyValue);
+            Assert.True(searchResultVisibilityObserver.NumberOfTimesPropertyChanged >= 0);
+
+            Assert.AreEqual(string.Empty, searchTextPropertyObserver.PropertyValue);
+
         }
 
         [Test]
-        public async Task When_search_is_result_is_available_and_command_is_made_to_crear_then_search_results_are_removed_and_search_text_is_removed()
+        public async Task When_search_is_result_is_available_and_higlight_command_is_made_then_search_results_are_removed_and_search_text_is_removed()
         {
             Semaphore semaphore = new Semaphore(0, 1);
             var searchText = "ss";

@@ -1,5 +1,4 @@
 ﻿using Prism.Commands;
-using SafeModel;
 
 namespace SafeViewModel
 {
@@ -7,12 +6,4 @@ namespace SafeViewModel
     {
         public DelegateCommand HighlightCommand { get; set; }
     }
-
-    public class RecordAlteringOperationViewModel : SingleOperationViewModel
-    {
-        public RecordAlteringOperationViewModel(RecordHeader recordHeader)
-        {
-        }
-    }
-
 }

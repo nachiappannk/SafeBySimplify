@@ -36,6 +36,7 @@ namespace SafeViewModel
                 {
                     _searchString = value;
                     OnSearchTextChanged(value);
+                    FirePropertyChanged();
                 }
             }
         }
@@ -52,8 +53,9 @@ namespace SafeViewModel
                 SearchResults = new ObservableCollection<RecordHeaderViewModel>
                     (headers.Select(x => new RecordHeaderViewModel(x, () =>
                 {
-
+                    SearchText = "";
                     SelectedOperation = new RecordAlteringOperationViewModel(x);
+                    IsSearchResultVisible = false;
                 })));
                 IsSearchResultVisible = true;
             }

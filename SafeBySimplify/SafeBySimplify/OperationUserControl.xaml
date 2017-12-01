@@ -19,6 +19,13 @@
                     </Grid.InputBindings>
                 </Grid>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type safeViewModel:RecordAlteringOperationViewModel}">
+                <Grid Background="Green">
+                    <Grid.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding HighlightCommand}" />
+                    </Grid.InputBindings>
+                </Grid>
+            </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
