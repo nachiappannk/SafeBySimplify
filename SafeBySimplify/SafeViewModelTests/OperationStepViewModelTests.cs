@@ -122,7 +122,6 @@ namespace SafeViewModelTests
         [Test]
         public async Task When_search_is_result_is_available_and_higlight_command_is_made_then_search_results_are_removed_and_search_text_is_removed()
         {
-            Semaphore semaphore = new Semaphore(0, 1);
             var searchText = "ss";
             var headers = new List<RecordHeader>()
             {
@@ -139,6 +138,15 @@ namespace SafeViewModelTests
         }
 
 
+        [Test]
+        public void When_add_command_is_made_then_selected_operation_is_add_operation()
+        {
+            Assume.That(_operationStepViewModel.AddCommand.CanExecute());
+            _operationStepViewModel.AddCommand.Execute();
+            Assert.AreEqual(typeof(AddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+        }
+
+        
 
         //Clicking of the SelectedResult should clear Search
         //Search Result should be closable
@@ -154,7 +162,6 @@ namespace SafeViewModelTests
             var asyncCompletionInitialToken = MockGetRecordAsync(_safe, searchText, 1000, new List<RecordHeader>());
             var asyncCompletionUpdatedToken = MockGetRecordAsync(_safe, updatedSearchText, 1000, new List<RecordHeader>());
             
-
             _operationStepViewModel.SearchText = searchText;
             _operationStepViewModel.SearchText = updatedSearchText;
 
