@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
-using NSubstitute.Core;
-using NSubstitute.Extensions;
 using NUnit.Framework;
 using SafeModel;
 using SafeViewModel;
@@ -19,19 +17,46 @@ namespace SafeViewModelTests
     {
         private OperationStepViewModel _operationStepViewModel;
         private ISafe _safe;
+        private ViewModelPropertyObserver<ObservableCollection<RecordHeaderViewModel>> _searchResultPropertyObserver;
+        private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
+        private ViewModelPropertyObserver<SingleOperationViewModel> _selectedOperationPropertyObserver;
+        private ViewModelPropertyObserver<string> _searchTextPropertyObserver;
 
         [SetUp]
         public void SetUp()
         {
             _safe = Substitute.For<ISafe>();
             _operationStepViewModel = new OperationStepViewModel(_safe, () => { });
+
+            _searchResultPropertyObserver = _operationStepViewModel
+                .GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>
+                (nameof(_operationStepViewModel.SearchResults));
+
+            _searchResultVisibilityObserver = _operationStepViewModel
+                .GetPropertyObserver<bool>(nameof(_operationStepViewModel.IsSearchResultVisible));
+
+            _selectedOperationPropertyObserver = _operationStepViewModel
+                .GetPropertyObserver<SingleOperationViewModel>
+                (nameof(_operationStepViewModel.SelectedOperation));
+
+
+            _searchTextPropertyObserver = _operationStepViewModel.GetPropertyObserver<string>
+                (nameof(_operationStepViewModel.SearchText));
+
+
         }
 
         [Test]
-        public void Selected_result_is_initially_empty_operation_and_search_result_is_invisible()
+        public void Search_result_is_initially_not_available()
+        {
+            Assert.AreEqual(false, _operationStepViewModel.IsSearchResultVisible);
+
+        }
+
+        [Test]
+        public void Selected_operation_is_initially_empty_operation()
         {
             Assert.AreEqual(typeof(EmptyOperationViewModel),_operationStepViewModel.SelectedOperation.GetType());
-            Assert.AreEqual(false, _operationStepViewModel.IsSearchResultVisible);
         }
 
 
@@ -45,17 +70,20 @@ namespace SafeViewModelTests
                 new RecordHeader() {Name = "1", Tags = new List<string>()},
                 new RecordHeader() {Name = "2", Tags = new List<string>()}
             };
-            MockGetRecordAsync(_safe, searchText, 100, () => { semaphore.Release(); }, headers );
-            var resultObserver = _operationStepViewModel.GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>(
-                nameof(_operationStepViewModel.SearchResults));
-            var resultVisibilityObserver = _operationStepViewModel
-                .GetPropertyObserver<bool>(nameof(_operationStepViewModel.IsSearchResultVisible));
-            _operationStepViewModel.SearchText = searchText;
-            semaphore.WaitOne(10000);
-            await Task.Run(() => { Thread.Sleep(100);});
-            var actualHeaders = resultObserver.PropertyValue.Select(x => x.RecordHeader).ToList();
+            var asyncCompletionToken = MockGetRecordAsync(_safe, searchText, 100,  headers );
+            SetSearchText(searchText);
+
+            await asyncCompletionToken.WaitForTaskCompletion(10000);
+
+            var actualHeaders = _searchResultPropertyObserver.PropertyValue.Select(x => x.RecordHeader).ToList();
+
             CollectionAssert.AreEqual(headers, actualHeaders);
-            Assert.AreEqual(true, resultVisibilityObserver.PropertyValue);
+            Assert.AreEqual(true, _searchResultVisibilityObserver.PropertyValue);
+        }
+
+        private void SetSearchText(string searchText)
+        {
+            _operationStepViewModel.SearchText = searchText;
         }
 
         [Test]
@@ -68,29 +96,26 @@ namespace SafeViewModelTests
                 new RecordHeader() {Name = "1", Tags = new List<string>()},
                 new RecordHeader() {Name = "2", Tags = new List<string>()}
             };
-            MockGetRecordAsync(_safe, searchText, 100, () => { semaphore.Release(); }, headers);
-            _operationStepViewModel.SearchText = searchText;
-            semaphore.WaitOne(10000);
-            await Task.Run(() => { Thread.Sleep(100); });
+            var asyncCompletionToken = MockGetRecordAsync(_safe, searchText, 100, headers);
+            SetSearchText(searchText);
+            
+            await asyncCompletionToken.WaitForTaskCompletion(10000);
+
             Assume.That(_operationStepViewModel.SearchResults.Count == headers.Count);
-            var selectedResultObserver = _operationStepViewModel.GetPropertyObserver<SingleOperationViewModel>
-                (nameof(_operationStepViewModel.SelectedOperation));
 
-            var searchResultVisibilityObserver = _operationStepViewModel.GetPropertyObserver<bool>
-                (nameof(_operationStepViewModel.IsSearchResultVisible));
-
-            var searchTextPropertyObserver = _operationStepViewModel.GetPropertyObserver<string>
-                (nameof(_operationStepViewModel.SearchText));
+            
+            
 
             _operationStepViewModel.SearchResults.ElementAt(1).SelectCommand.Execute();
-            Assert.AreEqual(typeof(RecordAlteringOperationViewModel),selectedResultObserver.PropertyValue.GetType());
-            Assert.AreEqual(1,selectedResultObserver.NumberOfTimesPropertyChanged);
+
+            Assert.AreEqual(typeof(RecordAlteringOperationViewModel),_selectedOperationPropertyObserver.PropertyValue.GetType());
+            Assert.AreEqual(1,_selectedOperationPropertyObserver.NumberOfTimesPropertyChanged);
 
 
-            Assert.False(searchResultVisibilityObserver.PropertyValue);
-            Assert.True(searchResultVisibilityObserver.NumberOfTimesPropertyChanged >= 0);
+            Assert.False(_searchResultVisibilityObserver.PropertyValue);
+            Assert.True(_searchResultVisibilityObserver.NumberOfTimesPropertyChanged >= 0);
 
-            Assert.AreEqual(string.Empty, searchTextPropertyObserver.PropertyValue);
+            Assert.AreEqual(string.Empty, _searchTextPropertyObserver.PropertyValue);
 
         }
 
@@ -104,10 +129,9 @@ namespace SafeViewModelTests
                 new RecordHeader() {Name = "1", Tags = new List<string>()},
                 new RecordHeader() {Name = "2", Tags = new List<string>()}
             };
-            MockGetRecordAsync(_safe, searchText, 100, () => { semaphore.Release(); }, headers);
+            var asyncCompletionToken = MockGetRecordAsync(_safe, searchText, 100, headers);
             _operationStepViewModel.SearchText = searchText;
-            semaphore.WaitOne(10000);
-            await Task.Run(() => { Thread.Sleep(100); });
+            await asyncCompletionToken.WaitForTaskCompletion(10000);
             Assume.That(_operationStepViewModel.SearchResults.Count == headers.Count);
             Assume.That(_operationStepViewModel.SelectedOperation.HighlightCommand.CanExecute());
             _operationStepViewModel.SelectedOperation.HighlightCommand.Execute();
@@ -122,35 +146,25 @@ namespace SafeViewModelTests
         //Add new result
 
         [Test]
-        public void When_search_text_is_changed_then_a_new_search_query_is_made_and_the_old_is_cancelled()
+        public async Task When_search_text_is_changed_then_a_new_search_query_is_made_and_the_old_is_cancelled()
         {
             var searchText = "ss";
             var updatedSearchText = "sss";
 
-            var initialSearchCompleted = false;
-            var secondSearchCompleted = false;
-
-            var recordHeaders = new List<RecordHeader>();
-            Semaphore semaphore = new Semaphore(0, 1);
-            MockGetRecordAsync(_safe, searchText, 1000, () => { initialSearchCompleted = true; }, recordHeaders);
-            MockGetRecordAsync(_safe, updatedSearchText, 1000, () =>
-            {
-                secondSearchCompleted = true;
-                semaphore.Release();
-            }, new List<RecordHeader>());
+            var asyncCompletionInitialToken = MockGetRecordAsync(_safe, searchText, 1000, new List<RecordHeader>());
+            var asyncCompletionUpdatedToken = MockGetRecordAsync(_safe, updatedSearchText, 1000, new List<RecordHeader>());
             
 
             _operationStepViewModel.SearchText = searchText;
             _operationStepViewModel.SearchText = updatedSearchText;
-            semaphore.WaitOne(10000);
-            Assert.AreEqual(false, initialSearchCompleted);
-            Assert.AreEqual(true, secondSearchCompleted);
 
-
+            await asyncCompletionUpdatedToken.WaitForTaskCompletion(10000);
+            Assert.False(asyncCompletionInitialToken.IsTaskCompleted);
         }
 
-        private void MockGetRecordAsync(ISafe safe, string searchText, int millisecondsTimeout, Action onTaskCompletionCallBack, List<RecordHeader> recordHeaders)
+        private AsyncCompletionToken MockGetRecordAsync(ISafe safe, string searchText, int millisecondsTimeout, List<RecordHeader> recordHeaders)
         {
+            var asyncCompeltionToken = new AsyncCompletionToken {Semaphore = new Semaphore(0, 1)};
             safe.GetRecordsAsync(searchText, Arg.Any<CancellationToken>())
                 .Returns(
                     x =>
@@ -159,11 +173,27 @@ namespace SafeViewModelTests
                         {
                             ((CancellationToken)x[1]).ThrowIfCancellationRequested();
                             Thread.Sleep(millisecondsTimeout);
-                            onTaskCompletionCallBack.Invoke();
+                            asyncCompeltionToken.IsTaskCompleted = true;
+                            asyncCompeltionToken.Semaphore.Release();
                             return recordHeaders;
                         });
                     }
                 );
+            return asyncCompeltionToken;
+        }
+
+        public class AsyncCompletionToken
+        {
+            public Semaphore Semaphore { get; set; }
+
+            public async Task WaitForTaskCompletion(int maxWaitTime)
+            {
+                var result = Semaphore.WaitOne(10000);
+                await Task.Run(() => { Thread.Sleep(100); });
+                if(!result) throw new Exception("The task was not completed");
+            }
+
+            public bool IsTaskCompleted { get; set; }
         }
 
         [Test]
