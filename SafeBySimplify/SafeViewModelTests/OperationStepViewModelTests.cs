@@ -75,7 +75,6 @@ namespace SafeViewModelTests
             };
             var asyncCompletionToken = MockGetRecordAsync(_safe, searchText, 100,  headers );
             SetSearchText(searchText);
-
             await asyncCompletionToken.WaitForTaskCompletion(10000);
 
             var actualHeaders = _searchResultPropertyObserver.PropertyValue.Select(x => x.RecordHeader).ToList();
@@ -150,6 +149,26 @@ namespace SafeViewModelTests
         }
 
         [Test]
+        public async Task When_search_is_made_and_add_command_is_made_then_selected_operation_is_add_operation_and_search_result_is_invisible_and_search_text_is_false()
+        {
+            var searchText = "ss";
+            var headers = new List<RecordHeader>()
+            {
+                new RecordHeader() {Name = "1", Tags = new List<string>()},
+                new RecordHeader() {Name = "2", Tags = new List<string>()}
+            };
+            var asyncCompletionToken = MockGetRecordAsync(_safe, searchText, 100, headers);
+            SetSearchText(searchText);
+            await asyncCompletionToken.WaitForTaskCompletion(10000);
+
+            Assume.That(_operationStepViewModel.AddCommand.CanExecute());
+            _operationStepViewModel.AddCommand.Execute();
+            Assert.AreEqual(typeof(AddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+            Assert.False(_searchResultVisibilityObserver.PropertyValue);
+            Assert.AreEqual(string.Empty,_searchTextPropertyObserver.PropertyValue);
+        }
+
+        [Test]
         public void When_add_command_is_made_and_discarded_then_selected_operation_is_empty_operation_and_operation_changing_is_possible()
         {
             Assume.That(_operationStepViewModel.AddCommand.CanExecute());
@@ -159,6 +178,19 @@ namespace SafeViewModelTests
             Assert.True(addOperationViewModel.DiscardCommand.CanExecute());
             addOperationViewModel.DiscardCommand.Execute();
             Assert.AreEqual(typeof(EmptyOperationViewModel),_selectedOperationPropertyObserver.PropertyValue.GetType());
+            Assert.True(_operationChangingPossibilityObserver.PropertyValue);
+        }
+
+        [Test]
+        public void When_add_command_is_made_and_saved_then_selected_operation_is_modification_operation_and_operation_changing_is_possible()
+        {
+            Assume.That(_operationStepViewModel.AddCommand.CanExecute());
+            _operationStepViewModel.AddCommand.Execute();
+            var addOperationViewModel = _selectedOperationPropertyObserver.PropertyValue as AddOperationViewModel;
+            Assume.That(addOperationViewModel != null);
+            Assert.True(addOperationViewModel.SaveCommand.CanExecute());
+            addOperationViewModel.SaveCommand.Execute();
+            Assert.AreEqual(typeof(RecordAlteringOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
             Assert.True(_operationChangingPossibilityObserver.PropertyValue);
         }
 

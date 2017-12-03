@@ -24,7 +24,9 @@ namespace SafeViewModel
                 () =>
                 {
                     IsOperationsChangingPossible = false;
-                    SelectedOperation = new AddOperationViewModel(GoToEmptyOperation);
+                    SelectedOperation = new AddOperationViewModel(GoToEmptyOperation, GoToAlteringOperation);
+                    IsSearchResultVisible = false;
+                    SearchText = string.Empty;
                 });
         }
 
@@ -63,18 +65,21 @@ namespace SafeViewModel
             {
                 var headers = await Safe.GetRecordsAsync(value, _tokenSource.Token);
                 SearchResults = new ObservableCollection<RecordHeaderViewModel>
-                    (headers.Select(x => new RecordHeaderViewModel(x, () =>
-                {
-                    SearchText = "";
-                    SelectedOperation = new RecordAlteringOperationViewModel(x);
-                    IsSearchResultVisible = false;
-                })));
+                    (headers.Select(x => new RecordHeaderViewModel(x, () => { GoToAlteringOperation(x); })));
                 IsSearchResultVisible = true;
             }
             catch (Exception e)
             {
 
             }
+        }
+
+        private void GoToAlteringOperation(RecordHeader x)
+        {
+            SearchText = "";
+            SelectedOperation = new RecordAlteringOperationViewModel(x);
+            IsSearchResultVisible = false;
+            IsOperationsChangingPossible = true;
         }
 
         private bool _isOperationChangeingPossible;

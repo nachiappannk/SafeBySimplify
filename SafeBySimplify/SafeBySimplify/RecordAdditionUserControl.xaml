@@ -16,7 +16,7 @@
         <local:RecordViewUserControl/>
         <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,5">
             <Button DockPanel.Dock="Right" Content="Discard" Margin="4,0" Width="50" Command="{Binding DiscardCommand}"/>
-            <Button DockPanel.Dock="Right" Content="Save" Margin="4,0" Width="50"/>
+            <Button DockPanel.Dock="Right" Content="Save" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
         </DockPanel>
     </Grid>
 </UserControl>
