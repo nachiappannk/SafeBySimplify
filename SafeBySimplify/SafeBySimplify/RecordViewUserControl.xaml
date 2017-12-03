@@ -5,66 +5,67 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SafeBySimplify"
              xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
+             xmlns:safeUiLib="clr-namespace:SafeUiLib;assembly=SafeUiLib"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance safeViewModel:RecordViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>        
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <Label Content="{Binding Name}" Style="{StaticResource Level2HeadingLableStyle}"/>
-        <TextBlock Grid.Row="1" Text="Tags"/>
-        <Grid Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}">
+        <DockPanel Grid.Row="1">
+            <TextBlock Text="Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
+            <safeUiLib:TagsControl>
+                <safeUiLib:TagsControl.TagTemplate>
+                    <DataTemplate>
+                        <safeUiLib:TagsControl/>
+                    </DataTemplate>
+                </safeUiLib:TagsControl.TagTemplate>
+            </safeUiLib:TagsControl>
+        </DockPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <DataGrid ItemsSource="{Binding PasswordRecords}" 
-                              AutoGenerateColumns="False"
-                              Margin="{StaticResource NormalElementSpacingMargin}" 
-                              HeadersVisibility="None"  ColumnWidth="SizeToCells"
-                              HorizontalAlignment="Center">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn  Header="Name"  MinWidth="100" Binding="{Binding Name}"/>
-                            <DataGridTextColumn  Header="Image" MinWidth="100"  Binding="{Binding Value}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding FileRecords}" Margin="{StaticResource NormalElementSpacingMargin}" HeadersVisibility="None"
-                              HorizontalAlignment="Center"
-                              AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn  Header="Image" Width="Auto" MinWidth="100" Binding="{Binding Name}"/>
-                            <DataGridTemplateColumn  Header="Image" MinWidth="30" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding DownloadCommand}" Content="Download" MinWidth="50"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn  Header="Image" MinWidth="30" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding UploadCommand}" Content="Download" MinWidth="50"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <TextBlock Text="Username and Password Records" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
+                    <ItemsControl ItemsSource="{Binding PasswordRecords}" Grid.Row="1">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:NameValueUserControl></local:NameValueUserControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
-            </ScrollViewer>
-            <StackPanel Grid.Column="1" Width="60" Orientation="Vertical">
-                <Button Command="{Binding SaveCommand}" Content="Save"/>
-                <Button Command="{Binding DiscardChangesCommand}" Content="Discard"/>
-                <Button Command="{Binding DeleteCommand}" Content="Delete"/>
-            </StackPanel>
-        </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="File Records" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
+                    <ItemsControl  ItemsSource="{Binding FileRecords}" Grid.Row="1">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:FileRecordUserControl/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+                <Border Grid.Row="2" Height="60" HorizontalAlignment="Stretch" Background="Bisque" BorderThickness="2" BorderBrush="SaddleBrown" CornerRadius="5" Margin="2,5">
+                    <TextBlock Text="Drag and drop file to be added here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

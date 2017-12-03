@@ -27,7 +27,7 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:AddOperationViewModel}">
-                <Grid Background="Brown"/>
+                <local:RecordAdditionUserControl></local:RecordAdditionUserControl>
             </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>

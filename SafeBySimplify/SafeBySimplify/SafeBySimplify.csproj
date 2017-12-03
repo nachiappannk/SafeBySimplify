@@ -77,7 +77,16 @@
     <Compile Include="EntryUserControl.xaml.cs">
       <DependentUpon>EntryUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileRecordUserControl.xaml.cs">
+      <DependentUpon>FileRecordUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NameValueUserControl.xaml.cs">
+      <DependentUpon>NameValueUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PasswordBoxMonitor.cs" />
+    <Compile Include="RecordAdditionUserControl.xaml.cs">
+      <DependentUpon>RecordAdditionUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RecordViewUserControl.xaml.cs">
       <DependentUpon>RecordViewUserControl.xaml</DependentUpon>
     </Compile>
@@ -86,6 +95,9 @@
     </Compile>
     <Compile Include="SearchResultUserControl.xaml.cs">
       <DependentUpon>SearchResultUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SearchTagUserControl.xaml.cs">
+      <DependentUpon>SearchTagUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsUserControl.xaml.cs">
       <DependentUpon>SettingsUserControl.xaml</DependentUpon>
@@ -97,6 +109,10 @@
       <DependentUpon>SignUpUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="EntryUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FileRecordUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,6 +128,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NameValueUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RecordAdditionUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RecordViewUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SearchResultUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchTagUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
