@@ -150,11 +150,16 @@ namespace SafeViewModelTests
         }
 
         [Test]
-        public void When_add_command_is_made_and_discarded_then_selected_operation_is_add_operation()
+        public void When_add_command_is_made_and_discarded_then_selected_operation_is_empty_operation_and_operation_changing_is_possible()
         {
             Assume.That(_operationStepViewModel.AddCommand.CanExecute());
             _operationStepViewModel.AddCommand.Execute();
-            Assert.AreEqual(typeof(AddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+            var addOperationViewModel = _selectedOperationPropertyObserver.PropertyValue as AddOperationViewModel;
+            Assume.That(addOperationViewModel != null);
+            Assert.True(addOperationViewModel.DiscardCommand.CanExecute());
+            addOperationViewModel.DiscardCommand.Execute();
+            Assert.AreEqual(typeof(EmptyOperationViewModel),_selectedOperationPropertyObserver.PropertyValue.GetType());
+            Assert.True(_operationChangingPossibilityObserver.PropertyValue);
         }
 
 

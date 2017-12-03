@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SafeBySimplify"
+             xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance safeViewModel:AddOperationViewModel}"
              d:DesignHeight="500" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
@@ -13,7 +15,7 @@
         </Grid.RowDefinitions>        
         <local:RecordViewUserControl/>
         <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,5">
-            <Button DockPanel.Dock="Right" Content="Discard" Margin="4,0" Width="50"/>
+            <Button DockPanel.Dock="Right" Content="Discard" Margin="4,0" Width="50" Command="{Binding DiscardCommand}"/>
             <Button DockPanel.Dock="Right" Content="Save" Margin="4,0" Width="50"/>
         </DockPanel>
     </Grid>

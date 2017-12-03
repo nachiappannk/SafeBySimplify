@@ -19,13 +19,19 @@ namespace SafeViewModel
             });
             IsOperationsChangingPossible = true;
             SearchResults = new ObservableCollection<RecordHeaderViewModel>();
-            SelectedOperation = new EmptyOperationViewModel(() => { IsSearchResultVisible = false; });
+            GoToEmptyOperation();
             AddCommand = new DelegateCommand(
                 () =>
                 {
                     IsOperationsChangingPossible = false;
-                    SelectedOperation = new AddOperationViewModel();
+                    SelectedOperation = new AddOperationViewModel(GoToEmptyOperation);
                 });
+        }
+
+        private void GoToEmptyOperation()
+        {
+            SelectedOperation = new EmptyOperationViewModel(() => { IsSearchResultVisible = false; });
+            IsOperationsChangingPossible = true;
         }
 
         public ISafe Safe { get; set; }
