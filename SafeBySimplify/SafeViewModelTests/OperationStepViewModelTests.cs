@@ -130,13 +130,21 @@ namespace SafeViewModelTests
                 new RecordHeader() {Name = "1", Tags = new List<string>()},
                 new RecordHeader() {Name = "2", Tags = new List<string>()}
             };
+            var searchText1 = String.Empty;
+            var headers1 = new List<RecordHeader>()
+            {
+            };
+
             var asyncCompletionToken = MockGetRecordAsync(_safe, searchText, 100, headers);
+            MockGetRecordAsync(_safe, searchText1, 0, headers1);
             _operationStepViewModel.SearchText = searchText;
             await asyncCompletionToken.WaitForTaskCompletion(10000);
             Assume.That(_operationStepViewModel.SearchResults.Count == headers.Count);
             Assume.That(_operationStepViewModel.SelectedOperation.HighlightCommand.CanExecute());
             _operationStepViewModel.SelectedOperation.HighlightCommand.Execute();
+            Assert.False(_searchResultVisibilityObserver.PropertyValue);
             Assert.AreEqual(false,_operationStepViewModel.IsSearchResultVisible);
+            Assert.AreEqual(string.Empty,_operationStepViewModel.SearchText);
         }
 
 

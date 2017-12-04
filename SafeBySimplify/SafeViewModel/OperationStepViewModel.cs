@@ -20,20 +20,28 @@ namespace SafeViewModel
             IsOperationsChangingPossible = true;
             SearchResults = new ObservableCollection<RecordHeaderViewModel>();
             GoToEmptyOperation();
-            AddCommand = new DelegateCommand(
-                () =>
-                {
-                    IsOperationsChangingPossible = false;
-                    SelectedOperation = new AddOperationViewModel(GoToEmptyOperation, GoToAlteringOperation);
-                    IsSearchResultVisible = false;
-                    SearchText = string.Empty;
-                });
+            AddCommand = new DelegateCommand(GoToAddOperation);
         }
 
-        private void GoToEmptyOperation()
+        private void GoToAddOperation()
         {
-            SelectedOperation = new EmptyOperationViewModel(() => { IsSearchResultVisible = false; });
+            IsOperationsChangingPossible = false;
+            SelectedOperation = new AddOperationViewModel(GoToEmptyOperation, GoToAlteringOperation);
+            IsSearchResultVisible = false;
+            SetSearchTextWithoutSearching(string.Empty);
+
+        }
+
+    private void GoToEmptyOperation()
+        {
+            SelectedOperation = new EmptyOperationViewModel(HighLightSelectedOperation);
             IsOperationsChangingPossible = true;
+        }
+
+        private void HighLightSelectedOperation()
+        {
+            SetSearchTextWithoutSearching(string.Empty);
+            IsSearchResultVisible = false;
         }
 
         public ISafe Safe { get; set; }
@@ -53,6 +61,16 @@ namespace SafeViewModel
                     FirePropertyChanged();
                 }
             }
+        }
+
+        private void SetSearchTextWithoutSearching(string searchText)
+        {
+            if (_searchString != searchText)
+            {
+                _searchString = searchText;
+                FirePropertyChanged(nameof(SearchText));
+            }
+
         }
 
         private CancellationTokenSource _tokenSource;
@@ -76,7 +94,7 @@ namespace SafeViewModel
 
         private void GoToAlteringOperation(RecordHeader x)
         {
-            SearchText = "";
+            SetSearchTextWithoutSearching(string.Empty);
             SelectedOperation = new RecordAlteringOperationViewModel(x);
             IsSearchResultVisible = false;
             IsOperationsChangingPossible = true;

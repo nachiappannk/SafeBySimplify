@@ -13,9 +13,9 @@
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <DataTemplate DataType="{x:Type safeViewModel:EmptyOperationViewModel}">
-                <Grid Background="Pink">
+                <Grid Background="White">
                     <Grid.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding HighlightCommand}" />
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding HighlightCommand}" />
                     </Grid.InputBindings>
                 </Grid>
             </DataTemplate>
@@ -54,7 +54,7 @@
             <ContentControl Content="{Binding SelectedOperation}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
             <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
                     Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" BorderThickness="1" BorderBrush="Black">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <Grid VerticalAlignment="Top">
                         <ItemsControl  ItemsSource="{Binding SearchResults}">
                             <ItemsControl.ItemTemplate>
