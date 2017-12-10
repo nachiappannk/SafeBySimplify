@@ -24,6 +24,14 @@ namespace SafeViewModelTests
         private ViewModelPropertyObserver<string> _searchTextPropertyObserver;
         private ViewModelPropertyObserver<bool> _operationChangingPossibilityObserver;
 
+        [TearDown]
+        public void TestDown()
+        {
+            _safe.DidNotReceive()
+                .GetRecordsAsync
+                (Arg.Is<string>(x => string.IsNullOrEmpty(x)), Arg.Any<CancellationToken>());
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -48,11 +56,6 @@ namespace SafeViewModelTests
             _operationChangingPossibilityObserver = _operationStepViewModel
                 .GetPropertyObserver<bool>
                 (nameof(_operationStepViewModel.IsOperationsChangingPossible));
-
-
-            _safe.GetRecordsAsync(Arg.Is<string>(x => string.IsNullOrEmpty(x)), Arg.Any<CancellationToken>())
-                .Throws(new Exception("Searching with empty string as arguments"));
-
         }
 
         public class Tests : OperationStepViewModelTests

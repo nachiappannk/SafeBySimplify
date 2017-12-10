@@ -86,7 +86,7 @@ namespace SafeViewModel
                     (headers.Select(x => new RecordHeaderViewModel(x, () => { GoToAlteringOperation(x); })));
                 IsSearchResultVisible = true;
             }
-            catch (Exception e)
+            catch (OperationCanceledException e)
             {
 
             }
