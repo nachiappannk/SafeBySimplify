@@ -15,7 +15,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Label Content="{Binding Name}" Style="{StaticResource Level2HeadingLableStyle}"/>
+        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" safeUiLib:HintingTextProvidingObject.HintText="Record Name" 
+                 Style="{StaticResource TextBoxWithHintStyle}"/>
         <DockPanel Grid.Row="1" Height="30">
             <TextBlock Text="Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
             <Grid>

@@ -12,8 +12,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>        
-        <local:RecordViewUserControl/>
+        </Grid.RowDefinitions>
+        <local:RecordViewUserControl DataContext="{Binding Record}"/>
         <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,5">
             <Button DockPanel.Dock="Right" Content="Discard" Margin="4,0" Width="50" Command="{Binding DiscardCommand}"/>
             <Button DockPanel.Dock="Right" Content="Save" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
