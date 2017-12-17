@@ -17,7 +17,7 @@ namespace SafeViewModelTests
     public class OperationStepViewModelTests
     {
         private OperationStepViewModel _operationStepViewModel;
-        private ISafe _safe;
+        private MockedSafe _safe;
         private ViewModelPropertyObserver<ObservableCollection<RecordHeaderViewModel>> _searchResultPropertyObserver;
         private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
         private ViewModelPropertyObserver<SingleOperationViewModel> _selectedOperationPropertyObserver;
@@ -27,15 +27,45 @@ namespace SafeViewModelTests
         [TearDown]
         public void TestDown()
         {
-            _safe.DidNotReceive()
-                .GetRecordsAsync
-                (Arg.Is<string>(x => string.IsNullOrEmpty(x)), Arg.Any<CancellationToken>());
+            Assert.False(_safe.SearchedTexts.Contains(string.Empty));
         }
+
+
+        public class MockedSafe : ISafe
+        {
+            Dictionary<string, List<RecordHeader>> _resultDictionary = new Dictionary<string, List<RecordHeader>>();
+            Dictionary<string, int> _searchTimeDictionary = new Dictionary<string, int>();
+
+            public void MockGetRecordsAsync(string searchText, List<RecordHeader> result, int searchTime)
+            {
+                _resultDictionary.Add(searchText, result);
+                _searchTimeDictionary.Add(searchText, searchTime);
+            }
+            
+            public List<RecordHeader> GetRecordHeaders(string searchText)
+            {
+                SearchedTexts.Add(searchText);
+                var millisecondsTimeout = _searchTimeDictionary[searchText];
+                //for (int i = 0; i < millisecondsTimeout; i++)
+                //{
+                //    for (int j = 0; j < 100000; j++)
+                //    {
+
+                //    }
+                //}
+                Thread.Sleep(millisecondsTimeout);
+                return _resultDictionary[searchText];
+            }
+
+            public List<string> SearchedTexts => new List<string>();
+        }
+
 
         [SetUp]
         public void SetUp()
         {
-            _safe = Substitute.For<ISafe>();
+            _safe = new MockedSafe();
+
             _operationStepViewModel = new OperationStepViewModel(_safe, () => { });
 
             _searchResultPropertyObserver = _operationStepViewModel
@@ -72,30 +102,15 @@ namespace SafeViewModelTests
                 Assert.AreEqual(typeof(EmptyOperationViewModel), _operationStepViewModel.SelectedOperation.GetType());
             }
 
-
             [Test]
-            public async Task When_search_text_is_changed_then_a_new_search_query_is_made_and_the_old_is_cancelled()
-            {
-                var searchText = "ss";
-                var updatedSearchText = "sss";
-
-                var asyncCompletionInitialToken = MockGetRecordAsync(_safe, searchText, 1000, new List<RecordHeader>());
-                var asyncCompletionUpdatedToken = MockGetRecordAsync(_safe, updatedSearchText, 1000, new List<RecordHeader>());
-
-                _operationStepViewModel.SearchText = searchText;
-                _operationStepViewModel.SearchText = updatedSearchText;
-
-                await asyncCompletionUpdatedToken.WaitForTaskCompletion(10000);
-                Assert.False(asyncCompletionInitialToken.IsTaskCompleted);
-            }
-
-            [Test]
-            public void Operantion_modification_possibility()
+            public void Initialy_selected_operation_modification_is_possible()
             {
                 Assert.AreEqual(true, _operationStepViewModel.IsOperationsChangingPossible);
             }
         }
 
+
+ 
 
 
         public class SearchTextAndSearchResult
@@ -120,12 +135,6 @@ namespace SafeViewModelTests
 
         
 
-        private AsyncCompletionToken MockGetRecordAsync(SearchTextAndSearchResult searchTextAndSearchResult)
-        {
-            var asyncCompletionToken = MockGetRecordAsync(_safe, searchTextAndSearchResult.SearchText,
-                searchTextAndSearchResult.TimeTakenForSearching, searchTextAndSearchResult.SearchResults);
-            return asyncCompletionToken;
-        }
 
         private void SetSearchText(string searchText)
         {
@@ -138,9 +147,10 @@ namespace SafeViewModelTests
             [SetUp]
             public void SearchTextEnteredAndSearchResultsAreCorrectSetUp()
             {
-                var asyncCompletionToken = MockGetRecordAsync(simpleSearchTextAndResult1);
+                _safe.MockGetRecordsAsync(simpleSearchTextAndResult1.SearchText, 
+                    simpleSearchTextAndResult1.SearchResults, simpleSearchTextAndResult1.TimeTakenForSearching);
                 SetSearchText(simpleSearchTextAndResult1.SearchText);
-                WaitForSearchResultsToBeAvailable(asyncCompletionToken);
+                _operationStepViewModel.TaskHolder.WaitOnHoldingTask();
                 Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
                 var actualHeaders = _searchResultPropertyObserver.PropertyValue.Select(x => x.RecordHeader).ToList();
                 Assume.That(simpleSearchTextAndResult1.SearchResults.Count == actualHeaders.Count, "The search results are wrong (count)");
@@ -148,10 +158,7 @@ namespace SafeViewModelTests
                 Assume.That(isAllSearchResultsListed,"The search results are wrong");
             }
 
-            private static void WaitForSearchResultsToBeAvailable(AsyncCompletionToken asyncCompletionToken)
-            {
-                asyncCompletionToken.WaitForTaskCompletion(10000).Wait();
-            }
+            
 
 
 
@@ -248,40 +255,7 @@ namespace SafeViewModelTests
 
 
 
-        private AsyncCompletionToken MockGetRecordAsync(ISafe safe, string searchText, int millisecondsTimeout, List<RecordHeader> recordHeaders)
-        {
-            var asyncCompeltionToken = new AsyncCompletionToken {Semaphore = new Semaphore(0, 1)};
-            safe.GetRecordsAsync(searchText, Arg.Any<CancellationToken>())
-                .Returns(
-                    x =>
-                    {
-                        return Task.Run(() =>
-                        {
-                            ((CancellationToken)x[1]).ThrowIfCancellationRequested();
-                            Thread.Sleep(millisecondsTimeout);
-                            asyncCompeltionToken.IsTaskCompleted = true;
-                            asyncCompeltionToken.Semaphore.Release();
-                            return recordHeaders;
-                        });
-                    }
-                );
-            return asyncCompeltionToken;
-        }
-
-        public class AsyncCompletionToken
-        {
-            public Semaphore Semaphore { get; set; }
-
-            public async Task WaitForTaskCompletion(int maxWaitTime)
-            {
-                var result = Semaphore.WaitOne(10000);
-                await Task.Run(() => { Thread.Sleep(100); });
-                if(!result) throw new Exception("The task was not completed");
-            }
-
-            public bool IsTaskCompleted { get; set; }
-        }
-
+        
 
     }
 }

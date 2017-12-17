@@ -74,21 +74,17 @@ namespace SafeModel
 
         public class SafeXXX : ISafe
         {
-            
-            public Task<List<RecordHeader>> GetRecordsAsync(string searchText, CancellationToken token)
+            public List<RecordHeader> GetRecordHeaders(string searchText)
             {
-                return Task.Run(() =>
+                Thread.Sleep(1000);
+                var charArray = searchText.ToCharArray();
+                var stringArray = charArray.Select((x, y) => x.ToString() + y.ToString());
+                var recordHeaders = stringArray.Select(x => new RecordHeader()
                 {
-                    var charArray = searchText.ToCharArray();
-                    var stringArray = charArray.Select((x, y) => x.ToString() + y.ToString());
-                    var recordHeaders = stringArray.Select(x => new RecordHeader()
-                    {
-                        Name = x,
-                        Tags = new List<string>() { "one", "two", "three"}
-                    }).ToList();
-                    return recordHeaders;
-
-                });
+                    Name = x,
+                    Tags = new List<string>() { "one", "two", "three" }
+                }).ToList();
+                return recordHeaders;
             }
         }
 

@@ -23,7 +23,8 @@ namespace SafeModel
 
     public interface ISafe
     {
-        Task<List<RecordHeader>> GetRecordsAsync(string searchText, CancellationToken token);
+        List<RecordHeader> GetRecordHeaders(string searchText);
+
     }
 
     public class RecordHeader

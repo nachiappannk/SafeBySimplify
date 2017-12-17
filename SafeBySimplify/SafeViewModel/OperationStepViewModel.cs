@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Prism.Commands;
 using SafeModel;
 
@@ -75,22 +77,42 @@ namespace SafeViewModel
 
         private CancellationTokenSource _tokenSource;
 
-        private async void OnSearchTextChanged(string value)
+        public int NumberOfOnGoingSearches
         {
-            _tokenSource?.Cancel();
-            _tokenSource = new CancellationTokenSource();
-            try
+            get { return _numberOfOnGoingSearches; }
+            set
             {
-                var headers = await Safe.GetRecordsAsync(value, _tokenSource.Token);
-                SearchResults = new ObservableCollection<RecordHeaderViewModel>
-                    (headers.Select(x => new RecordHeaderViewModel(x, () => { GoToAlteringOperation(x); })));
-                IsSearchResultVisible = true;
-            }
-            catch (OperationCanceledException e)
-            {
-
+                _numberOfOnGoingSearches = value;
+                IsSearchInProgress = _numberOfOnGoingSearches != 0;
             }
         }
+
+        public bool IsSearchInProgress { get; set; }
+
+        private void SearchAndUpdateSearchResults(string value, CancellationTokenSource cancellationTokenSource)
+        {
+            cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            var headers = GetRecordHeaders(value);
+            cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            SearchResults = new ObservableCollection<RecordHeaderViewModel>
+                    (headers.Select(x => new RecordHeaderViewModel(x, () => { GoToAlteringOperation(x); })));
+            IsSearchResultVisible = true;
+        }
+
+        private void OnSearchTextChanged(string value)
+        {
+            var taskHolder = new TaskHolder((cts) =>  SearchAndUpdateSearchResults(value, cts));
+            TaskHolder?.Cancel();
+            TaskHolder = taskHolder;
+        }
+
+        public TaskHolder TaskHolder { get; set; }
+
+        private List<RecordHeader> GetRecordHeaders(string searchText)
+        {
+            return Safe.GetRecordHeaders(searchText);
+        }
+
 
         private void GoToAlteringOperation(RecordHeader x)
         {
@@ -145,6 +167,7 @@ namespace SafeViewModel
         }
 
         private bool _isSearchResultVisible;
+        private int _numberOfOnGoingSearches;
 
         public bool IsSearchResultVisible
         {
@@ -161,4 +184,39 @@ namespace SafeViewModel
 
         public DelegateCommand AddCommand { get; set; }
     }
+
+    public class TaskHolder
+    {
+        public TaskHolder(Action<CancellationTokenSource> taskDelegate)
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+            _runningTask = Task.Run(() =>
+            {
+                try
+                {
+                    taskDelegate.Invoke(_cancellationTokenSource);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            });
+        }
+
+        public Task _runningTask;
+
+        private CancellationTokenSource _cancellationTokenSource;
+
+        public void Cancel()
+        {
+            _cancellationTokenSource.Cancel();
+        }
+
+        public void WaitOnHoldingTask()
+        {
+            _runningTask.Wait();
+        }
+
+    }
+
 }
