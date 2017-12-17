@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Prism.Commands;
 
 namespace SafeViewModel
 {
@@ -11,8 +12,9 @@ namespace SafeViewModel
         private string _name;
         private string _value;
 
-        public PasswordRecord(Action changedAction)
+        public PasswordRecord(Action changedAction, Action<PasswordRecord> removeAction )
         {
+            RemoveCommand = new DelegateCommand(() => removeAction.Invoke(this));
             _changedAction = changedAction;
             _name = string.Empty;
             _value = string.Empty;
@@ -39,5 +41,7 @@ namespace SafeViewModel
                 _changedAction.Invoke();
             }
         }
+
+        public DelegateCommand RemoveCommand { get; set; }
     }
 }
