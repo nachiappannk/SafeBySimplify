@@ -57,6 +57,15 @@ namespace SafeViewModelTests
             var newlyAddedPaswordRecord = _addOperationViewModel.Record.PasswordRecords.ElementAt(initialNumberOfPasswordRecords);
             Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Name);
             Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Value);
+
+            var lastRecord = _addOperationViewModel.Record.PasswordRecords.Last();
+            var otherRecords = _addOperationViewModel.Record.PasswordRecords.ToList();
+            otherRecords.Remove(lastRecord);
+
+            Assert.True(otherRecords.All(x => x.RemoveCommand.CanExecute()));
+            Assert.False(lastRecord.RemoveCommand.CanExecute());
+
+
         }
 
 

@@ -34,7 +34,11 @@ namespace SafeViewModel
 
         private void AddNewEmptyPasswordRecord()
         {
-            PasswordRecords.Add(new PasswordRecord(InsertEmptyRecordIfNecessary, (r) => PasswordRecords.Remove(r)));
+            PasswordRecords.Add(
+                new PasswordRecord(InsertEmptyRecordIfNecessary, 
+                (r) => PasswordRecords.Remove(r),
+                (r) => PasswordRecords.Last() != r
+                ));
         }
 
         private void InsertEmptyRecordIfNecessary()

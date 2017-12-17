@@ -12,9 +12,11 @@ namespace SafeViewModel
         private string _name;
         private string _value;
 
-        public PasswordRecord(Action changedAction, Action<PasswordRecord> removeAction )
+        public PasswordRecord(Action changedAction, 
+            Action<PasswordRecord> removeAction, 
+            Predicate<PasswordRecord> isRemovePossible)
         {
-            RemoveCommand = new DelegateCommand(() => removeAction.Invoke(this));
+            RemoveCommand = new DelegateCommand(() => removeAction.Invoke(this), () => isRemovePossible.Invoke(this));
             _changedAction = changedAction;
             _name = string.Empty;
             _value = string.Empty;
