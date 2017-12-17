@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Label Content="New Record Creation" Style="{StaticResource Level2HeadingLableStyle}"/>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Margin="{StaticResource NormalElementSpacingMargin}" HorizontalAlignment="Stretch">
-            <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1" >
+            <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
