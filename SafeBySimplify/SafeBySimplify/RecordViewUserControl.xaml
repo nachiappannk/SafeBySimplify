@@ -15,34 +15,44 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" safeUiLib:HintingTextProvidingObject.HintText="Record Name" 
-                 Style="{StaticResource TextBoxWithHintStyle}"/>
-        <DockPanel Grid.Row="1" Height="30">
-            <TextBlock Text="Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
-            <Grid>
-                <TextBlock Text="Search tags : Tag seperator is semicolon (;)" Margin="10,0" VerticalAlignment="Center"/>
-                <safeUiLib:TagsControl Height="30" ToolTip="Search tags : Tag seperator is semicolon (;)">
-                    <safeUiLib:TagsControl.TagTemplate>
-                        <DataTemplate>
-                            <Border BorderThickness="2" CornerRadius="4" Background="#FFFFD0A0" BorderBrush="Brown" Margin="2,0">
-                                <TextBlock Text="{Binding}" Width="Auto" Height="16"/>
-                            </Border>
-                        </DataTemplate>
-                    </safeUiLib:TagsControl.TagTemplate>
-                </safeUiLib:TagsControl>
-            </Grid>
-        </DockPanel>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="2">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+        <Label Content="New Record Creation" Style="{StaticResource Level2HeadingLableStyle}"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Margin="{StaticResource NormalElementSpacingMargin}" HorizontalAlignment="Stretch">
+            <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    <TextBlock Text="Record Name and Search Tags" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
+                    <TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" safeUiLib:HintingTextProvidingObject.HintText="Add Record Name" 
+                         Style="{StaticResource TextBoxWithHintStyle}"/>
+                    <DockPanel Grid.Row="2" Height="25">
+                        <TextBlock Text="Search Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
+                        <Grid>
+                            <TextBlock Text="Add search tag. Used for searching records. The tag delimiter is (;) semicolon" VerticalAlignment="Center" Margin="5,0,5,0" 
+                                   Style="{StaticResource HintTextBlockStyle}"/>
+                            <safeUiLib:TagsControl Height="20" ToolTip="Used for searching records. The tag delimiter is (;) semicolon" Margin="0,0,5,0" FontSize="8">
+                                <safeUiLib:TagsControl.TagTemplate>
+                                    <DataTemplate>
+                                        <Border BorderThickness="2" CornerRadius="4" Background="#FFFFD0A0" BorderBrush="SandyBrown" Margin="2,0">
+                                            <TextBlock Text="{Binding}" Width="Auto" Height="Auto" FontSize="8"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </safeUiLib:TagsControl.TagTemplate>
+                            </safeUiLib:TagsControl>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+            </Border>
+        </ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -52,13 +62,17 @@
                         <ItemsControl ItemsSource="{Binding PasswordRecords}" Grid.Row="1">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <local:NameValueUserControl></local:NameValueUserControl>
+                                    <local:NameValueUserControl/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </Grid>
-                    <Grid Grid.Row="1">
+
+                </Border>
+                <Border Grid.Row="1" BorderBrush="Brown" BorderThickness="2" CornerRadius="4" Margin="1">
+                    <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
@@ -70,10 +84,10 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+                        <Border Grid.Row="2" Height="60" HorizontalAlignment="Stretch" Background="Bisque" BorderThickness="2" BorderBrush="SandyBrown" CornerRadius="5" Margin="2,5">
+                            <TextBlock Text="Drag and drop file to be added here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
                     </Grid>
-                </Grid>
-                <Border Grid.Row="1" Height="60" HorizontalAlignment="Stretch" Background="Bisque" BorderThickness="2" BorderBrush="SaddleBrown" CornerRadius="5" Margin="2,5">
-                    <TextBlock Text="Drag and drop file to be added here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
             </Grid>
         </ScrollViewer>
