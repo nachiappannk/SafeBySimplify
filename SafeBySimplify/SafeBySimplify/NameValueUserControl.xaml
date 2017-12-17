@@ -4,14 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SafeBySimplify"
+             xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
+             xmlns:safeUiLib="clr-namespace:SafeUiLib;assembly=SafeUiLib"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance safeViewModel:PasswordRecord}"
              d:DesignHeight="30" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" Margin="2"/>
-        <TextBox Grid.Column="1" Margin="2"/>
+        <TextBox Grid.Column="0" Margin="2" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                 safeUiLib:HintingTextProvidingObject.HintText="Field Name" 
+                 Style="{StaticResource TextBoxWithHintStyle}"/>
+        <TextBox Grid.Column="1" Margin="2" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" 
+                 safeUiLib:HintingTextProvidingObject.HintText="Field Value" 
+                 Style="{StaticResource TextBoxWithHintStyle}"/>
     </Grid>
 </UserControl>
