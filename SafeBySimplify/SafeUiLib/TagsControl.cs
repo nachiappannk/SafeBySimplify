@@ -45,6 +45,12 @@ namespace SafeUiLib
         public TagsControl()
         {
             TextChanged += OnTokenTextChanged;
+            TextChanged += (sender, args) =>
+            {
+                if (this._paragraph.Inlines.Count == 0) this.Opacity = .5;
+                else Opacity = 1;
+            }; 
+
             LostFocus += OnLoosingFocus;
 
             var inline = new Run();
@@ -73,6 +79,9 @@ namespace SafeUiLib
             var concatenatedTokens = string.Join(";", tokens);
             Tags = concatenatedTokens;
         }
+
+
+
 
         private static void OnTagsChanging(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

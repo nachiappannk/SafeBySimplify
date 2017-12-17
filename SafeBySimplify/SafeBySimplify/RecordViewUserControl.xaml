@@ -18,13 +18,18 @@
         <Label Content="{Binding Name}" Style="{StaticResource Level2HeadingLableStyle}"/>
         <DockPanel Grid.Row="1" Height="30">
             <TextBlock Text="Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
-            <safeUiLib:TagsControl Height="30">
-                <safeUiLib:TagsControl.TagTemplate>
-                    <DataTemplate>
-                        <safeUiLib:TagsControl/>
-                    </DataTemplate>
-                </safeUiLib:TagsControl.TagTemplate>
-            </safeUiLib:TagsControl>
+            <Grid>
+                <TextBlock Text="Search tags : Tag seperator is semicolon (;)" Margin="10,0" VerticalAlignment="Center"/>
+                <safeUiLib:TagsControl Height="30" ToolTip="Search tags : Tag seperator is semicolon (;)">
+                    <safeUiLib:TagsControl.TagTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="2" CornerRadius="4" Background="Yellow" BorderBrush="Brown" Margin="2,0">
+                                <TextBlock Text="{Binding}" Width="Auto" Height="16"/>
+                            </Border>
+                        </DataTemplate>
+                    </safeUiLib:TagsControl.TagTemplate>
+                </safeUiLib:TagsControl>
+            </Grid>
         </DockPanel>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="2">
             <Grid>
