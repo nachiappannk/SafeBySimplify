@@ -6,7 +6,6 @@ namespace SafeViewModel
     {
         public string Name { get; set; }
         public DelegateCommand DownloadCommand { get; set; }
-
         public DelegateCommand UploadCommand { get; set; }
     }
 }

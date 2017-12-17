@@ -7,7 +7,37 @@ namespace SafeViewModel
 {
     public class PasswordRecord
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
+        private readonly Action _changedAction;
+        private string _name;
+        private string _value;
+
+        public PasswordRecord(Action changedAction)
+        {
+            _changedAction = changedAction;
+            _name = string.Empty;
+            _value = string.Empty;
+        }
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name == value) return;
+                _name = value;
+                _changedAction.Invoke();
+            }
+        }
+
+        public string Value
+        {
+            get { return _value; }
+            set
+            {
+                if(_value == value) return;
+                _value = value;
+                _changedAction.Invoke();
+            }
+        }
     }
 }
