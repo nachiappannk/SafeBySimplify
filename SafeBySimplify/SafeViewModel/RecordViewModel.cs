@@ -39,6 +39,10 @@ namespace SafeViewModel
                 (r) => PasswordRecords.Remove(r),
                 (r) => PasswordRecords.Last() != r
                 ));
+            foreach (var passwordRecord in PasswordRecords)
+            {
+                passwordRecord.RemoveCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private void InsertEmptyRecordIfNecessary()

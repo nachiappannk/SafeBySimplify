@@ -227,6 +227,7 @@ namespace SafeViewModelTests
             [Test]
             public void When_add_command_is_made_and_saved_then_selected_operation_is_modification_operation_and_operation_changing_is_possible()
             {
+                _addOperationViewModel.Record.Name = "SomeName";
                 Assert.True(_addOperationViewModel.SaveCommand.CanExecute());
                 _addOperationViewModel.SaveCommand.Execute();
                 Assert.AreEqual(typeof(RecordAlteringOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());

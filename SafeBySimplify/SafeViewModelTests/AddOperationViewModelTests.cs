@@ -22,52 +22,44 @@ namespace SafeViewModelTests
             _saveCommandObserver = _addOperationViewModel.SaveCommand.GetDelegateCommandObserver();
         }
 
-        [Test]
-        public void When_user_name_are_filled_in_password_record_then_an_empty_password_record_is_added()
+
+        public class PasswordRecordIsAdded : AddOperationViewModelTests
         {
-            When_some_details_are_filled_in_password_record_then_an_empty_password_record_is_added(r =>
-                r.Name = "SomeUserName");
-        }
+            private bool _isCollectionModified = false;
+            private int _initialNumberOfPasswordRecords;
+            private CommandObserver _lastRecordRemoveCommandObserver;
 
-
-        [Test]
-        public void When_password_are_filled_in_password_record_then_an_empty_password_record_is_added()
-        {
-            When_some_details_are_filled_in_password_record_then_an_empty_password_record_is_added(r =>
-                r.Value = "SomeUserName");
-        }
-
-
-        public void When_some_details_are_filled_in_password_record_then_an_empty_password_record_is_added(Action<PasswordRecord> detailFiller)
-        {
-            var collectionModified = false;
-            
-            _addOperationViewModel.Record.PasswordRecords.CollectionChanged += (sender, args) =>
+            [SetUp]
+            public void PasswordRecordIsAddedSetup()
+            {
+                _addOperationViewModel.Record.PasswordRecords.CollectionChanged += (sender, args) =>
                 {
-                    collectionModified = true;
+                    _isCollectionModified = true;
                 };
+                _initialNumberOfPasswordRecords = _addOperationViewModel.Record.PasswordRecords.Count;
+                var passwordRecord = _addOperationViewModel.Record.PasswordRecords.ElementAt(_initialNumberOfPasswordRecords - 1);
+                _lastRecordRemoveCommandObserver = passwordRecord.RemoveCommand.GetDelegateCommandObserver();
+                passwordRecord.Name = "NewValue";
+            }
 
-            var initialNumberOfPasswordRecords = _addOperationViewModel.Record.PasswordRecords.Count;
-            var passwordRecord = _addOperationViewModel.Record.PasswordRecords.ElementAt(initialNumberOfPasswordRecords - 1);
-            detailFiller.Invoke(passwordRecord);
+            [Test]
+            public void New_empty_password_record_is_added_that_can_not_be_deleted()
+            {
+                Assert.AreEqual(_initialNumberOfPasswordRecords + 1, _addOperationViewModel.Record.PasswordRecords.Count);
+                var newlyAddedPaswordRecord = _addOperationViewModel.Record.PasswordRecords.ElementAt(_initialNumberOfPasswordRecords);
+                Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Name);
+                Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Value);
+                Assert.False(newlyAddedPaswordRecord.RemoveCommand.CanExecute());
+            }
 
-
-            Assert.True(collectionModified);
-            Assert.AreEqual(initialNumberOfPasswordRecords + 1, _addOperationViewModel.Record.PasswordRecords.Count);
-            var newlyAddedPaswordRecord = _addOperationViewModel.Record.PasswordRecords.ElementAt(initialNumberOfPasswordRecords);
-            Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Name);
-            Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Value);
-
-            var lastRecord = _addOperationViewModel.Record.PasswordRecords.Last();
-            var otherRecords = _addOperationViewModel.Record.PasswordRecords.ToList();
-            otherRecords.Remove(lastRecord);
-
-            Assert.True(otherRecords.All(x => x.RemoveCommand.CanExecute()));
-            Assert.False(lastRecord.RemoveCommand.CanExecute());
+            [Test]
+            public void The_old_last_record_remove_command_becomes_enabled()
+            {
+                Assert.True(_lastRecordRemoveCommandObserver.ValueOfCanExecuteOnLatestEvent);
+            }
 
 
         }
-
 
         [Test]
         public void When_details_are_filled_and_removed_then_correct_record_is_removed()
