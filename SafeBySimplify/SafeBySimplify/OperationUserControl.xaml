@@ -11,7 +11,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.Resources>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <DataTemplate DataType="{x:Type safeViewModel:RecordAlteringOperationViewModel}">
                 <Grid Background="Green">
                     <Grid.InputBindings>
@@ -20,7 +19,10 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:AddOperationViewModel}">
-                <local:RecordAdditionUserControl></local:RecordAdditionUserControl>
+                <local:RecordAdditionUserControl/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type safeViewModel:SearchAndAddOperationViewModel}">
+                <local:SearchAndAddOperationUserControl/>
             </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -41,20 +43,6 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <ContentControl Content="{Binding SelectedOperation}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
-            <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
-                    Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <Grid VerticalAlignment="Top">
-                        <ItemsControl  ItemsSource="{Binding SearchResults}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <local:SearchResultUserControl/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Grid>
-                </ScrollViewer>
-            </Border>
         </Grid>
     </Grid>
 </UserControl>
