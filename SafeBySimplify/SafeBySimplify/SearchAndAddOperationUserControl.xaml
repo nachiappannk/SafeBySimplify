@@ -10,34 +10,41 @@
              d:DataContext="{d:DesignInstance safeViewModel:SearchAndAddOperationViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.Resources>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
+        <Label Content="Add Record or Search for Record" Style="{StaticResource Level2HeadingLableStyle}"></Label>
+        <Grid Grid.Row="1">
+            <Grid.Resources>
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
                  Style="{StaticResource TextBoxWithHintStyle}"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Column="1" Grid.Row="0" Content="Add" Command="{Binding AddCommand}"/>
-        <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
+            <Button Grid.Column="1" Grid.Row="0" Content="Add" Command="{Binding AddCommand}"/>
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
                 Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid VerticalAlignment="Top">
-                    <ItemsControl  ItemsSource="{Binding SearchResults}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <local:SearchResultUserControl/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </ScrollViewer>
-        </Border>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Grid VerticalAlignment="Top">
+                        <ItemsControl  ItemsSource="{Binding SearchResults}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:SearchResultUserControl/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
