@@ -19,7 +19,16 @@ namespace SafeViewModel
             IsSearchResultVisible = false;
         }
 
-        public bool IsSearchResultVisible { get; set; }
+        public bool IsSearchResultVisible
+        {
+            get { return _isSearchResultVisible; }
+            set
+            {
+                if(_isSearchResultVisible == value)return;
+                _isSearchResultVisible = value;
+                FirePropertyChanged();
+            }
+        }
 
         private void SearchAndUpdateSearchResults(string value, CancellationTokenSource cancellationTokenSource)
         {
@@ -62,6 +71,7 @@ namespace SafeViewModel
 
 
         private ObservableCollection<RecordHeaderViewModel> _searchResult;
+        private bool _isSearchResultVisible;
 
         public ObservableCollection<RecordHeaderViewModel> SearchResults
         {

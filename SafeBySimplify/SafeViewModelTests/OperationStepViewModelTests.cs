@@ -127,6 +127,7 @@ namespace SafeViewModelTests
 
                     _safe.MockGetRecordsAsync(simpleSearchTextAndResult1.SearchText,
                         simpleSearchTextAndResult1.SearchResults, simpleSearchTextAndResult1.TimeTakenForSearching);
+
                     _serarchAndAddOperationViewModel.SearchText = simpleSearchTextAndResult1.SearchText;
                     _serarchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
 
