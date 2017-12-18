@@ -153,49 +153,53 @@ namespace SafeViewModelTests
                 [Test]
                 public void When_add_command_is_made_then_selected_operation_is_add_operation()
                 {
-                    Assume.That(_operationStepViewModel.AddCommand.CanExecute());
-                    _operationStepViewModel.AddCommand.Execute();
+                    Assume.That(_serarchAndAddOperationViewModel.AddCommand.CanExecute());
+                    _serarchAndAddOperationViewModel.AddCommand.Execute();
                     Assert.AreEqual(typeof(AddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
                 }
             }
+
+            public class InitiatedAddingARecord : SearchAndAddOperationIsTheSelectionOperation
+            {
+                private AddOperationViewModel _addOperationViewModel;
+
+                [SetUp]
+                public void InitiatedAddingARecordSetUp()
+                {
+                    Assume.That(_serarchAndAddOperationViewModel.AddCommand.CanExecute());
+                    _serarchAndAddOperationViewModel.AddCommand.Execute();
+                    Assume.That(typeof(AddOperationViewModel) == _selectedOperationPropertyObserver.PropertyValue.GetType());
+                    _addOperationViewModel = _operationStepViewModel.SelectedOperation as AddOperationViewModel;
+                    Assume.That(_addOperationViewModel != null);
+                }
+
+                [Test]
+                public void When_record_is_discarded_then_selected_operation_is_search_and_add_operation()
+                {
+                    Assert.True(_addOperationViewModel.DiscardCommand.CanExecute());
+                    _addOperationViewModel.DiscardCommand.Execute();
+                    Assert.AreEqual(typeof(SearchAndAddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+                }
+
+                [Test]
+                public void When_record_is_entered_and_saved_then_selected_operation_is_modification_operation()
+                {
+                    _addOperationViewModel.Record.Name = "SomeName";
+                    Assert.True(_addOperationViewModel.SaveCommand.CanExecute());
+                    _addOperationViewModel.SaveCommand.Execute();
+                    Assert.AreEqual(typeof(RecordAlteringOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+                    Assert.Inconclusive("The Correct record is in the record altering operation view model");
+                }
+            }
+
         }
+
+
+
 
 
         
 
-
-        public class InitiatedAddingARecord : OperationStepViewModelTests
-        {
-            private AddOperationViewModel _addOperationViewModel;
-
-            [SetUp]
-            public void InitiatedAddingARecordSetUp()
-            {
-                Assume.That(_operationStepViewModel.AddCommand.CanExecute());
-                _operationStepViewModel.AddCommand.Execute();
-                Assume.That(typeof(AddOperationViewModel) == _selectedOperationPropertyObserver.PropertyValue.GetType());
-                _addOperationViewModel = _operationStepViewModel.SelectedOperation as AddOperationViewModel;
-                Assume.That(_addOperationViewModel != null);
-            }
-
-            [Test]
-            public void When_record_is_discarded_then_selected_operation_is_search_and_add_operation()
-            {
-                Assert.True(_addOperationViewModel.DiscardCommand.CanExecute());
-                _addOperationViewModel.DiscardCommand.Execute();
-                Assert.AreEqual(typeof(SearchAndAddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
-            }
-
-            [Test]
-            public void When_record_is_entered_and_saved_then_selected_operation_is_modification_operation()
-            {
-                _addOperationViewModel.Record.Name = "SomeName";
-                Assert.True(_addOperationViewModel.SaveCommand.CanExecute());
-                _addOperationViewModel.SaveCommand.Execute();
-                Assert.AreEqual(typeof(RecordAlteringOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
-                Assert.Inconclusive("The Correct record is in the record altering operation view model");
-            }
-        }
 
 
 
@@ -206,7 +210,7 @@ namespace SafeViewModelTests
 
 
 
-        
+
 
     }
 }

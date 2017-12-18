@@ -19,7 +19,7 @@ namespace SafeViewModel
                 goToEntryStepAction.Invoke();
                 Safe = null;
             });
-            AddCommand = new DelegateCommand(GoToAddOperation);
+            //AddCommand = new DelegateCommand(GoToAddOperation);
             GoToSearchAndAddOperation();
         }
 
@@ -30,7 +30,7 @@ namespace SafeViewModel
 
         private void GoToSearchAndAddOperation()
         {
-            SelectedOperation = new SearchAndAddOperationViewModel(Safe, GoToAlteringOperation);
+            SelectedOperation = new SearchAndAddOperationViewModel(Safe, GoToAlteringOperation, GoToAddOperation);
         }
 
         public ISafe Safe { get; set; }
@@ -59,7 +59,7 @@ namespace SafeViewModel
         }
 
         
-        public DelegateCommand AddCommand { get; set; }
+        //public DelegateCommand AddCommand { get; set; }
     }
 
     

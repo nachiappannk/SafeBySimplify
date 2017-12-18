@@ -25,16 +25,17 @@ namespace SafeViewModelTests
         public void SetUp()
         {
             _safe = new MockedSafe();
-            _searchAndAddOperationViewModel = new SearchAndAddOperationViewModel(_safe, (x) => { });
+            _searchAndAddOperationViewModel = new SearchAndAddOperationViewModel(_safe, (x) => { }, () => { });
         }
 
-
-        [Test]
-        public void Search_result_is_initially_not_available()
+        public class Tests : SearchAndAddOperationViewModelTests
         {
-            Assert.AreEqual(false, _searchAndAddOperationViewModel.IsSearchResultVisible);
+            [Test]
+            public void Search_result_is_initially_not_available()
+            {
+                Assert.AreEqual(false, _searchAndAddOperationViewModel.IsSearchResultVisible);
+            }
         }
-
 
         public class SearchTextEnteredAndSearchResultsAreCorrect : SearchAndAddOperationViewModelTests
         {
@@ -55,5 +56,6 @@ namespace SafeViewModelTests
 
         }
 
+       
     }
 }

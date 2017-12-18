@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using Prism.Commands;
 using SafeModel;
 
 namespace SafeViewModel
@@ -12,11 +13,12 @@ namespace SafeViewModel
         private readonly ISafe _safe;
         private readonly Action<RecordHeader> _recordModifierSelectorAction;
 
-        public SearchAndAddOperationViewModel(ISafe safe, Action<RecordHeader> recordModifierSelectorAction)
+        public SearchAndAddOperationViewModel(ISafe safe, Action<RecordHeader> recordModifierSelectorAction, Action addNewRecordAction)
         {
             _safe = safe;
             _recordModifierSelectorAction = recordModifierSelectorAction;
             IsSearchResultVisible = false;
+            AddCommand = new DelegateCommand(addNewRecordAction);
         }
 
         public bool IsSearchResultVisible
@@ -85,5 +87,7 @@ namespace SafeViewModel
                 }
             }
         }
+
+        public DelegateCommand AddCommand { get; set; }
     }
 }
