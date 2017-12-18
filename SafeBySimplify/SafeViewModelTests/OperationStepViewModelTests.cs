@@ -13,51 +13,46 @@ using SafeViewModelTests.TestTools;
 
 namespace SafeViewModelTests
 {
+    public class MockedSafe : ISafe
+    {
+        Dictionary<string, List<RecordHeader>> _resultDictionary = new Dictionary<string, List<RecordHeader>>();
+        Dictionary<string, int> _searchTimeDictionary = new Dictionary<string, int>();
+
+        public void MockGetRecordsAsync(string searchText, List<RecordHeader> result, int searchTime)
+        {
+            _resultDictionary.Add(searchText, result);
+            _searchTimeDictionary.Add(searchText, searchTime);
+        }
+
+        public List<RecordHeader> GetRecordHeaders(string searchText)
+        {
+            SearchedTexts.Add(searchText);
+            var millisecondsTimeout = _searchTimeDictionary[searchText];
+            //for (int i = 0; i < millisecondsTimeout; i++)
+            //{
+            //    for (int j = 0; j < 100000; j++)
+            //    {
+
+            //    }
+            //}
+            Thread.Sleep(millisecondsTimeout);
+            return _resultDictionary[searchText];
+        }
+
+        public List<string> SearchedTexts => new List<string>();
+    }
+
     [TestFixture]
     public class OperationStepViewModelTests
     {
         private OperationStepViewModel _operationStepViewModel;
         private MockedSafe _safe;
-        private ViewModelPropertyObserver<ObservableCollection<RecordHeaderViewModel>> _searchResultPropertyObserver;
-        private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
         private ViewModelPropertyObserver<SingleOperationViewModel> _selectedOperationPropertyObserver;
-        private ViewModelPropertyObserver<string> _searchTextPropertyObserver;
-        private ViewModelPropertyObserver<bool> _operationChangingPossibilityObserver;
 
         [TearDown]
         public void TestDown()
         {
             Assert.False(_safe.SearchedTexts.Contains(string.Empty));
-        }
-
-
-        public class MockedSafe : ISafe
-        {
-            Dictionary<string, List<RecordHeader>> _resultDictionary = new Dictionary<string, List<RecordHeader>>();
-            Dictionary<string, int> _searchTimeDictionary = new Dictionary<string, int>();
-
-            public void MockGetRecordsAsync(string searchText, List<RecordHeader> result, int searchTime)
-            {
-                _resultDictionary.Add(searchText, result);
-                _searchTimeDictionary.Add(searchText, searchTime);
-            }
-            
-            public List<RecordHeader> GetRecordHeaders(string searchText)
-            {
-                SearchedTexts.Add(searchText);
-                var millisecondsTimeout = _searchTimeDictionary[searchText];
-                //for (int i = 0; i < millisecondsTimeout; i++)
-                //{
-                //    for (int j = 0; j < 100000; j++)
-                //    {
-
-                //    }
-                //}
-                Thread.Sleep(millisecondsTimeout);
-                return _resultDictionary[searchText];
-            }
-
-            public List<string> SearchedTexts => new List<string>();
         }
 
 
@@ -68,46 +63,14 @@ namespace SafeViewModelTests
 
             _operationStepViewModel = new OperationStepViewModel(_safe, () => { });
 
-            _searchResultPropertyObserver = _operationStepViewModel
-                .GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>
-                (nameof(_operationStepViewModel.SearchResults));
-
-            _searchResultVisibilityObserver = _operationStepViewModel
-                .GetPropertyObserver<bool>(nameof(_operationStepViewModel.IsSearchResultVisible));
-
             _selectedOperationPropertyObserver = _operationStepViewModel
                 .GetPropertyObserver<SingleOperationViewModel>
                 (nameof(_operationStepViewModel.SelectedOperation));
 
 
-            _searchTextPropertyObserver = _operationStepViewModel.GetPropertyObserver<string>
-                (nameof(_operationStepViewModel.SearchText));
 
-            _operationChangingPossibilityObserver = _operationStepViewModel
-                .GetPropertyObserver<bool>
-                (nameof(_operationStepViewModel.IsOperationsChangingPossible));
         }
 
-        public class Tests : OperationStepViewModelTests
-        {
-            [Test]
-            public void Search_result_is_initially_not_available()
-            {
-                Assert.AreEqual(false, _operationStepViewModel.IsSearchResultVisible);
-            }
-
-            [Test]
-            public void Selected_operation_is_initially_empty_operation()
-            {
-                Assert.AreEqual(typeof(EmptyOperationViewModel), _operationStepViewModel.SelectedOperation.GetType());
-            }
-
-            [Test]
-            public void Initialy_selected_operation_modification_is_possible()
-            {
-                Assert.AreEqual(true, _operationStepViewModel.IsOperationsChangingPossible);
-            }
-        }
 
 
  
@@ -133,72 +96,71 @@ namespace SafeViewModelTests
             TimeTakenForSearching = 100,
         };
 
-        
 
 
-        private void SetSearchText(string searchText)
+        public class SearchAndAddOperationIsTheSelectionOperation : OperationStepViewModelTests
         {
-            _operationStepViewModel.SearchText = searchText;
-        }
-
-
-        public class SearchTextEnteredAndSearchResultsAreCorrect : OperationStepViewModelTests
-        {
+            private SearchAndAddOperationViewModel _serarchAndAddOperationViewModel;
             [SetUp]
-            public void SearchTextEnteredAndSearchResultsAreCorrectSetUp()
+            public void SearchAndAddOperationIsTheSelectionOPerationSetUp()
             {
-                _safe.MockGetRecordsAsync(simpleSearchTextAndResult1.SearchText, 
-                    simpleSearchTextAndResult1.SearchResults, simpleSearchTextAndResult1.TimeTakenForSearching);
-                SetSearchText(simpleSearchTextAndResult1.SearchText);
-                _operationStepViewModel.TaskHolder.WaitOnHoldingTask();
-                Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
-                var actualHeaders = _searchResultPropertyObserver.PropertyValue.Select(x => x.RecordHeader).ToList();
-                Assume.That(simpleSearchTextAndResult1.SearchResults.Count == actualHeaders.Count, "The search results are wrong (count)");
-                var isAllSearchResultsListed =  actualHeaders.All(x => simpleSearchTextAndResult1.SearchResults.Contains(x));
-                Assume.That(isAllSearchResultsListed,"The search results are wrong");
+                Assume.That(typeof(SearchAndAddOperationViewModel) == _operationStepViewModel.SelectedOperation.GetType());
+                _serarchAndAddOperationViewModel =
+                    _operationStepViewModel.SelectedOperation as SearchAndAddOperationViewModel;
             }
 
-            
-
-
-
-            [Test]
-            public void When_search_result_is_selected_then_search_result_is_displayed_in_detail_and_search_text_is_reset()
+            public class SearchTextEnteredAndSearchResultsAreCorrect : SearchAndAddOperationIsTheSelectionOperation
             {
-                _operationStepViewModel.SearchResults.ElementAt(1).SelectCommand.Execute();
+                private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
+                private ViewModelPropertyObserver<ObservableCollection<RecordHeaderViewModel>> _searchResultsPropertyObserver;
 
-                Assert.AreEqual(typeof(RecordAlteringOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
-                Assert.AreEqual(1, _selectedOperationPropertyObserver.NumberOfTimesPropertyChanged);
+                [SetUp]
+                public void SearchTextEnteredAndSearchResultsAreCorrectSetUp()
+                {
+
+                    _searchResultVisibilityObserver = _serarchAndAddOperationViewModel
+                        .GetPropertyObserver<bool>(nameof(_serarchAndAddOperationViewModel.IsSearchResultVisible));
+
+                    _searchResultsPropertyObserver = _serarchAndAddOperationViewModel
+                        .GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>
+                        (nameof(_serarchAndAddOperationViewModel.SearchResults));
+
+                    _safe.MockGetRecordsAsync(simpleSearchTextAndResult1.SearchText,
+                        simpleSearchTextAndResult1.SearchResults, simpleSearchTextAndResult1.TimeTakenForSearching);
+                    _serarchAndAddOperationViewModel.SearchText = simpleSearchTextAndResult1.SearchText;
+                    _serarchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
+
+                    Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
+                    var actualHeaders = _searchResultsPropertyObserver.PropertyValue.Select(x => x.RecordHeader).ToList();
+                    Assume.That(simpleSearchTextAndResult1.SearchResults.Count == actualHeaders.Count, "The search results are wrong (count)");
+                    var isAllSearchResultsListed = actualHeaders.All(x => simpleSearchTextAndResult1.SearchResults.Contains(x));
+                    Assume.That(isAllSearchResultsListed, "The search results are wrong");
+                }
+
+                [Test]
+                public void When_search_result_is_selected_then_search_result_is_displayed_in_detail_and_search_text_is_reset()
+                {
+                    _serarchAndAddOperationViewModel.SearchResults.ElementAt(1).SelectCommand.Execute();
+
+                    Assert.AreEqual(typeof(RecordAlteringOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+                    Assert.AreEqual(1, _selectedOperationPropertyObserver.NumberOfTimesPropertyChanged);
+                    Assert.Inconclusive("The correct result is selected");
 
 
-                Assert.False(_searchResultVisibilityObserver.PropertyValue);
-                Assert.True(_searchResultVisibilityObserver.NumberOfTimesPropertyChanged >= 0);
-
-                Assert.AreEqual(string.Empty, _searchTextPropertyObserver.PropertyValue);
-
-            }
-
-            [Test]
-            public void When_search_is_result_is_available_and_higlight_command_is_made_then_search_results_are_removed_and_search_text_is_removed()
-            {
-                Assume.That(_operationStepViewModel.SelectedOperation.HighlightCommand.CanExecute());
-                _operationStepViewModel.SelectedOperation.HighlightCommand.Execute();
-                Assert.False(_searchResultVisibilityObserver.PropertyValue);
-                Assert.AreEqual(false, _operationStepViewModel.IsSearchResultVisible);
-                Assert.AreEqual(string.Empty, _operationStepViewModel.SearchText);
-            }
-
-
-            [Test]
-            public void When_search_is_made_and_add_command_is_made_then_selected_operation_is_add_operation_and_search_result_is_invisible_and_search_text_is_false()
-            {
-                Assume.That(_operationStepViewModel.AddCommand.CanExecute());
-                _operationStepViewModel.AddCommand.Execute();
-                Assert.AreEqual(typeof(AddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
-                Assert.False(_searchResultVisibilityObserver.PropertyValue);
-                Assert.AreEqual(string.Empty, _searchTextPropertyObserver.PropertyValue);
+                }
+                
+                [Test]
+                public void When_add_command_is_made_then_selected_operation_is_add_operation()
+                {
+                    Assume.That(_operationStepViewModel.AddCommand.CanExecute());
+                    _operationStepViewModel.AddCommand.Execute();
+                    Assert.AreEqual(typeof(AddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+                }
             }
         }
+
+
+        
 
 
         public class InitiatedAddingARecord : OperationStepViewModelTests
@@ -216,35 +178,22 @@ namespace SafeViewModelTests
             }
 
             [Test]
-            public void When_record_is_discarded_then_selected_operation_is_empty_operation_and_operation_changing_is_possible()
+            public void When_record_is_discarded_then_selected_operation_is_search_and_add_operation()
             {
                 Assert.True(_addOperationViewModel.DiscardCommand.CanExecute());
                 _addOperationViewModel.DiscardCommand.Execute();
-                Assert.AreEqual(typeof(EmptyOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
-                Assert.True(_operationChangingPossibilityObserver.PropertyValue);
+                Assert.AreEqual(typeof(SearchAndAddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
             }
 
             [Test]
-            public void When_add_command_is_made_and_saved_then_selected_operation_is_modification_operation_and_operation_changing_is_possible()
+            public void When_record_is_entered_and_saved_then_selected_operation_is_modification_operation()
             {
                 _addOperationViewModel.Record.Name = "SomeName";
                 Assert.True(_addOperationViewModel.SaveCommand.CanExecute());
                 _addOperationViewModel.SaveCommand.Execute();
                 Assert.AreEqual(typeof(RecordAlteringOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
-                Assert.True(_operationChangingPossibilityObserver.PropertyValue);
+                Assert.Inconclusive("The Correct record is in the record altering operation view model");
             }
-
-
-
-
-            [Test]
-            public void When_add_command_is_made_then_operation_changing_is_disabled()
-            {
-                Assert.NotZero(_operationChangingPossibilityObserver.NumberOfTimesPropertyChanged);
-                Assert.False(_operationChangingPossibilityObserver.PropertyValue);
-            }
-
-
         }
 
 

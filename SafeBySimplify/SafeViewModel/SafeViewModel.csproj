@@ -68,10 +68,12 @@
     <Compile Include="RecordAlteringOperationViewModel.cs" />
     <Compile Include="RecordHeaderViewModel.cs" />
     <Compile Include="RecordViewModel.cs" />
+    <Compile Include="SearchAndAddOperationViewModel.cs" />
     <Compile Include="SingleOperationViewModel.cs" />
     <Compile Include="SettingsStepViewModel.cs" />
     <Compile Include="SignInViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
+    <Compile Include="TaskHolder.cs" />
     <Compile Include="WorkFlowStepViewModel.cs" />
     <Compile Include="WorkFlowViewModel.cs" />
   </ItemGroup>

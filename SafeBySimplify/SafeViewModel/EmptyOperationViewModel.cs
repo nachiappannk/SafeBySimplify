@@ -6,9 +6,6 @@ namespace SafeViewModel
 {
     public class EmptyOperationViewModel : SingleOperationViewModel
     {
-        public EmptyOperationViewModel(Action highlightAction)
-        {
-            HighlightCommand = new DelegateCommand(highlightAction);
-        }
+
     }
 }

@@ -2,8 +2,8 @@
 
 namespace SafeViewModel
 {
-    public class SingleOperationViewModel
+    public class SingleOperationViewModel : NotifiesPropertyChanged
     {
-        public DelegateCommand HighlightCommand { get; set; }
+
     }
 }
