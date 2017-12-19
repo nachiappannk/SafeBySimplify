@@ -11,12 +11,12 @@ namespace SafeViewModel
     public class SearchAndAddOperationViewModel : SingleOperationViewModel
     {
         private readonly ISafe _safe;
-        private readonly Action<RecordHeader> _recordModifierSelectorAction;
+        private readonly Action<string> _recordSelectionAction;
 
-        public SearchAndAddOperationViewModel(ISafe safe, Action<RecordHeader> recordModifierSelectorAction, Action addNewRecordAction)
+        public SearchAndAddOperationViewModel(ISafe safe, Action<string> recordSelectionAction, Action addNewRecordAction)
         {
             _safe = safe;
-            _recordModifierSelectorAction = recordModifierSelectorAction;
+            _recordSelectionAction = recordSelectionAction;
             IsSearchResultVisible = false;
             AddCommand = new DelegateCommand(addNewRecordAction);
         }
@@ -38,7 +38,7 @@ namespace SafeViewModel
             var headers = GetRecordHeaders(value);
             cancellationTokenSource.Token.ThrowIfCancellationRequested();
             SearchResults = new ObservableCollection<RecordHeaderViewModel>
-                (headers.Select(x => new RecordHeaderViewModel(x, () => { _recordModifierSelectorAction(x); })));
+                (headers.Select(x => new RecordHeaderViewModel(x, () => { _recordSelectionAction(x.Id); })));
             IsSearchResultVisible = true;
         }
 

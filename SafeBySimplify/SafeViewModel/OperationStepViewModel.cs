@@ -38,9 +38,9 @@ namespace SafeViewModel
 
         private string _searchString;
         
-        private void GoToAlteringOperation(RecordHeader x)
+        private void GoToAlteringOperation(string recordId)
         {
-            SelectedOperation = new RecordAlteringOperationViewModel(x);
+            SelectedOperation = new RecordAlteringOperationViewModel(recordId);
         }
 
         private SingleOperationViewModel _selectedOperation;

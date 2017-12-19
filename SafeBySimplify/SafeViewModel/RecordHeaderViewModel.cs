@@ -14,10 +14,12 @@ namespace SafeViewModel
             Name = recordHeader.Name;
             Tags = recordHeader.Tags.ToList();
             SelectCommand = new DelegateCommand(selectAction);
+            Id = recordHeader.Id;
         }
         public RecordHeader RecordHeader { get; set; }
         public string Name { get; set; }
         public List<string> Tags { get; set; }
         public DelegateCommand SelectCommand { get; set; }
+        public string Id { get; set; }
     }
 }

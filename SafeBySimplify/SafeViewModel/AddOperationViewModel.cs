@@ -9,7 +9,7 @@ namespace SafeViewModel
     public class AddOperationViewModel : SingleOperationViewModel
     {
 
-        public AddOperationViewModel(Action discardAction, Action<RecordHeader> saveAction)
+        public AddOperationViewModel(Action discardAction, Action<string> saveAction)
         {
             Record = new RecordViewModel
             {
