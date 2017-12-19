@@ -33,7 +33,7 @@
                     </Image.Source>
                 </Image>
             </Button>
-            <TextBlock Text="Seetha" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
+            <TextBlock Text="{Binding UserName}" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
         </DockPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
