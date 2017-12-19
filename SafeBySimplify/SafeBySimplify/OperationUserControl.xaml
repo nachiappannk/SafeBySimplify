@@ -26,7 +26,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}">
-            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White" Command="{Binding SignOutCommand}" IsEnabled="{Binding IsOperationsChangingPossible}"/>
+            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White" Command="{Binding SignOutCommand}"/>
             <TextBlock Text="Seetha" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
         </DockPanel>
         <Grid Grid.Row="1">
