@@ -26,7 +26,13 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}">
-            <Button Content="Logout" DockPanel.Dock="Right" Foreground="Gray" Background="White" Command="{Binding SignOutCommand}"/>
+            <Button DockPanel.Dock="Right" Command="{Binding SignOutCommand}">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Image.Source>
+                        <BitmapImage UriSource="images/logout.png" />
+                    </Image.Source>
+                </Image>
+            </Button>
             <TextBlock Text="Seetha" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
         </DockPanel>
         <Grid Grid.Row="1">

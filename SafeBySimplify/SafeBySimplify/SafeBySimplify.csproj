@@ -242,6 +242,15 @@
   <ItemGroup>
     <Resource Include="images\save.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\logout.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -24,8 +24,8 @@
                     </Image.Source>
                 </Image>
             </Button>
-            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding SaveCommand}">
-                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="Discard changes">
+            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding SaveCommand}"  ToolTip="Save">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>
                         <BitmapImage UriSource="images/save.png" />
                     </Image.Source>
