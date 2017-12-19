@@ -12,15 +12,15 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type safeViewModel:EntryStepViewModel}">
-                <local:EntryUserControl></local:EntryUserControl>
+                <local:EntryUserControl/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:SettingsStepViewModel}">
-                <local:SettingsUserControl></local:SettingsUserControl>
+                <local:SettingsUserControl/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:OperationStepViewModel}">
-                <local:OperationUserControl></local:OperationUserControl>
+                <local:OperationUserControl/>
             </DataTemplate>
         </Grid.Resources>
-            <ContentControl Content="{Binding CurrentStep}"/>
+        <ContentControl Content="{Binding CurrentStep}"/>
     </Grid>
 </Window>

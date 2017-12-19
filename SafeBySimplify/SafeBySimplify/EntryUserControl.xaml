@@ -13,7 +13,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <!--<Label Content="Welcome" Style="{StaticResource Level1HeadingLableStyle}"></Label>-->
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}" LastChildFill="False">
             <TextBlock Text="Welcome" DockPanel.Dock="Left" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
             <Button DockPanel.Dock="Right" Margin="1" Command="{Binding GoToSettingsCommand }">
@@ -32,7 +31,6 @@
                 </Grid.ColumnDefinitions>
                 <local:SignUpUserControl Grid.Column="0" Margin="0,0,15,0" DataContext="{Binding SignUpViewModel}"/>
                 <local:SignInUserControl Grid.Column="1" Margin="15,0,0,0" DataContext="{Binding SignInViewModel}"/>
-
             </Grid>
         </Grid>
     </Grid>

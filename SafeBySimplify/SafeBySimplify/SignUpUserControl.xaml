@@ -12,9 +12,6 @@
     <Grid>
         <Border CornerRadius="5" BorderThickness="1" BorderBrush="Black">
             <Grid>
-                <Grid.Resources>
-                    
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="1*"/>
