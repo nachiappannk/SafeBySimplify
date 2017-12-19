@@ -30,7 +30,13 @@
             <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
                  Style="{StaticResource TextBoxWithHintStyle}"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Grid.Column="1" Grid.Row="0" Content="Add" Command="{Binding AddCommand}"/>
+            <Button Grid.Column="1" Grid.Row="0" Command="{Binding AddCommand}">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Image.Source>
+                        <BitmapImage UriSource="images/add.png" />
+                    </Image.Source>
+                </Image>
+            </Button>
             <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
                 Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
