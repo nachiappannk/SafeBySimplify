@@ -12,11 +12,7 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type safeViewModel:RecordAlteringOperationViewModel}">
-                <Grid Background="Green">
-                    <Grid.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding HighlightCommand}" />
-                    </Grid.InputBindings>
-                </Grid>
+                <local:RecordModificationUserControl/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type safeViewModel:AddOperationViewModel}">
                 <local:RecordAdditionUserControl/>

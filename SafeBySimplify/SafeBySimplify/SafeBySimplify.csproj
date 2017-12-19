@@ -87,6 +87,9 @@
     <Compile Include="RecordAdditionUserControl.xaml.cs">
       <DependentUpon>RecordAdditionUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RecordModificationUserControl.xaml.cs">
+      <DependentUpon>RecordModificationUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RecordViewUserControl.xaml.cs">
       <DependentUpon>RecordViewUserControl.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RecordAdditionUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RecordModificationUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

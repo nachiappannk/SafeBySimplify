@@ -12,11 +12,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Label Content="New Record Creation" Style="{StaticResource Level2HeadingLableStyle}"/>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Margin="{StaticResource NormalElementSpacingMargin}" HorizontalAlignment="Stretch">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Margin="{StaticResource NormalElementSpacingMargin}" HorizontalAlignment="Stretch">
             <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
                 <Grid>
                     <Grid.RowDefinitions>
@@ -46,7 +44,7 @@
                 </Grid>
             </Border>
         </ScrollViewer>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="2">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

@@ -1,24 +1,24 @@
-﻿<UserControl x:Class="SafeBySimplify.RecordAdditionUserControl"
+﻿<UserControl x:Class="SafeBySimplify.RecordModificationUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SafeBySimplify"
-             xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance safeViewModel:AddOperationViewModel}"
-             d:DesignHeight="500" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="New Record Creation" Style="{StaticResource Level2HeadingLableStyle}" Grid.Row="0"/>
+        <Label Content="Viewing/Modifying Record" Style="{StaticResource Level2HeadingLableStyle}" Grid.Row="0"/>
         <local:RecordViewUserControl DataContext="{Binding Record}" Grid.Row="1"/>
         <DockPanel LastChildFill="False" Margin="0,5" Grid.Row="2">
             <Button DockPanel.Dock="Right" Content="Discard" Margin="4,0" Width="50" Command="{Binding DiscardCommand}"/>
             <Button DockPanel.Dock="Right" Content="Save" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
+            <Button DockPanel.Dock="Right" Content="Delete" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
+            <Button DockPanel.Dock="Right" Content="Close" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
         </DockPanel>
     </Grid>
 </UserControl>
