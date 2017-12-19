@@ -43,9 +43,13 @@
     <Compile Include="IAccountGateway.cs" />
     <Compile Include="ICryptor.cs" />
     <Compile Include="IHasWorkingDirectory.cs" />
+    <Compile Include="ISafe.cs" />
     <Compile Include="ISafeProvider.cs" />
+    <Compile Include="ISafeProviderForExistingUser.cs" />
+    <Compile Include="ISafeProviderForNonExistingUser.cs" />
     <Compile Include="ISettingGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecordHeader.cs" />
     <Compile Include="SafeProvider.cs" />
     <Compile Include="SettingGateway.cs" />
     <Compile Include="SettingGatewayForTests.cs" />
