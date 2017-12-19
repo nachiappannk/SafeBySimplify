@@ -29,20 +29,22 @@ namespace SafeViewModel
         public WorkFlowViewModel(ISafeProvider safeProvider)
         {
             _safeProvider = safeProvider;
-            GoToEnryStep();
+            GoToEntryStep();
         }
 
-        private void GoToOperationStep(ISafe safe)
+        private void GoToOperationStep(ISafe safe, string userName)
         {
-            CurrentStep = new OperationStepViewModel(safe, GoToEnryStep);
+            var operationStepViewModel = new OperationStepViewModel(safe, GoToEntryStep);
+            operationStepViewModel.UserName = userName;
+            CurrentStep = operationStepViewModel;
         }
 
         private void GoToSettingStep()
         {
-            CurrentStep = new SettingsStepViewModel(_safeProvider, GoToEnryStep);
+            CurrentStep = new SettingsStepViewModel(_safeProvider, GoToEntryStep);
         }
 
-        private void GoToEnryStep()
+        private void GoToEntryStep()
         {
             CurrentStep = new EntryStepViewModel(_safeProvider, GoToSettingStep, GoToOperationStep);
         }

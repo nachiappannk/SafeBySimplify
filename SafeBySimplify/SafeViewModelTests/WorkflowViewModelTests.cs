@@ -55,7 +55,7 @@ namespace SafeViewModelTests
         }
 
         [Test]
-        public void When_signed_up_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step()
+        public void When_signed_up_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step_with_correct_username()
         {
             const string validUserName = "SomeUserName";
             const string validPassword = "SomePassword";
@@ -69,12 +69,13 @@ namespace SafeViewModelTests
             AssumeInEntryStepAndThenGoToOperationsBySignUp(validUserName, validPassword);
             Assert.AreEqual(typeof(OperationStepViewModel),_currentStepProperyObserver.PropertyValue.GetType());
             var operationStepViewModel = _currentStepProperyObserver.PropertyValue as OperationStepViewModel;
+            Assert.AreEqual(validUserName, operationStepViewModel.UserName);
             // ReSharper disable once PossibleNullReferenceException
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
 
         [Test]
-        public void When_signed_in_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step()
+        public void When_signed_in_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step_with_correct_username()
         {
             const string validUserName = "SomeUserName";
             const string validPassword = "SomePassword";
@@ -85,6 +86,7 @@ namespace SafeViewModelTests
             AssumeInEntryStepAndThenGoToOperationsBySignIn(validUserName, validPassword);
             Assert.AreEqual(typeof(OperationStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
             var operationStepViewModel = _currentStepProperyObserver.PropertyValue as OperationStepViewModel;
+            Assert.AreEqual(validUserName, operationStepViewModel.UserName);
             // ReSharper disable once PossibleNullReferenceException
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }

@@ -13,7 +13,7 @@ namespace SafeViewModel
         public SignInViewModel SignInViewModel { get; set; }
 
         public EntryStepViewModel(
-            ISafeProvider safeProvider, Action goToSettingStepAction, Action<ISafe> goToOperationStep)
+            ISafeProvider safeProvider, Action goToSettingStepAction, Action<ISafe, string> goToOperationStep)
         {
             GoToSettingsCommand = new DelegateCommand(goToSettingStepAction); 
 

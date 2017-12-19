@@ -58,8 +58,9 @@ namespace SafeViewModel
             }
         }
 
-        
-        //public DelegateCommand AddCommand { get; set; }
+        public string UserName { get; set; }
+
+
     }
 
     

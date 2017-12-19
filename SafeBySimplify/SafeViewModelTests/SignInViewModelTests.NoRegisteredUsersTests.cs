@@ -14,7 +14,7 @@ namespace SafeViewModelTests
             {
                 _safeProviderForExistingUser.GetUserNames().Returns(new List<string>());
                 _signInViewModel = new SignInViewModel(_safeProviderForExistingUser, 
-                    (s) => { });
+                    (s, n) => { });
             }
 
             [Test]

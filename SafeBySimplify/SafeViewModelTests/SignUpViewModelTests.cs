@@ -24,7 +24,7 @@ namespace SafeViewModelTests
         public void SetUp()
         {
             _safeProviderForNonExistingUser = CreateSafeProviderForNonExistingUser();
-            _signUpViewModel = new SignUpViewModel(_safeProviderForNonExistingUser, (safe) => { });
+            _signUpViewModel = new SignUpViewModel(_safeProviderForNonExistingUser, (safe, n) => { });
             _commandObserver = _signUpViewModel.SignUpCommand.GetDelegateCommandObserver();
             _errorMessagePropertyObserver =
                 _signUpViewModel.GetPropertyObserver<string>(nameof(_signUpViewModel.SignUpErrorMessage));
