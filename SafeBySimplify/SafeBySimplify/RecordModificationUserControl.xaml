@@ -15,10 +15,34 @@
         <Label Content="Viewing/Modifying Record" Style="{StaticResource Level2HeadingLableStyle}" Grid.Row="0"/>
         <local:RecordViewUserControl DataContext="{Binding Record}" Grid.Row="1"/>
         <DockPanel LastChildFill="False" Margin="0,5" Grid.Row="2">
-            <Button DockPanel.Dock="Right" Content="Discard" Margin="4,0" Width="50" Command="{Binding DiscardCommand}"/>
-            <Button DockPanel.Dock="Right" Content="Save" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
-            <Button DockPanel.Dock="Right" Content="Delete" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
-            <Button DockPanel.Dock="Right" Content="Close" Margin="4,0" Width="50" Command="{Binding SaveCommand}"/>
+            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding DiscardCommand}">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="Discard changes">
+                    <Image.Source>
+                        <BitmapImage UriSource="images/undo.png" />
+                    </Image.Source>
+                </Image>
+            </Button>
+            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding SaveCommand}">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Image.Source>
+                        <BitmapImage UriSource="images/save.png" />
+                    </Image.Source>
+                </Image>
+            </Button>
+            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding SaveCommand}">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Image.Source>
+                        <BitmapImage UriSource="images/delete.png" />
+                    </Image.Source>
+                </Image>
+            </Button>
+            <Button DockPanel.Dock="Right" Margin="4,0"  Command="{Binding SaveCommand}">
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Image.Source>
+                        <BitmapImage UriSource="images/search.png" />
+                    </Image.Source>
+                </Image>
+            </Button>
         </DockPanel>
     </Grid>
 </UserControl>
