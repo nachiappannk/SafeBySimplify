@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}" LastChildFill="False">
             <TextBlock Text="Welcome" DockPanel.Dock="Left" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
-            <Button DockPanel.Dock="Right" Margin="1" Command="{Binding GoToSettingsCommand }">
+            <Button DockPanel.Dock="Right" Margin="1" Command="{Binding GoToSettingsCommand }" ToolTip="Settings">
                 <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>
                         <BitmapImage UriSource="images/settings.png" />
