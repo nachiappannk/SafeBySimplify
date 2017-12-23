@@ -13,58 +13,25 @@ using SafeViewModelTests.TestTools;
 
 namespace SafeViewModelTests
 {
-    public class MockedSafe : ISafe
-    {
-        Dictionary<string, List<RecordHeader>> _resultDictionary = new Dictionary<string, List<RecordHeader>>();
-        Dictionary<string, int> _searchTimeDictionary = new Dictionary<string, int>();
-
-        public void MockGetRecordsAsync(string searchText, List<RecordHeader> result, int searchTime)
-        {
-            _resultDictionary.Add(searchText, result);
-            _searchTimeDictionary.Add(searchText, searchTime);
-        }
-
-        public List<RecordHeader> GetRecordHeaders(string searchText)
-        {
-            SearchedTexts.Add(searchText);
-            var millisecondsTimeout = _searchTimeDictionary[searchText];
-            //for (int i = 0; i < millisecondsTimeout; i++)
-            //{
-            //    for (int j = 0; j < 100000; j++)
-            //    {
-
-            //    }
-            //}
-            Thread.Sleep(millisecondsTimeout);
-            return _resultDictionary[searchText];
-        }
-
-        public Record GetRecord(string recordId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<string> SearchedTexts => new List<string>();
-    }
-
     [TestFixture]
     public class OperationStepViewModelTests
     {
         private OperationStepViewModel _operationStepViewModel;
-        private MockedSafe _safe;
+        private List<string> _searchedTexts = new List<string>();
+        private ISafe _safe;
         private ViewModelPropertyObserver<SingleOperationViewModel> _selectedOperationPropertyObserver;
 
         [TearDown]
         public void TestDown()
         {
-            Assert.False(_safe.SearchedTexts.Contains(string.Empty));
+            Assert.False(_searchedTexts.Contains(string.Empty));
         }
 
 
         [SetUp]
         public void SetUp()
         {
-            _safe = new MockedSafe();
+            _safe = Substitute.For<ISafe>();
 
             _operationStepViewModel = new OperationStepViewModel(_safe, () => { });
 
@@ -130,8 +97,15 @@ namespace SafeViewModelTests
                         .GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>
                         (nameof(_serarchAndAddOperationViewModel.SearchResults));
 
-                    _safe.MockGetRecordsAsync(simpleSearchTextAndResult1.SearchText,
-                        simpleSearchTextAndResult1.SearchResults, simpleSearchTextAndResult1.TimeTakenForSearching);
+                    _safe
+                        .When(x => x.GetRecord(Arg.Any<string>()))
+                        .Do(x => _searchedTexts.Add(x.ArgAt<string>(0)));
+
+                    _safe.GetRecordHeaders(simpleSearchTextAndResult1.SearchText).Returns(x =>
+                    {
+                        Thread.Sleep(simpleSearchTextAndResult1.TimeTakenForSearching);
+                        return simpleSearchTextAndResult1.SearchResults;
+                    });
 
                     _serarchAndAddOperationViewModel.SearchText = simpleSearchTextAndResult1.SearchText;
                     _serarchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();

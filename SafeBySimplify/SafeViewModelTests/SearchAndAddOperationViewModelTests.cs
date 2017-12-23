@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using NSubstitute;
 using NUnit.Framework;
 using SafeModel;
 using SafeViewModel;
@@ -9,7 +11,7 @@ namespace SafeViewModelTests
     public class SearchAndAddOperationViewModelTests
     {
         private SearchAndAddOperationViewModel _searchAndAddOperationViewModel;
-        private MockedSafe _safe;
+        private ISafe _safe;
 
         private string _searchText = "ss";
 
@@ -24,7 +26,7 @@ namespace SafeViewModelTests
         [SetUp]
         public void SetUp()
         {
-            _safe = new MockedSafe();
+            _safe = NSubstitute.Substitute.For<ISafe>();
             _searchAndAddOperationViewModel = new SearchAndAddOperationViewModel(_safe, (x) => { }, () => { });
         }
 
@@ -42,7 +44,12 @@ namespace SafeViewModelTests
             [SetUp]
             public void SearchTextEnteredAndSearchResultsAreCorrectSetUp()
             {
-                _safe.MockGetRecordsAsync(_searchText, _searchResults, _timeTakenForSearching);
+                _safe.GetRecordHeaders(_searchText).Returns(x =>
+                {
+                    Thread.Sleep(_timeTakenForSearching);
+                    return _searchResults;
+                });
+
                 _searchAndAddOperationViewModel.SearchText = _searchText;
                 _searchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
                 //Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
