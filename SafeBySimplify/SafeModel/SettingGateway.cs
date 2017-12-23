@@ -27,6 +27,7 @@ namespace SafeModel
             var assemblyName = Path.GetFileNameWithoutExtension(assemblyNameWithExtentionAndPath);
             var path = Path.GetDirectoryName(assemblyNameWithExtentionAndPath);
             var result = path + "\\" + assemblyName;
+
             return result;
         }
 
@@ -36,7 +37,14 @@ namespace SafeModel
             var assemblyNameWithExtentionAndPath = Assembly.GetEntryAssembly().Location;
             var assemblyName = Path.GetFileNameWithoutExtension(assemblyNameWithExtentionAndPath);
             var path = Path.GetDirectoryName(assemblyNameWithExtentionAndPath);
-            var result = path + "\\" + assemblyName + ".stng";
+            //var result = path + "\\" + assemblyName + ".stng";
+
+            var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var myAppData = localAppData +"\\" + assemblyName;
+            Directory.CreateDirectory(myAppData);
+            var result = myAppData + "\\" + assemblyName + ".stng";
+
+
             return result;
         }
 
