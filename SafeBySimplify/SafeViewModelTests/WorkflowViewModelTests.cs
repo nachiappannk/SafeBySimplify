@@ -1,4 +1,29 @@
-﻿using System.Collections.Generic;
+﻿/*
+MIT License
+
+Copyright(c) 2017 Nachiappan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
+using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
 using SafeModel;
@@ -28,29 +53,21 @@ namespace SafeViewModelTests
 
         }
 
+
+
+
         [Test]
-        public void First_step_is_the_entry_screen_with_signin_and_signup_options()
+        public void First_step_is_entry_step()
         {
             Assert.AreEqual(typeof(EntryStepViewModel),_workFlowViewModel.CurrentStep.GetType());
-            Assert.True(_workFlowViewModel.CurrentStep.IsActive);
         }
 
 
         [Test]
         public void When_in_entry_screen_and_go_to_settings_command_is_executed_then_the_app_moves_to_settings()
         {
-            AssumeInEntryStepAndThenGoToSettings();
+            MoveFromEntryStepToSettingStep();
             Assert.AreEqual(typeof(SettingsStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
-            Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
-        }
-
-        [Test]
-        public void When_in_settings_and_ok_command_is_made_then_the_app_moves_to_entry()
-        {
-            AssumeInEntryStepAndThenGoToSettings();
-            _currentStepProperyObserver.ResetObserver();
-            AssumeInSettingStepAndThenGoToEntryStep();
-            Assert.AreEqual(typeof(EntryStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
             Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
         }
 
@@ -66,13 +83,14 @@ namespace SafeViewModelTests
             _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
             _safeProvider.StubPasswordNameValidity(validPassword, true, string.Empty);
 
-            AssumeInEntryStepAndThenGoToOperationsBySignUp(validUserName, validPassword);
-            Assert.AreEqual(typeof(OperationStepViewModel),_currentStepProperyObserver.PropertyValue.GetType());
+            MoveFromEntryStepToOperationStepBySigningUp(validUserName, validPassword);
+            Assert.AreEqual(typeof(OperationStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
             var operationStepViewModel = _currentStepProperyObserver.PropertyValue as OperationStepViewModel;
             Assert.AreEqual(validUserName, operationStepViewModel.UserName);
             // ReSharper disable once PossibleNullReferenceException
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
+
 
         [Test]
         public void When_signed_in_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step_with_correct_username()
@@ -91,6 +109,23 @@ namespace SafeViewModelTests
             Assert.AreEqual(safe, operationStepViewModel.Safe);
         }
 
+
+
+
+        [Test]
+        public void When_in_settings_and_ok_command_is_made_then_the_app_moves_to_entry()
+        {
+            MoveFromEntryStepToSettingStep();
+            _currentStepProperyObserver.ResetObserver();
+            AssumeInSettingStepAndThenGoToEntryStep();
+            Assert.AreEqual(typeof(EntryStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
+            Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
+        }
+
+
+
+
+
         [Test]
         public void When_in_operation_screen_and_logged_out_then_app_returns_to_entry_screen()
         {
@@ -102,7 +137,7 @@ namespace SafeViewModelTests
 
             _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
             _safeProvider.StubPasswordNameValidity(validPassword, true, string.Empty);
-            AssumeInEntryStepAndThenGoToOperationsBySignUp(validUserName, validPassword);
+            MoveFromEntryStepToOperationStepBySigningUp(validUserName, validPassword);
 
 
             var operationStepViewModel = _workFlowViewModel.CurrentStep as OperationStepViewModel;
@@ -127,7 +162,7 @@ namespace SafeViewModelTests
         }
 
 
-        private void AssumeInEntryStepAndThenGoToSettings()
+        private void MoveFromEntryStepToSettingStep()
         {
             var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
             Assume.That(entryStepViewModel != null, "Not in entry step");
@@ -150,7 +185,7 @@ namespace SafeViewModelTests
             signInViewModel.SignInCommand.Execute();
         }
 
-        private void AssumeInEntryStepAndThenGoToOperationsBySignUp(string validUserName, string validPassword)
+        private void MoveFromEntryStepToOperationStepBySigningUp(string validUserName, string validPassword)
         {
             var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
             Assume.That(entryStepViewModel != null, "Not in entry step");

@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountGatway.cs" />
+    <Compile Include="Cryptor.cs" />
     <Compile Include="IAccountGateway.cs" />
     <Compile Include="ICryptor.cs" />
     <Compile Include="IHasWorkingDirectory.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="ISettingGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordHeader.cs" />
+    <Compile Include="Safe.cs" />
     <Compile Include="SafeProvider.cs" />
     <Compile Include="SettingGateway.cs" />
     <Compile Include="SettingGatewayForTests.cs" />

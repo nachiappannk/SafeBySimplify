@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="SafeProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SafeProviderTests.SafeCreatedForNonExistingUser.cs" />
+    <Compile Include="SafeProviderTests.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

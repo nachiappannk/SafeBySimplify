@@ -6,23 +6,16 @@ namespace SafeModel
     {
         bool IsUsernameCreatable(string workingDirectory, string username);
         List<string> GetUserNames(string workingDirectory);
-        void WriteUserRecord(string userName, byte[] masterPassBytes, string verifyingWord, byte[] verifyingWordEncryptedBytes);
+        void WriteUserRecord(string userName, Account account);
+
+        Account ReadUserAccount(string userName);
     }
 
-    public class AccountGatway : IAccountGateway
+    public class Account
     {
-        public bool IsUsernameCreatable(string workingDirectory, string username)
-        {
-            return true;
-        }
+        public byte[] MasterEncryptedPassBytes { get; set; }
+        public string VerifyingWord { get; set; }
+        public byte[] VeryifyingWordEncryptedBytes { get; set; }
 
-        public List<string> GetUserNames(string workingDirectory)
-        {
-            return new List<string>() {  "one", "two", "three"};
-        }
-
-        public void WriteUserRecord(string userName, byte[] masterPassBytes, string verifyingWord, byte[] verifyingWordEncryptedBytes)
-        {
-        }
     }
 }

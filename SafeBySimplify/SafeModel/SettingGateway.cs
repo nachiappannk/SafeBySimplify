@@ -56,8 +56,7 @@ namespace SafeModel
         public void SetWorkingDirectory(string workingDirectory)
         {
             var settingsFile = GetSettingFile();
-            System.IO.File.WriteAllLines(settingsFile, new List<string>() {workingDirectory});
-
+            File.WriteAllLines(settingsFile, new List<string>() {workingDirectory});
         }
     }
 }

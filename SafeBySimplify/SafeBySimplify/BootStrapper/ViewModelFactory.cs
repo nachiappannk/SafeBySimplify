@@ -19,10 +19,7 @@ namespace SafeBySimplify.BootStrapper
 
         public static WorkFlowViewModel CreateWorkFlowViewModelWithTestSetting()
         {
-            var settings = new SettingGatewayForTests();
-            settings.SetWorkingDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             var safeProvider = new SafeProvider();
-            safeProvider.SettingGateway = settings;
             return new WorkFlowViewModel(safeProvider);
         }
     }

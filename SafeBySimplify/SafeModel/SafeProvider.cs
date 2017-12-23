@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SafeModel
@@ -24,11 +22,11 @@ namespace SafeModel
         {
             SettingGateway = new SettingGateway();
             AccountGateway = new AccountGatway();
+            Cryptor = new Cryptor();
         }
 
         public ISettingGateway SettingGateway { get; set; }
         public IAccountGateway AccountGateway { get; set; }
-
         public ICryptor  Cryptor { get; set; }
 
         public string WorkingDirectory
@@ -72,26 +70,7 @@ namespace SafeModel
             return true;
         }
 
-        public class SafeXXX : ISafe
-        {
-            public List<RecordHeader> GetRecordHeaders(string searchText)
-            {
-                Thread.Sleep(1000);
-                var charArray = searchText.ToCharArray();
-                var stringArray = charArray.Select((x, y) => x.ToString() + y.ToString());
-                var recordHeaders = stringArray.Select(x => new RecordHeader()
-                {
-                    Name = x,
-                    Tags = new List<string>() { "one", "two", "three" }
-                }).ToList();
-                return recordHeaders;
-            }
-
-            public Record GetRecord(string recordId)
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        
 
         public ISafe CreateSafeForNonExistingUser(string userName, string masterpassword, string password)
         {
@@ -99,9 +78,19 @@ namespace SafeModel
             var masterPassBytes = GetEncryptedBytes(masterpassword, password);
             var verifyingWord = "SafeBySimplify";
             var veriyfingWordEncryptedBytes = GetEncryptedBytes(verifyingWord, password);
-            AccountGateway.WriteUserRecord(userName, masterPassBytes, verifyingWord, veriyfingWordEncryptedBytes);
 
-            return new SafeXXX();
+            var account = new Account()
+            {
+                MasterEncryptedPassBytes = masterPassBytes,
+                VerifyingWord = verifyingWord,
+                VeryifyingWordEncryptedBytes = veriyfingWordEncryptedBytes,
+            };
+            AccountGateway.WriteUserRecord(userName, account);
+
+            var safeForNonExistingUser = new Safe();
+            safeForNonExistingUser.UserName = userName;
+            safeForNonExistingUser.WorkingDirectory = WorkingDirectory;
+            return safeForNonExistingUser;
         }
 
         private byte[] GetEncryptedBytes<T>(T content, string password)
@@ -111,7 +100,19 @@ namespace SafeModel
 
         public bool TryCreateSafeForExistingUser(string userName, string password, out ISafe safe)
         {
-            safe = new SafeXXX();
+            var account = AccountGateway.ReadUserAccount(userName);
+            var verifyingWordBytesForCurrentPassword = Cryptor.GetEncryptedBytes(account.VerifyingWord, password);
+
+            safe = null;
+
+            if (account.VeryifyingWordEncryptedBytes.Length != verifyingWordBytesForCurrentPassword.Length) return false;
+            for (var i = 0; i < account.VeryifyingWordEncryptedBytes.Length; i++)
+            {
+                if (account.VeryifyingWordEncryptedBytes[i] != verifyingWordBytesForCurrentPassword[i]) return false;
+            }
+            safe = new Safe();
+            safe.UserName = userName;
+            safe.WorkingDirectory = WorkingDirectory;
             return true;
         }
 
@@ -120,4 +121,5 @@ namespace SafeModel
             return AccountGateway.GetUserNames(WorkingDirectory);
         }
     }
+    
 }

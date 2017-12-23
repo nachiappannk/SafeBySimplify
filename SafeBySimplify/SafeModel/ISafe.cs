@@ -7,6 +7,10 @@ namespace SafeModel
         List<RecordHeader> GetRecordHeaders(string searchText);
         Record GetRecord(string recordId);
 
+        string WorkingDirectory { get; set; }
+
+        string UserName { get; set; }
+
 
     }
 
