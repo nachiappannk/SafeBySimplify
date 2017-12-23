@@ -61,6 +61,16 @@ namespace SafeViewModelTests
 
         }
 
+        //[Test]
+        //public void When_file_is_added_then_correct_file_record_is_added()
+        //{
+        //    var file = @"D:\Test\One.pdf";
+        //    _addOperationViewModel.Record.AddFileRecord(file);
+        //    var correspondingFileRecord = _addOperationViewModel.Record.FileRecords.Last();
+        //    Assert.Fail("Yet to be implemented");
+        //    //Assert.AreEqual(correspondingFileRecord.Name);
+        //}
+
         [Test]
         public void When_details_are_filled_and_removed_then_correct_record_is_removed()
         {

@@ -40,7 +40,7 @@ namespace SafeViewModel
         
         private void GoToAlteringOperation(string recordId)
         {
-            SelectedOperation = new RecordAlteringOperationViewModel(recordId);
+            SelectedOperation = new RecordAlteringOperationViewModel(Safe, recordId);
         }
 
         private SingleOperationViewModel _selectedOperation;

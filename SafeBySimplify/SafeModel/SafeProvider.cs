@@ -86,6 +86,11 @@ namespace SafeModel
                 }).ToList();
                 return recordHeaders;
             }
+
+            public Record GetRecord(string recordId)
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
         public ISafe CreateSafeForNonExistingUser(string userName, string masterpassword, string password)

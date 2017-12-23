@@ -23,19 +23,24 @@ namespace SafeViewModel
         }
 
         public List<string> Tags { get; set; }
-        public ObservableCollection<PasswordRecord> PasswordRecords { get; set; }
+        public ObservableCollection<PasswordRecordViewModel> PasswordRecords { get; set; }
         public List<FileRecord> FileRecords { get; set; }
+
+        public void AddFileRecord(string fileUri)
+        {
+
+        }
 
         public RecordViewModel()
         {
-            PasswordRecords = new ObservableCollection<PasswordRecord>();
+            PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
             AddNewEmptyPasswordRecord();
         }
 
         private void AddNewEmptyPasswordRecord()
         {
             PasswordRecords.Add(
-                new PasswordRecord(InsertEmptyRecordIfNecessary, 
+                new PasswordRecordViewModel(InsertEmptyRecordIfNecessary, 
                 (r) => PasswordRecords.Remove(r),
                 (r) => PasswordRecords.Last() != r
                 ));

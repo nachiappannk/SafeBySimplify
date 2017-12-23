@@ -39,6 +39,11 @@ namespace SafeViewModelTests
             return _resultDictionary[searchText];
         }
 
+        public Record GetRecord(string recordId)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<string> SearchedTexts => new List<string>();
     }
 

@@ -6,15 +6,15 @@ using Prism.Commands;
 
 namespace SafeViewModel
 {
-    public class PasswordRecord
+    public class PasswordRecordViewModel
     {
         private readonly Action _changedAction;
         private string _name;
         private string _value;
 
-        public PasswordRecord(Action changedAction, 
-            Action<PasswordRecord> removeAction, 
-            Predicate<PasswordRecord> isRemovePossible)
+        public PasswordRecordViewModel(Action changedAction, 
+            Action<PasswordRecordViewModel> removeAction, 
+            Predicate<PasswordRecordViewModel> isRemovePossible)
         {
             RemoveCommand = new DelegateCommand(() => removeAction.Invoke(this), () => isRemovePossible.Invoke(this));
             _changedAction = changedAction;
