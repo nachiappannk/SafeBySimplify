@@ -6,9 +6,9 @@ namespace SafeModel
     {
         bool IsUsernameCreatable(string workingDirectory, string username);
         List<string> GetUserNames(string workingDirectory);
-        void WriteUserRecord(string userName, Account account);
+        void WriteUserRecord(string workingDirectory, string userName, Account account);
 
-        Account ReadUserAccount(string userName);
+        Account ReadUserAccount(string workingDirectory, string userName);
     }
 
     public class Account

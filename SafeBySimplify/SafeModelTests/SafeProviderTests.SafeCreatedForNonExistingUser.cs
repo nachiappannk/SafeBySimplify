@@ -28,7 +28,7 @@ namespace SafeModelTests
             public void When_new_user_is_created_then_user_records_are_written_to_the_gateway()
             {
                 _accountGateway.Received(1)
-                    .WriteUserRecord(_userName, Arg.Is<Account>(x => 
+                    .WriteUserRecord(_initialWorkingDirectory, _userName, Arg.Is<Account>(x => 
                     x.VeryifyingWordEncryptedBytes == _verifyingWordEncryptedBytes &&
                     x.VerifyingWord == _verifyingWord &&
                     x.MasterEncryptedPassBytes == _masterPassBytes));

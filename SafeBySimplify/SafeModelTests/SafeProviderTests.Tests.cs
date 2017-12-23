@@ -94,7 +94,7 @@ namespace SafeModelTests
                     VeryifyingWordEncryptedBytes = verifyingWordEncryptedBytesForValidPassword,
                 };
 
-                _accountGateway.ReadUserAccount(userName).Returns(account);
+                _accountGateway.ReadUserAccount(_initialWorkingDirectory, userName).Returns(account);
                 _cryptor.GetEncryptedBytes(verifyingWord, someInvalidPassword).Returns(verifyingWordEncryptedBytesForInvalidPassword);
 
                 ISafe safe = null;
@@ -121,7 +121,7 @@ namespace SafeModelTests
                     VeryifyingWordEncryptedBytes = verifyingWordEncryptedBytesForValidPassword,
                 };
 
-                _accountGateway.ReadUserAccount(userName).Returns(account);
+                _accountGateway.ReadUserAccount(_initialWorkingDirectory, userName).Returns(account);
                 _cryptor.GetEncryptedBytes(verifyingWord, password).Returns(verifyingWordEncryptedBytesForValidPassword);
 
                 ISafe safe = null;

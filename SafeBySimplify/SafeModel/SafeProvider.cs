@@ -85,7 +85,7 @@ namespace SafeModel
                 VerifyingWord = verifyingWord,
                 VeryifyingWordEncryptedBytes = veriyfingWordEncryptedBytes,
             };
-            AccountGateway.WriteUserRecord(userName, account);
+            AccountGateway.WriteUserRecord(WorkingDirectory, userName, account);
 
             var safeForNonExistingUser = new Safe();
             safeForNonExistingUser.UserName = userName;
@@ -100,7 +100,7 @@ namespace SafeModel
 
         public bool TryCreateSafeForExistingUser(string userName, string password, out ISafe safe)
         {
-            var account = AccountGateway.ReadUserAccount(userName);
+            var account = AccountGateway.ReadUserAccount(WorkingDirectory, userName);
             var verifyingWordBytesForCurrentPassword = Cryptor.GetEncryptedBytes(account.VerifyingWord, password);
 
             safe = null;
