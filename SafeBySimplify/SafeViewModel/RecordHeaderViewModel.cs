@@ -12,13 +12,13 @@ namespace SafeViewModel
         {
             RecordHeader = recordHeader;
             Name = recordHeader.Name;
-            Tags = recordHeader.Tags;
+            Tags = recordHeader.Tags.Split(';').ToList();
             SelectCommand = new DelegateCommand(selectAction);
             Id = recordHeader.Id;
         }
         public RecordHeader RecordHeader { get; set; }
         public string Name { get; set; }
-        public string Tags { get; set; }
+        public List<string> Tags { get; set; }
         public DelegateCommand SelectCommand { get; set; }
         public string Id { get; set; }
     }
