@@ -48,13 +48,13 @@ namespace SafeViewModelTests
             {
                 foreach (var action in actions)
                 {
-                    action.Invoke(_signUpViewModel);
+                    action.Invoke(SignUpViewModel);
                 }
 
-                if (_commandObserver.NumberOfEventsRecieved > 0)
-                    CommandAssertionExtentions.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs(_commandObserver, commandExecutableState);
+                if (CommandObserver.NumberOfEventsRecieved > 0)
+                    CommandAssertionExtentions.AssetThereWasAtleastOneCanExecuteChangedEventAndCommandExecutableStateIs(CommandObserver, commandExecutableState);
                 if (!String.IsNullOrWhiteSpace(errorMessage))
-                    PropertyChangedEventExtentions.AssertProperyHasChanged(_errorMessagePropertyObserver, errorMessage);
+                    PropertyChangedEventExtentions.AssertProperyHasChanged(ErrorMessagePropertyObserver, errorMessage);
             }
 
         }

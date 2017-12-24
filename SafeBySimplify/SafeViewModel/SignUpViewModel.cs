@@ -18,47 +18,34 @@ namespace SafeViewModel
         {
             _safeProviderForNonExistingUser = safeProviderForNonExistingUser;
             _signUpCompletionCallback = signUpCompletionCallback;
+            SignUpCommand = new DelegateCommand( SignUp,() => _canSignUp);
+        }
 
-
-            SignUpCommand = new DelegateCommand(
-                () =>
-                {
-                    var safe = _safeProviderForNonExistingUser
-                    .CreateSafeForNonExistingUser(SignUpUserName, SignUpPassword, SignUpPassword);
-                    _signUpCompletionCallback.Invoke(safe, SignUpUserName);
-                }, 
-                () => _canSignUp);
+        private void SignUp()
+        {
+            var safe = _safeProviderForNonExistingUser
+                .CreateSafeForNonExistingUser(SignUpUserName, SignUpPassword, SignUpPassword);
+            _signUpCompletionCallback.Invoke(safe, SignUpUserName);
         }
 
         private void ComputeCanSignUp()
         {
-            if (string.IsNullOrWhiteSpace(SignUpUserName)
-                || string.IsNullOrWhiteSpace(SignUpPassword)
-                || string.IsNullOrWhiteSpace(SignUpConfirmPassword))
-            {
-                SetUpSignUpCommandStateAndSignUpErrorMessage(false, string.Empty);
-                return;
-            }
-
-            if (SignUpConfirmPassword != SignUpPassword)
-            {
-                SetUpSignUpCommandStateAndSignUpErrorMessage(false, PasswordMismatchingErrorMessage);
-                return;
-            }
-
             string errorMessage = string.Empty;
-            if (!_safeProviderForNonExistingUser.IsUserNameValidForNonExistingUser(SignUpUserName, out errorMessage))
-            {
+
+            if (string.IsNullOrWhiteSpace(SignUpUserName))
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, string.Empty);
+            else if(string.IsNullOrWhiteSpace(SignUpPassword))
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, string.Empty);
+            else if(string.IsNullOrWhiteSpace(SignUpConfirmPassword))
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, string.Empty);
+            else if (SignUpConfirmPassword != SignUpPassword)
+                SetUpSignUpCommandStateAndSignUpErrorMessage(false, PasswordMismatchingErrorMessage);
+            else if (!_safeProviderForNonExistingUser.IsUserNameValidForNonExistingUser(SignUpUserName, out errorMessage))
                 SetUpSignUpCommandStateAndSignUpErrorMessage(false, errorMessage);
-                return;
-            }
-            errorMessage = string.Empty;
-            if (!_safeProviderForNonExistingUser.IsPasswordValidForNonExistingUser(SignUpPassword, out errorMessage))
-            {
+            else if (!_safeProviderForNonExistingUser.IsPasswordValidForNonExistingUser(SignUpPassword, out errorMessage))
                 SetUpSignUpCommandStateAndSignUpErrorMessage(false, errorMessage);
-                return;
-            }
-            SetUpSignUpCommandStateAndSignUpErrorMessage(true, string.Empty);
+            else
+                SetUpSignUpCommandStateAndSignUpErrorMessage(true, string.Empty);
         }
 
         private void SetUpSignUpCommandStateAndSignUpErrorMessage(bool canSignUp, string errorMessage)
@@ -87,7 +74,6 @@ namespace SafeViewModel
         }
 
         private string _signUpUserName;
-
         public string SignUpUserName
         {
             get { return _signUpUserName; }

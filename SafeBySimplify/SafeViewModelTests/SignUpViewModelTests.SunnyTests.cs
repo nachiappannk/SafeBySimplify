@@ -19,15 +19,15 @@ namespace SafeViewModelTests
 
                 foreach (var action in actions)
                 {
-                    action.Invoke(_signUpViewModel);
+                    action.Invoke(SignUpViewModel);
                 }
 
-                _commandObserver.AssetAllSendersWereCorrect();
-                Assert.AreNotEqual(0, _commandObserver.NumberOfEventsRecieved);
-                if (_commandObserver.NumberOfEventsRecieved > 0)
-                    Assert.AreEqual(true, _commandObserver.ValueOfCanExecuteOnLatestEvent);
-                if (_errorMessagePropertyObserver.NumberOfTimesPropertyChanged > 0)
-                    Assert.True(String.IsNullOrWhiteSpace(_errorMessagePropertyObserver.PropertyValue));
+                CommandObserver.AssetAllSendersWereCorrect();
+                Assert.AreNotEqual(0, CommandObserver.NumberOfEventsRecieved);
+                if (CommandObserver.NumberOfEventsRecieved > 0)
+                    Assert.AreEqual(true, CommandObserver.ValueOfCanExecuteOnLatestEvent);
+                if (ErrorMessagePropertyObserver.NumberOfTimesPropertyChanged > 0)
+                    Assert.True(String.IsNullOrWhiteSpace(ErrorMessagePropertyObserver.PropertyValue));
             }
 
             public static IEnumerable GetTestCaseData()

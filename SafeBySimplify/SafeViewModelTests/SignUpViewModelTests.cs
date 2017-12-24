@@ -13,21 +13,20 @@ namespace SafeViewModelTests
         protected const string ValidUserName = "SomeUserName";
         protected const string ValidPassword = "Password";
 
+        protected SignUpViewModel SignUpViewModel;
+        protected CommandObserver CommandObserver;
+        protected ViewModelPropertyObserver<string> ErrorMessagePropertyObserver;
 
-        protected SignUpViewModel _signUpViewModel;
-        protected CommandObserver _commandObserver;
-        protected ViewModelPropertyObserver<string> _errorMessagePropertyObserver;
-
-        protected ISafeProviderForNonExistingUser _safeProviderForNonExistingUser;
+        protected ISafeProviderForNonExistingUser SafeProviderForNonExistingUser;
 
         [SetUp]
         public void SetUp()
         {
-            _safeProviderForNonExistingUser = CreateSafeProviderForNonExistingUser();
-            _signUpViewModel = new SignUpViewModel(_safeProviderForNonExistingUser, (safe, n) => { });
-            _commandObserver = _signUpViewModel.SignUpCommand.GetDelegateCommandObserver();
-            _errorMessagePropertyObserver =
-                _signUpViewModel.GetPropertyObserver<string>(nameof(_signUpViewModel.SignUpErrorMessage));
+            SafeProviderForNonExistingUser = CreateSafeProviderForNonExistingUser();
+            SignUpViewModel = new SignUpViewModel(SafeProviderForNonExistingUser, (safe, n) => { });
+            CommandObserver = SignUpViewModel.SignUpCommand.GetDelegateCommandObserver();
+            ErrorMessagePropertyObserver =
+                SignUpViewModel.GetPropertyObserver<string>(nameof(SignUpViewModel.SignUpErrorMessage));
         }
 
         private static ISafeProviderForNonExistingUser CreateSafeProviderForNonExistingUser()

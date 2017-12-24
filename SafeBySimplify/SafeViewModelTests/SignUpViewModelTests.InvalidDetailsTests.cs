@@ -16,30 +16,30 @@ namespace SafeViewModelTests
             [Test]
             public void When_username_in_signup_form_invalid_then_command_is_disabled_with_error_message()
             {
-                _safeProviderForNonExistingUser.StubUserNameValidity(InvalidUserName, false, InvalidUserNameErrorMessage);
+                SafeProviderForNonExistingUser.StubUserNameValidity(InvalidUserName, false, InvalidUserNameErrorMessage);
 
-                _signUpViewModel.SignUpUserName = InvalidUserName;
-                _signUpViewModel.SignUpPassword = ValidPassword;
-                _signUpViewModel.SignUpConfirmPassword = ValidPassword;
+                SignUpViewModel.SignUpUserName = InvalidUserName;
+                SignUpViewModel.SignUpPassword = ValidPassword;
+                SignUpViewModel.SignUpConfirmPassword = ValidPassword;
 
-                if(_commandObserver.NumberOfEventsRecieved > 0)_commandObserver.AssertTheCommandBecameNonExecutable();
-                Assert.AreEqual(false, _signUpViewModel.SignUpCommand.CanExecute());
-                _errorMessagePropertyObserver.AssertProperyHasChanged(InvalidUserNameErrorMessage);
+                if(CommandObserver.NumberOfEventsRecieved > 0)CommandObserver.AssertTheCommandBecameNonExecutable();
+                Assert.AreEqual(false, SignUpViewModel.SignUpCommand.CanExecute());
+                ErrorMessagePropertyObserver.AssertProperyHasChanged(InvalidUserNameErrorMessage);
             }
 
             [Test]
             public void When_invalid_password_in_signup_form_is_invalid_then_command_is_disabled_with_error_message()
             {
 
-                _safeProviderForNonExistingUser.StubPasswordNameValidity(InvalidPassword, false, InvalidPasswordErrorMessage);
+                SafeProviderForNonExistingUser.StubPasswordNameValidity(InvalidPassword, false, InvalidPasswordErrorMessage);
 
-                _signUpViewModel.SignUpUserName = ValidUserName;
-                _signUpViewModel.SignUpPassword = InvalidPassword;
-                _signUpViewModel.SignUpConfirmPassword = InvalidPassword;
+                SignUpViewModel.SignUpUserName = ValidUserName;
+                SignUpViewModel.SignUpPassword = InvalidPassword;
+                SignUpViewModel.SignUpConfirmPassword = InvalidPassword;
 
-                if (_commandObserver.NumberOfEventsRecieved > 0) _commandObserver.AssertTheCommandBecameNonExecutable();
-                Assert.AreEqual(false, _signUpViewModel.SignUpCommand.CanExecute());
-                _errorMessagePropertyObserver.AssertProperyHasChanged(InvalidPasswordErrorMessage);
+                if (CommandObserver.NumberOfEventsRecieved > 0) CommandObserver.AssertTheCommandBecameNonExecutable();
+                Assert.AreEqual(false, SignUpViewModel.SignUpCommand.CanExecute());
+                ErrorMessagePropertyObserver.AssertProperyHasChanged(InvalidPasswordErrorMessage);
             }
         }
     }
