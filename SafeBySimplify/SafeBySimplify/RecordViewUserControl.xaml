@@ -14,8 +14,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Margin="{StaticResource NormalElementSpacingMargin}" HorizontalAlignment="Stretch">
-            <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
+            <Border Grid.Row="0" BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -47,7 +46,6 @@
                     </DockPanel>
                 </Grid>
             </Border>
-        </ScrollViewer>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="1">
             <Grid>
                 <Grid.RowDefinitions>
