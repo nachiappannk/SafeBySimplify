@@ -27,10 +27,17 @@ namespace SafeViewModel
             };
 
 
-            DiscardCommand = new DelegateCommand(discardAction);
+            DiscardCommand = new DelegateCommand
+                (() =>
+                    {
+                        safe.ReoganizeFiles(Record.Id);
+                        discardAction.Invoke();
+                    }
+                );
             SaveCommand = new DelegateCommand(() =>
             {
-                saveAction.Invoke(null);
+                safe.UpsertRecord(null);
+                saveAction.Invoke(Record.Id);
             },() => CanExecuteSaveCommand );
         }
 

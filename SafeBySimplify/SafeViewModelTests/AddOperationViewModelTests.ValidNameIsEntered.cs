@@ -1,5 +1,7 @@
 ﻿using System;
+using NSubstitute;
 using NUnit.Framework;
+using SafeModel;
 
 namespace SafeViewModelTests
 {
@@ -19,6 +21,18 @@ namespace SafeViewModelTests
             {
                 _addOperationViewModel.Record.Name = String.Empty;
                 Assert.False(_saveCommandObserver.ValueOfCanExecuteOnLatestEvent);
+            }
+
+
+            [Test]
+            public void When_saved_the_record_is_written_in_safe_the_files_are_reoganized()
+            {
+
+
+
+                _addOperationViewModel.SaveCommand.Execute();
+                _safe.Received(1).UpsertRecord(Arg.Any<Record>());
+                Assert.AreEqual(_uniqueId, _idAtSaveAction);
             }
         }
     }

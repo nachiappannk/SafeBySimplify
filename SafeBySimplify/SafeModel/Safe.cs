@@ -35,5 +35,15 @@ namespace SafeModel
         {
             throw new System.NotImplementedException();
         }
+
+        public void ReoganizeFiles(string recordId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UpsertRecord(Record record)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace SafeViewModelTests
     {
         private AddOperationViewModel _addOperationViewModel;
         private bool _isDiscardActionPerformed = false;
+        private string _idAtSaveAction;
         private CommandObserver _saveCommandObserver;
         private IUniqueIdGenerator _uniqueIdGenerator;
         private string _uniqueId = "SomeUniqueID";
@@ -28,8 +29,21 @@ namespace SafeViewModelTests
 
             _safe = Substitute.For<ISafe>();
 
-            _addOperationViewModel = new AddOperationViewModel(() => { _isDiscardActionPerformed = true; }, (x) => { }, _uniqueIdGenerator, _safe);
+            _addOperationViewModel = new AddOperationViewModel(() => { _isDiscardActionPerformed = true; }, (x) =>
+                {
+                    _idAtSaveAction = x;
+                }, 
+                _uniqueIdGenerator, 
+                _safe);
             _saveCommandObserver = _addOperationViewModel.SaveCommand.GetDelegateCommandObserver();
+        }
+
+        [Test]
+        public void When_discarded_then_the_record_is_reoganized_in_safe()
+        {
+            _addOperationViewModel.DiscardCommand.Execute();
+            _safe.Received(1).ReoganizeFiles(_uniqueId);
+            Assert.True(_isDiscardActionPerformed);
         }
 
         [Test]

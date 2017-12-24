@@ -10,6 +10,8 @@ namespace SafeModel
         string UserName { get; set; }
         void StoreFile(string recordId, string fileId, string fileUri);
         void RetreiveFile(string recordId, string fileId, string fileUri);
+        void ReoganizeFiles(string recordId);
+        void UpsertRecord(Record record);
     }
 
 
