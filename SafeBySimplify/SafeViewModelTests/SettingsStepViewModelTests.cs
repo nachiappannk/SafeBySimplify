@@ -1,5 +1,27 @@
-﻿using System.Windows.Input;
-using NSubstitute;
+﻿/*
+MIT License
+
+Copyright(c) 2017 Nachiappan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 using NUnit.Framework;
 using SafeModel;
 using SafeViewModel;
@@ -23,10 +45,12 @@ namespace SafeViewModelTests
         public void SetUp()
         {
             _settingGateway = new SettingGatewayForTests();
+            _settingGateway.SetWorkingDirectory(InitialWorkingDirectory);
+
             var safeProvider = new SafeProvider();
             safeProvider.SettingGateway = _settingGateway;
             _hasWorkingDirectory = safeProvider;
-            _settingGateway.SetWorkingDirectory(InitialWorkingDirectory);
+            
 
             _settingsStepViewModel = new SettingsStepViewModel(_hasWorkingDirectory, () => { });
             _settingsStepViewModel.OnEntry();
@@ -68,14 +92,13 @@ namespace SafeViewModelTests
 
             Assume.That(_settingsStepViewModel.DiscardCommand.CanExecute(),"Discard is in disabled state");
             _settingsStepViewModel.DiscardCommand.Execute();
-            Assert.AreEqual(InitialWorkingDirectory, _settingGateway.GetWorkingDirectory());
+
+            Assert.AreEqual(InitialWorkingDirectory, _settingsStepViewModel.WorkSpaceDirectory);
             _workSpaceDirectoryObserver.AssertProperyHasChanged(initalValue);
             Assert.AreEqual(initalValue, _settingsStepViewModel.WorkSpaceDirectory);
 
             AssertTheCommandsMovedToInitialState();
         }
-
-
 
         [Test]
         public void When_changing_workspace_and_saving_we_go_to_initial_state_and_workspace_is_the_new_value_and_write_is_made_to_lib()
