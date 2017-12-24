@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NSubstitute;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using SafeModel;
 using SafeViewModel;
 using SafeViewModelTests.TestTools;
 
@@ -14,62 +16,53 @@ namespace SafeViewModelTests
         private AddOperationViewModel _addOperationViewModel;
         private bool _isDiscardActionPerformed = false;
         private CommandObserver _saveCommandObserver;
+        private IUniqueIdGenerator _uniqueIdGenerator;
+        private string _uniqueId = "SomeUniqueID";
 
         [SetUp]
         public void SetUp()
         {
-            _addOperationViewModel = new AddOperationViewModel(() => { _isDiscardActionPerformed = true; }, (x) => { });
+            _uniqueIdGenerator = Substitute.For<IUniqueIdGenerator>();
+            _uniqueIdGenerator.GetUniqueId().Returns(_uniqueId);
+            _addOperationViewModel = new AddOperationViewModel(() => { _isDiscardActionPerformed = true; }, (x) => { }, _uniqueIdGenerator);
             _saveCommandObserver = _addOperationViewModel.SaveCommand.GetDelegateCommandObserver();
         }
 
-
-        public class PasswordRecordIsAdded : AddOperationViewModelTests
+        [Test]
+        public void When_file_is_added_then_correct_file_record_is_added()
         {
-            private bool _isCollectionModified = false;
-            private int _initialNumberOfPasswordRecords;
-            private CommandObserver _lastRecordRemoveCommandObserver;
+            bool _isCollectionModified = false;
 
-            [SetUp]
-            public void PasswordRecordIsAddedSetup()
-            {
-                _addOperationViewModel.Record.PasswordRecords.CollectionChanged += (sender, args) =>
-                {
-                    _isCollectionModified = true;
-                };
-                _initialNumberOfPasswordRecords = _addOperationViewModel.Record.PasswordRecords.Count;
-                var passwordRecord = _addOperationViewModel.Record.PasswordRecords.ElementAt(_initialNumberOfPasswordRecords - 1);
-                _lastRecordRemoveCommandObserver = passwordRecord.RemoveCommand.GetDelegateCommandObserver();
-                passwordRecord.Name = "NewValue";
-            }
+            _addOperationViewModel.Record.FileRecords.CollectionChanged += (a, b) => { _isCollectionModified = true; };
+            var file = @"D:\Test\One.pdf";
+            _addOperationViewModel.Record.AddFileRecord(file);
+            var correspondingFileRecord = _addOperationViewModel.Record.FileRecords.Last();
 
-            [Test]
-            public void New_empty_password_record_is_added_that_can_not_be_deleted()
-            {
-                Assert.AreEqual(_initialNumberOfPasswordRecords + 1, _addOperationViewModel.Record.PasswordRecords.Count);
-                var newlyAddedPaswordRecord = _addOperationViewModel.Record.PasswordRecords.ElementAt(_initialNumberOfPasswordRecords);
-                Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Name);
-                Assert.AreEqual(string.Empty, newlyAddedPaswordRecord.Value);
-                Assert.False(newlyAddedPaswordRecord.RemoveCommand.CanExecute());
-            }
-
-            [Test]
-            public void The_old_last_record_remove_command_becomes_enabled()
-            {
-                Assert.True(_lastRecordRemoveCommandObserver.ValueOfCanExecuteOnLatestEvent);
-            }
-
-
+            Assert.True(_isCollectionModified);
+            Assert.AreEqual("One", correspondingFileRecord.Name);
+            Assert.AreEqual("pdf", correspondingFileRecord.Extention);
+            Assert.True(correspondingFileRecord.DeleteCommand.CanExecute());
         }
+        
 
-        //[Test]
-        //public void When_file_is_added_then_correct_file_record_is_added()
-        //{
-        //    var file = @"D:\Test\One.pdf";
-        //    _addOperationViewModel.Record.AddFileRecord(file);
-        //    var correspondingFileRecord = _addOperationViewModel.Record.FileRecords.Last();
-        //    Assert.Fail("Yet to be implemented");
-        //    //Assert.AreEqual(correspondingFileRecord.Name);
-        //}
+        [TestCase("One")]
+        [TestCase("Two")]
+        public void When_file_is_deleted_the_correct_file_is_removed_from_ui(string fileToBeDeleted)
+        {
+            var file1 = @"D:\Test\One.pdf";
+            var file2 = @"D:\Test\Two.pdf";
+            bool _isCollectionModified = false;
+            _addOperationViewModel.Record.AddFileRecord(file1);
+            _addOperationViewModel.Record.AddFileRecord(file2);
+
+            _addOperationViewModel.Record.FileRecords.CollectionChanged += (a, b) => { _isCollectionModified = true; };
+
+            var viewModelToBeDeleted = _addOperationViewModel.Record.FileRecords.Last(x => x.Name == fileToBeDeleted);
+            viewModelToBeDeleted.DeleteCommand.Execute();
+
+            Assert.True(_isCollectionModified);
+            Assert.False(_addOperationViewModel.Record.FileRecords.Select(x => x.Name).Contains(fileToBeDeleted));
+        }
 
         [Test]
         public void When_details_are_filled_and_removed_then_correct_record_is_removed()

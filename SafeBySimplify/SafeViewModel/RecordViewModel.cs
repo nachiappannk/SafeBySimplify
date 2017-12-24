@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using Prism.Commands;
 
@@ -22,18 +23,24 @@ namespace SafeViewModel
             }
         }
 
+        public string Id { get; set; }
+
         public List<string> Tags { get; set; }
         public ObservableCollection<PasswordRecordViewModel> PasswordRecords { get; set; }
-        public List<FileRecord> FileRecords { get; set; }
+        public ObservableCollection<FileRecordViewModel> FileRecords { get; set; }
 
         public void AddFileRecord(string fileUri)
         {
-
+            var fileRecordViewModel = new FileRecordViewModel(FileRecords);
+            fileRecordViewModel.Name = Path.GetFileNameWithoutExtension(fileUri);
+            fileRecordViewModel.Extention = Path.GetExtension(fileUri).Replace(".","");
+            FileRecords.Add(fileRecordViewModel);
         }
 
         public RecordViewModel()
         {
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
+            FileRecords = new ObservableCollection<FileRecordViewModel>();
             AddNewEmptyPasswordRecord();
         }
 

@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using NSubstitute;
 using NUnit.Framework;
+using SafeModel;
 
 namespace SafeViewModelTests
 {
@@ -7,6 +9,13 @@ namespace SafeViewModelTests
     {
         public class Tests : AddOperationViewModelTests
         {
+            [Test]
+            public void The_id_is_as_provided_by_unique_id_generator()
+            {
+                Assert.AreEqual(_uniqueId, _addOperationViewModel.Record.Id);
+            }
+
+
             [Test]
             public void Initially_the_heading_is_empty()
             {

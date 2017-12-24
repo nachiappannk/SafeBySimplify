@@ -9,14 +9,15 @@ namespace SafeViewModel
     public class AddOperationViewModel : SingleOperationViewModel
     {
 
-        public AddOperationViewModel(Action discardAction, Action<string> saveAction)
+        public AddOperationViewModel(Action discardAction, Action<string> saveAction, IUniqueIdGenerator uniqueIdGenerator)
         {
             Record = new RecordViewModel
             {
                 Name = string.Empty,
                 Tags = new List<string>(),
-                FileRecords = new List<FileRecord>(),
             };
+
+            Record.Id = uniqueIdGenerator.GetUniqueId();
 
             Record.PropertyChanged += (sender, args) =>
             {

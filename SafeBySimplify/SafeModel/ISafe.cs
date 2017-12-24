@@ -27,4 +27,11 @@ namespace SafeModel
 
         public List<PasswordRecord> PasswordRecords { get; set; }
     }
+
+
+    public interface IUniqueIdGenerator
+    {
+        string GetUniqueId();
+        string GetSemiUniqueId();
+    }
 }

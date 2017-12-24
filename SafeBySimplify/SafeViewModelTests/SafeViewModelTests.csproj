@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOperationViewModelTests.cs" />
+    <Compile Include="AddOperationViewModelTests.PasswordRecordIsAdded.cs" />
     <Compile Include="AddOperationViewModelTests.Tests.cs" />
     <Compile Include="AddOperationViewModelTests.ValidNameIsEntered.cs" />
     <Compile Include="OperationStepViewModelTests.cs" />

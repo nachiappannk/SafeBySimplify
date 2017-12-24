@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="AddOperationViewModel.cs" />
     <Compile Include="EntryStepViewModel.cs" />
-    <Compile Include="FileRecord.cs" />
+    <Compile Include="FileRecordViewModel.cs" />
     <Compile Include="NotifiesPropertyChanged.cs" />
     <Compile Include="OperationStepViewModel.cs" />
     <Compile Include="PasswordRecordViewModel.cs" />
