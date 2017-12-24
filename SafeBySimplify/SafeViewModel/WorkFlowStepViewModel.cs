@@ -5,9 +5,5 @@
         public virtual void OnEntry()
         {
         }
-
-        public virtual void OnExit()
-        {
-        }
     }
 }

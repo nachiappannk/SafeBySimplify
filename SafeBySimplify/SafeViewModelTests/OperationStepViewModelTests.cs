@@ -33,11 +33,11 @@ namespace SafeViewModelTests
         {
             _safe = Substitute.For<ISafe>();
 
-            _operationStepViewModel = new OperationStepViewModel(_safe, () => { });
+            _operationStepViewModel = new OperationStepViewModel("userName", _safe, () => { });
 
             _selectedOperationPropertyObserver = _operationStepViewModel
                 .GetPropertyObserver<SingleOperationViewModel>
-                (nameof(_operationStepViewModel.SelectedOperation));
+                (nameof(_operationStepViewModel.SelectedOperation)); 
 
 
 

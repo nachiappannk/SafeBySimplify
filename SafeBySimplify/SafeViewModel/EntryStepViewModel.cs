@@ -20,8 +20,5 @@ namespace SafeViewModel
             SignUpViewModel = new SignUpViewModel(safeProvider, goToOperationStep);
             SignInViewModel = new SignInViewModel(safeProvider, goToOperationStep);
         }
-
-
-        
     }
 }
