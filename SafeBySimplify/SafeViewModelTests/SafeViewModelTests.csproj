@@ -83,6 +83,9 @@
     <Compile Include="SettingsStepViewModelTests.cs" />
     <Compile Include="WorkflowViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkflowViewModelTests.InEntryStep.cs" />
+    <Compile Include="WorkflowViewModelTests.InOperationStep.cs" />
+    <Compile Include="WorkflowViewModelTests.InSettingStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

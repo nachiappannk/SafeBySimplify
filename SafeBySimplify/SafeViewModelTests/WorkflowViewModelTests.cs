@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
@@ -33,122 +32,27 @@ using SafeViewModelTests.TestTools;
 namespace SafeViewModelTests
 {
     [TestFixture]
-    public class WorkflowViewModelTests
+    public partial class WorkflowViewModelTests
     {
         private string InitialWorkingDirectory = @"D:\TFS";
         WorkFlowViewModel _workFlowViewModel;
         private ISafeProvider _safeProvider;
         private ViewModelPropertyObserver<WorkFlowStepViewModel> _currentStepProperyObserver;
+        private readonly List<string> _validUserNames = new List<string>() {"one", "two"};
 
         [SetUp]
         public void SetUp()
         {
             _safeProvider = Substitute.For<ISafeProvider>();
             _safeProvider.WorkingDirectory.Returns(InitialWorkingDirectory);
-            _safeProvider.GetUserNames().Returns(new List<string>() {"one", "two"});
+            _safeProvider.GetUserNames().Returns(_validUserNames);
+
             _workFlowViewModel = new WorkFlowViewModel(_safeProvider);
 
             _currentStepProperyObserver = _workFlowViewModel
                 .GetPropertyObserver<WorkFlowStepViewModel>(nameof(_workFlowViewModel.CurrentStep));
 
         }
-
-
-
-
-        [Test]
-        public void First_step_is_entry_step()
-        {
-            Assert.AreEqual(typeof(EntryStepViewModel),_workFlowViewModel.CurrentStep.GetType());
-        }
-
-
-        [Test]
-        public void When_in_entry_screen_and_go_to_settings_command_is_executed_then_the_app_moves_to_settings()
-        {
-            MoveFromEntryStepToSettingStep();
-            Assert.AreEqual(typeof(SettingsStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
-            Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
-        }
-
-        [Test]
-        public void When_signed_up_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step_with_correct_username()
-        {
-            const string validUserName = "SomeUserName";
-            const string validPassword = "SomePassword";
-
-            var safe = Substitute.For<ISafe>();
-            _safeProvider.CreateSafeForNonExistingUser(validUserName, validPassword, validPassword).Returns(safe);
-
-            _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
-            _safeProvider.StubPasswordNameValidity(validPassword, true, string.Empty);
-
-            MoveFromEntryStepToOperationStepBySigningUp(validUserName, validPassword);
-            Assert.AreEqual(typeof(OperationStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
-            var operationStepViewModel = _currentStepProperyObserver.PropertyValue as OperationStepViewModel;
-            Assert.AreEqual(validUserName, operationStepViewModel.UserName);
-            // ReSharper disable once PossibleNullReferenceException
-            Assert.AreEqual(safe, operationStepViewModel.Safe);
-        }
-
-
-        [Test]
-        public void When_signed_in_with_correct_detail_then_operation_step_is_initialized_and_app_moves_operation_step_with_correct_username()
-        {
-            const string validUserName = "SomeUserName";
-            const string validPassword = "SomePassword";
-
-            var safe = Substitute.For<ISafe>();
-            _safeProvider.StubCreateSafeForExistingUser(validUserName, validPassword, safe);
-
-            AssumeInEntryStepAndThenGoToOperationsBySignIn(validUserName, validPassword);
-            Assert.AreEqual(typeof(OperationStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
-            var operationStepViewModel = _currentStepProperyObserver.PropertyValue as OperationStepViewModel;
-            Assert.AreEqual(validUserName, operationStepViewModel.UserName);
-            // ReSharper disable once PossibleNullReferenceException
-            Assert.AreEqual(safe, operationStepViewModel.Safe);
-        }
-
-
-
-
-        [Test]
-        public void When_in_settings_and_ok_command_is_made_then_the_app_moves_to_entry()
-        {
-            MoveFromEntryStepToSettingStep();
-            _currentStepProperyObserver.ResetObserver();
-            AssumeInSettingStepAndThenGoToEntryStep();
-            Assert.AreEqual(typeof(EntryStepViewModel), _currentStepProperyObserver.PropertyValue.GetType());
-            Assert.AreNotEqual(0, _currentStepProperyObserver.NumberOfTimesPropertyChanged);
-        }
-
-
-
-
-
-        [Test]
-        public void When_in_operation_screen_and_logged_out_then_app_returns_to_entry_screen()
-        {
-            const string validUserName = "SomeUserName";
-            const string validPassword = "SomePassword";
-
-            var safe = Substitute.For<ISafe>();
-            _safeProvider.CreateSafeForNonExistingUser(validUserName, validPassword, validPassword).Returns(safe);
-
-            _safeProvider.StubUserNameValidity(validUserName, true, string.Empty);
-            _safeProvider.StubPasswordNameValidity(validPassword, true, string.Empty);
-            MoveFromEntryStepToOperationStepBySigningUp(validUserName, validPassword);
-
-
-            var operationStepViewModel = _workFlowViewModel.CurrentStep as OperationStepViewModel;
-
-            Assert.AreEqual(true,operationStepViewModel.SignOutCommand.CanExecute());
-            operationStepViewModel.SignOutCommand.Execute();
-            Assert.IsNull(operationStepViewModel.Safe);
-            Assert.AreEqual(typeof(EntryStepViewModel),_currentStepProperyObserver.PropertyValue.GetType());
-
-        }
-
 
 
         private void AssumeInSettingStepAndThenGoToEntryStep()
@@ -172,7 +76,7 @@ namespace SafeViewModelTests
             entryStepViewModel.GoToSettingsCommand.Execute();
         }
 
-        private void AssumeInEntryStepAndThenGoToOperationsBySignIn(string validUserName, string validPassword)
+        private void MoveFromEntryStepToOperationStepBySigningIn(string validUserName, string validPassword)
         {
             var entryStepViewModel = _workFlowViewModel.CurrentStep as EntryStepViewModel;
             Assume.That(entryStepViewModel != null, "Not in entry step");
