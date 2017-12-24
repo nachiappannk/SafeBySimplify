@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace SafeModel
 {
@@ -31,11 +32,25 @@ namespace SafeModel
 
         public void WriteUserRecord(string workingDirectory, string userName, Account account)
         {
+            var effectiveWorkingDirectory = workingDirectory + "\\" + userName;
+            Directory.CreateDirectory(effectiveWorkingDirectory);
+            var file = effectiveWorkingDirectory + "\\" + userName + ".acnt";
+
+            var serializedAccount = JsonConvert.SerializeObject(account);
+            File.WriteAllText(file, serializedAccount);
+
         }
 
         public Account ReadUserAccount(string workingDirectory, string userName)
         {
-            throw new System.NotImplementedException();
+            var effectiveWorkingDirectory = workingDirectory + "\\" + userName;
+            Directory.CreateDirectory(effectiveWorkingDirectory);
+            var file = effectiveWorkingDirectory + "\\" + userName + ".acnt";
+
+
+            var content = File.ReadAllText(file);
+            return JsonConvert.DeserializeObject<Account>(content);
+
         }
 
     }
