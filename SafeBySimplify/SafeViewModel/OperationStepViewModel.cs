@@ -25,7 +25,7 @@ namespace SafeViewModel
 
         private void GoToAddOperation()
         {
-            SelectedOperation = new AddOperationViewModel(GoToSearchAndAddOperation, GoToAlteringOperation, null);
+            SelectedOperation = new AddOperationViewModel(GoToSearchAndAddOperation, GoToAlteringOperation, new UniqueIdGenerator(), Safe);
         }
 
         private void GoToSearchAndAddOperation()

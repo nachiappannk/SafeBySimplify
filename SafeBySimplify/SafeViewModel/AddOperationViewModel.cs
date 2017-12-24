@@ -8,10 +8,12 @@ namespace SafeViewModel
 {
     public class AddOperationViewModel : SingleOperationViewModel
     {
+        private readonly ISafe _safe;
 
-        public AddOperationViewModel(Action discardAction, Action<string> saveAction, IUniqueIdGenerator uniqueIdGenerator)
+        public AddOperationViewModel(Action discardAction, Action<string> saveAction, IUniqueIdGenerator uniqueIdGenerator, ISafe safe)
         {
-            Record = new RecordViewModel
+            _safe = safe;
+            Record = new RecordViewModel(safe, uniqueIdGenerator)
             {
                 Name = string.Empty,
                 Tags = new List<string>(),

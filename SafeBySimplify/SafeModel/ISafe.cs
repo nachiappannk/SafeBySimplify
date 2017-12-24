@@ -6,12 +6,10 @@ namespace SafeModel
     {
         List<RecordHeader> GetRecordHeaders(string searchText);
         Record GetRecord(string recordId);
-
         string WorkingDirectory { get; set; }
-
         string UserName { get; set; }
-
-
+        void StoreFile(string recordId, string fileId, string fileUri);
+        void RetreiveFile(string recordId, string fileId, string fileUri);
     }
 
 
@@ -24,14 +22,6 @@ namespace SafeModel
     public class Record
     {
         public RecordHeader Header { get; set; }
-
         public List<PasswordRecord> PasswordRecords { get; set; }
-    }
-
-
-    public interface IUniqueIdGenerator
-    {
-        string GetUniqueId();
-        string GetSemiUniqueId();
     }
 }

@@ -10,7 +10,7 @@ namespace SafeViewModel
         public RecordAlteringOperationViewModel(ISafe safe, string recordId)
         {
             _safe = safe;
-            Record = new RecordViewModel();
+            Record = new RecordViewModel(null, null);
             var record = safe.GetRecord(recordId);
             Record.Name = record.Header.Name;
             Record.Tags = record.Header.Tags;

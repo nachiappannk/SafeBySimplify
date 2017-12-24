@@ -4,11 +4,14 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Prism.Commands;
+using SafeModel;
 
 namespace SafeViewModel
 {
     public class RecordViewModel : NotifiesPropertyChanged
     {
+        private readonly ISafe _safe;
+        private readonly IUniqueIdGenerator _uniqueIdGenerator;
         private string _name;
         public string Name
         {
@@ -31,14 +34,18 @@ namespace SafeViewModel
 
         public void AddFileRecord(string fileUri)
         {
-            var fileRecordViewModel = new FileRecordViewModel(FileRecords);
+            var fileRecordViewModel = new FileRecordViewModel(FileRecords, _safe, Id);
             fileRecordViewModel.Name = Path.GetFileNameWithoutExtension(fileUri);
             fileRecordViewModel.Extention = Path.GetExtension(fileUri).Replace(".","");
             FileRecords.Add(fileRecordViewModel);
+            _safe.StoreFile(Id, _uniqueIdGenerator.GetSemiUniqueId(), fileUri);
         }
 
-        public RecordViewModel()
+        public RecordViewModel(ISafe safe, IUniqueIdGenerator uniqueIdGenerator)
         {
+            _safe = safe;
+            _uniqueIdGenerator = uniqueIdGenerator;
+            Id = uniqueIdGenerator.GetUniqueId();
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
             FileRecords = new ObservableCollection<FileRecordViewModel>();
             AddNewEmptyPasswordRecord();

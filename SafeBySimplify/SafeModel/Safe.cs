@@ -26,5 +26,14 @@ namespace SafeModel
 
         public string WorkingDirectory { get; set; }
         public string UserName { get; set; }
+        public void StoreFile(string recordId, string fileId, string fileUri)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RetreiveFile(string recordId, string fileId, string fileUri)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

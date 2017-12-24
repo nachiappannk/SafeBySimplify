@@ -18,13 +18,17 @@ namespace SafeViewModelTests
         private CommandObserver _saveCommandObserver;
         private IUniqueIdGenerator _uniqueIdGenerator;
         private string _uniqueId = "SomeUniqueID";
+        private ISafe _safe;
 
         [SetUp]
         public void SetUp()
         {
             _uniqueIdGenerator = Substitute.For<IUniqueIdGenerator>();
             _uniqueIdGenerator.GetUniqueId().Returns(_uniqueId);
-            _addOperationViewModel = new AddOperationViewModel(() => { _isDiscardActionPerformed = true; }, (x) => { }, _uniqueIdGenerator);
+
+            _safe = Substitute.For<ISafe>();
+
+            _addOperationViewModel = new AddOperationViewModel(() => { _isDiscardActionPerformed = true; }, (x) => { }, _uniqueIdGenerator, _safe);
             _saveCommandObserver = _addOperationViewModel.SaveCommand.GetDelegateCommandObserver();
         }
 
@@ -32,6 +36,10 @@ namespace SafeViewModelTests
         public void When_file_is_added_then_correct_file_record_is_added()
         {
             bool _isCollectionModified = false;
+
+            var fileId = "fileId";
+
+            _uniqueIdGenerator.GetSemiUniqueId().Returns(fileId);
 
             _addOperationViewModel.Record.FileRecords.CollectionChanged += (a, b) => { _isCollectionModified = true; };
             var file = @"D:\Test\One.pdf";
@@ -42,8 +50,23 @@ namespace SafeViewModelTests
             Assert.AreEqual("One", correspondingFileRecord.Name);
             Assert.AreEqual("pdf", correspondingFileRecord.Extention);
             Assert.True(correspondingFileRecord.DeleteCommand.CanExecute());
+
+            _safe.Received(1).StoreFile(_uniqueId, fileId, file);
+
         }
-        
+
+        [Test]
+        public void When_file_is_downloaded_then_correct_file_record_is_downloaded()
+        {
+            var file = @"D:\Test\One.pdf";
+            _addOperationViewModel.Record.AddFileRecord(file);
+
+            var correspondingFileRecord = _addOperationViewModel.Record.FileRecords.Last();
+
+            correspondingFileRecord.DownloadFileAs(file);
+
+            _safe.Received(1).RetreiveFile(_uniqueId, correspondingFileRecord.FileRecordId, file);
+        }
 
         [TestCase("One")]
         [TestCase("Two")]
