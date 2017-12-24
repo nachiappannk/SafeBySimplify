@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SafeViewModel;
 
 namespace SafeBySimplify
 {
@@ -23,6 +24,16 @@ namespace SafeBySimplify
         public RecordViewUserControl()
         {
             InitializeComponent();
+        }
+
+        private void OnFileDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                var record = this.DataContext as RecordViewModel;
+                record.AddFileRecord(files.ElementAt(0));
+            }
         }
     }
 }

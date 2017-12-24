@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SafeBySimplify"
+             xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance safeViewModel:FileRecordViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Border BorderThickness="2" CornerRadius="2"  Background="Bisque" BorderBrush="Brown" Margin="1">
         <Grid>
@@ -19,14 +21,14 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0"/>
+                <TextBox Grid.Column="0" Text="{Binding Name}"/>
                 <Grid Grid.Column="1" Width="Auto">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Extn:" Margin="2,0" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="pdf" Margin="2,0" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Extention}" Margin="2,0" VerticalAlignment="Center"/>
                 </Grid>
                 <Button Grid.Column="2" Margin="0,1" ToolTip="Download">
                     <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -43,7 +45,7 @@
                     </Image>
                 </Button>
             </Grid>
-            <TextBox Grid.Row="1"/>
+            <TextBox Grid.Row="1" Text="{Binding Description}"/>
         </Grid>
     </Border>
 </UserControl>

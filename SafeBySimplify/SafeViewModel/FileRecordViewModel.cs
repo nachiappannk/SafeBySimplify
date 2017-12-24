@@ -20,6 +20,7 @@ namespace SafeViewModel
             DeleteCommand = new DelegateCommand(() => fileRecordViewModels.Remove(this));
         }
 
+        public string Description { get; set; }
         public string Name { get; set; }
         public string Extention { get; set; }
         public string FileRecordId { get; set; }
