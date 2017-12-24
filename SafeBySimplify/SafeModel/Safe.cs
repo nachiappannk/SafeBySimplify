@@ -14,7 +14,7 @@ namespace SafeModel
             var recordHeaders = stringArray.Select(x => new RecordHeader()
             {
                 Name = x,
-                Tags = new List<string>() { "one", "two", "three" }
+                Tags = "one;two;three",
             }).ToList();
             return recordHeaders;
         }

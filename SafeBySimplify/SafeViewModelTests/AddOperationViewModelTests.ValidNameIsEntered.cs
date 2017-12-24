@@ -35,7 +35,7 @@ namespace SafeViewModelTests
 
                 var recordName = "RecordName";
                 _addOperationViewModel.Record.Name = recordName;
-                _addOperationViewModel.Record.Tags = new List<string>() {"One","Two"};
+                _addOperationViewModel.Record.Tags = "One;Two";
                 var passwordRecord = _addOperationViewModel.Record.PasswordRecords.Last();
                 passwordRecord.Name = "One";
                 passwordRecord.Value = "Two";
@@ -52,7 +52,7 @@ namespace SafeViewModelTests
                     (x) => 
                     x.Header.Name == recordName &&
                     x.Header.Id == _uniqueId &&
-                    x.Header.Tags.Join("-") == _addOperationViewModel.Record.Tags.Join("-") &&
+                    x.Header.Tags == _addOperationViewModel.Record.Tags &&
                     IsPasswordRecordsMatching(x.PasswordRecords, passwordRecords) &&
                     x.FileRecords.First().Name == "One" &&
                     x.FileRecords.First().Extention == "pdf" &&

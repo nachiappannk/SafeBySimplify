@@ -23,7 +23,7 @@ namespace SafeViewModelTests
                 {
                     Id = "RecordId",
                     Name = "RecordName",
-                    Tags = new List<string>() { "Tag1", "Tag2" },
+                    Tags = "Tag1;Tag2",
                 },
                 PasswordRecords = new List<PasswordRecord>()
                 {

@@ -17,7 +17,7 @@ namespace SafeViewModel
             Record = new RecordViewModel(safe, uniqueIdGenerator)
             {
                 Name = string.Empty,
-                Tags = new List<string>(),
+                Tags = string.Empty,
             };
 
             Record.Id = uniqueIdGenerator.GetUniqueId();
@@ -41,7 +41,7 @@ namespace SafeViewModel
                 record.Header = new RecordHeader();
                 record.Header.Name = Record.Name;
                 record.Header.Id = Record.Id;
-                record.Header.Tags = Record.Tags.ToList();
+                record.Header.Tags = Record.Tags;
                 record.PasswordRecords = new List<PasswordRecord>();
 
                 var passwordRecords = Record.PasswordRecords.ToList();

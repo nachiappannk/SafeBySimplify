@@ -10,7 +10,7 @@ namespace SafeViewModelTests
     {
         private RecordHeaderViewModel _recordHeaderViewModel;
         private readonly string _recordName = "RecordName";
-        private readonly List<string> _tags = new List<string>() {"one", "two", "three"};
+        private readonly string _tags = "one;two;three";
 
         [SetUp]
         public void SetUp()

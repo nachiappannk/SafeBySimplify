@@ -17,8 +17,8 @@ namespace SafeViewModelTests
 
         private List<RecordHeader> _searchResults = new List<RecordHeader>()
         {
-            new RecordHeader() {Name = "1", Tags = new List<string>()},
-            new RecordHeader() {Name = "2", Tags = new List<string>()}
+            new RecordHeader() {Name = "1", Tags = string.Empty},
+            new RecordHeader() {Name = "2", Tags = string.Empty}
         };
 
         private int _timeTakenForSearching = 100;

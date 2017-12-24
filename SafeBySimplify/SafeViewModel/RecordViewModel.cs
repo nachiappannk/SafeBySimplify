@@ -28,7 +28,7 @@ namespace SafeViewModel
 
         public string Id { get; set; }
 
-        public List<string> Tags { get; set; }
+        public string Tags { get; set; }
         public ObservableCollection<PasswordRecordViewModel> PasswordRecords { get; set; }
         public ObservableCollection<FileRecordViewModel> FileRecords { get; set; }
 
