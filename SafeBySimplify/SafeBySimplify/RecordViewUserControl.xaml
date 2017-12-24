@@ -30,7 +30,11 @@
                         <Grid>
                             <TextBlock Text="Add search tag. Used for searching records. The tag delimiter is (;) semicolon" VerticalAlignment="Center" Margin="5,0,5,0" 
                                    Style="{StaticResource HintTextBlockStyle}"/>
-                            <safeUiLib:TagsControl Height="20" ToolTip="Used for searching records. The tag delimiter is (;) semicolon" Margin="0,0,5,0" FontSize="8">
+                            <safeUiLib:TagsControl Height="20" 
+                                                   Tags="{Binding Tags}"
+                                                   ToolTip="Used for searching records. The tag delimiter is (;) semicolon" 
+                                                   Margin="0,0,5,0" 
+                                                   FontSize="8">
                                 <safeUiLib:TagsControl.TagTemplate>
                                     <DataTemplate>
                                         <Border BorderThickness="2" CornerRadius="4" Background="#FFFFD0A0" BorderBrush="SandyBrown" Margin="2,0">
