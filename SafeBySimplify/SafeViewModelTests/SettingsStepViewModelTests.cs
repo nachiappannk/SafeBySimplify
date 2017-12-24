@@ -53,7 +53,6 @@ namespace SafeViewModelTests
             
 
             _settingsStepViewModel = new SettingsStepViewModel(_hasWorkingDirectory, () => { });
-            _settingsStepViewModel.OnEntry();
 
             _saveCommandObserver = _settingsStepViewModel.SaveCommand.GetDelegateCommandObserver();
             _discardCommandObserver = _settingsStepViewModel.DiscardCommand.GetDelegateCommandObserver();

@@ -39,7 +39,6 @@ namespace SafeViewModel
                 if (_currentStep != value)
                 {
                     _currentStep = value;
-                    _currentStep?.OnEntry();
                     FirePropertyChanged();
                 }
             }
