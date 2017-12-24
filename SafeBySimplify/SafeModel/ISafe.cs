@@ -25,5 +25,14 @@ namespace SafeModel
     {
         public RecordHeader Header { get; set; }
         public List<PasswordRecord> PasswordRecords { get; set; }
+
+        public List<FileRecord> FileRecords { get; set; }
+    }
+
+    public class FileRecord
+    {
+        public string Name { get; set; }
+        public string Extention { get; set; }
+        public string FileId { get; set; }
     }
 }
