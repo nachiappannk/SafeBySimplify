@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,19 +11,34 @@ namespace SafeViewModel
     public class PasswordRecordViewModel
     {
         private readonly Action _changedAction;
-        private string _name;
-        private string _value;
+        private readonly ObservableCollection<PasswordRecordViewModel> _passwordRecordViewModels;
 
-        public PasswordRecordViewModel(Action changedAction, 
-            Action<PasswordRecordViewModel> removeAction, 
-            Predicate<PasswordRecordViewModel> isRemovePossible)
+        public PasswordRecordViewModel(Action changedAction, ObservableCollection<PasswordRecordViewModel> passwordRecordViewModels)
         {
-            RemoveCommand = new DelegateCommand(() => removeAction.Invoke(this), () => isRemovePossible.Invoke(this));
+            _passwordRecordViewModels = passwordRecordViewModels;
+            _passwordRecordViewModels.CollectionChanged += CollectionModified;
+            RemoveCommand = new DelegateCommand(Remove, IsRemovePossible);
             _changedAction = changedAction;
-            _name = string.Empty;
-            _value = string.Empty;
         }
 
+        private void CollectionModified(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RemoveCommand.RaiseCanExecuteChanged();
+        }
+
+        private void Remove()
+        {
+            _passwordRecordViewModels.CollectionChanged -= CollectionModified;
+            _passwordRecordViewModels.Remove(this);
+        }
+
+        private bool IsRemovePossible()
+        {
+            var lastItem = _passwordRecordViewModels.Last();
+            return this != lastItem;
+        }
+
+        private string _name = string.Empty;
         public string Name
         {
             get { return _name; }
@@ -33,6 +50,7 @@ namespace SafeViewModel
             }
         }
 
+        private string _value = string.Empty;
         public string Value
         {
             get { return _value; }

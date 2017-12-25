@@ -7,14 +7,12 @@ namespace SafeViewModel
 {
     public class FileRecordViewModel
     {
-        private readonly ObservableCollection<FileRecordViewModel> _fileRecordViewModels;
         private readonly IFileSafe _safe;
         private readonly string _recordId;
 
         public FileRecordViewModel(ObservableCollection<FileRecordViewModel> fileRecordViewModels, 
             IFileSafe safe, string recordId)
         {
-            _fileRecordViewModels = fileRecordViewModels;
             _safe = safe;
             _recordId = recordId;
             DeleteCommand = new DelegateCommand(() => fileRecordViewModels.Remove(this));
