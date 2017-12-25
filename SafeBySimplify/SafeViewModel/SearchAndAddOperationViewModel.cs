@@ -42,7 +42,7 @@ namespace SafeViewModel
             IsSearchResultVisible = true;
         }
 
-        private string _searchString;
+        private string _searchString = String.Empty;
         public string SearchText
         {
             get { return _searchString; }
