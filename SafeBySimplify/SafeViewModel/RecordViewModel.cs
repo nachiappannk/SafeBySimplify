@@ -28,6 +28,8 @@ namespace SafeViewModel
         public ObservableCollection<PasswordRecordViewModel> PasswordRecords { get; set; }
         public ObservableCollection<FileRecordViewModel> FileRecords { get; set; }
 
+        private bool _initialized = false;
+
         public RecordViewModel(Record record, IFileSafe fileSafe, IFileIdGenerator fileIdGenerator)
         {
             _fileSafe = fileSafe;
@@ -36,8 +38,13 @@ namespace SafeViewModel
             Name = record.Header.Name;
             Tags = record.Header.Tags;
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
+            foreach (var passwordRecord in record.PasswordRecords)
+            {
+                AddNewPasswordRecord(passwordRecord.Name, passwordRecord.Value);
+            }
             FileRecords = new ObservableCollection<FileRecordViewModel>();
-            AddNewEmptyPasswordRecord();
+            _initialized = true;
+            AddNewPasswordRecord(string.Empty, string.Empty);
         }
 
         public void AddFileRecord(string fileUri)
@@ -49,18 +56,24 @@ namespace SafeViewModel
             _fileSafe.StoreFile(Id, _fileIdGenerator.GetFileId(), fileUri);
         }
 
-        private void AddNewEmptyPasswordRecord()
+        private void AddNewPasswordRecord(string name, string value)
         {
-            var passwordRecordViewModel = new PasswordRecordViewModel(InsertEmptyRecordIfNecessary,PasswordRecords);
+            var passwordRecordViewModel =
+                new PasswordRecordViewModel(InsertEmptyRecordIfNecessary, PasswordRecords)
+                {
+                    Name = name,
+                    Value = value
+                };
             PasswordRecords.Add(passwordRecordViewModel);
         }
 
         private void InsertEmptyRecordIfNecessary()
         {
+            if(!_initialized) return;
             var lastRecord = PasswordRecords.Last();
             if ((string.Empty != lastRecord.Name) || (string.Empty != lastRecord.Value))
             {
-                AddNewEmptyPasswordRecord();
+                AddNewPasswordRecord(string.Empty, string.Empty);
             }
         }
     }
