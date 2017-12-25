@@ -67,7 +67,6 @@
     <Compile Include="AddOperationViewModelTests.ValidNameIsEntered.cs" />
     <Compile Include="OperationStepViewModelTests.cs" />
     <Compile Include="RecordAlteringOperationViewModelTests.cs" />
-    <Compile Include="RecordHeaderViewModelTests.cs" />
     <Compile Include="SafeProviderForNonExistingUserTestExtententions.cs" />
     <Compile Include="SearchAndAddOperationViewModelTests.cs" />
     <Compile Include="SearchAndAddOperationViewModelTests.Initially.cs" />
