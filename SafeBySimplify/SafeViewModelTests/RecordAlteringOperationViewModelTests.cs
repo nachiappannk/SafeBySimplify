@@ -50,15 +50,7 @@ namespace SafeViewModelTests
         {
             CollectionAssert.AreEquivalent(_record.Header.Tags, _recordAlteringOperationViewModel.Record.Tags);
         }
-
-        [Test, Ignore("Not Implemented")]
-        public void The_last_password_record_is_an_empty_record_with_delete_button_disabled()
-        {
-            var lastRecord = _recordAlteringOperationViewModel.Record.PasswordRecords.Last();
-            Assert.AreEqual(string.Empty, lastRecord.Name);
-            Assert.AreEqual(string.Empty, lastRecord.Value);
-        }
-
+        
 
         [Test]
         public void Initially_the_password_records_is_as_per_safe()

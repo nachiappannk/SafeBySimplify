@@ -21,29 +21,30 @@ namespace SafeModel
 
         public Record GetRecord(string recordId)
         {
-            throw new System.NotImplementedException();
+            var record = new Record();
+            record.Header = new RecordHeader();
+            record.FileRecords = new List<FileRecord>();
+            record.PasswordRecords = new List<PasswordRecord>();
+            record.Header.Id = recordId;
+            return record;
         }
 
         public string WorkingDirectory { get; set; }
         public string UserName { get; set; }
         public void StoreFile(string recordId, string fileId, string fileUri)
         {
-            throw new System.NotImplementedException();
         }
 
         public void RetreiveFile(string recordId, string fileId, string fileUri)
         {
-            throw new System.NotImplementedException();
         }
 
         public void ReoganizeFiles(string recordId)
         {
-            throw new System.NotImplementedException();
         }
 
         public void UpsertRecord(Record record)
         {
-            throw new System.NotImplementedException();
         }
     }
 }
