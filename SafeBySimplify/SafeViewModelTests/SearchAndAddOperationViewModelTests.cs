@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -113,6 +114,13 @@ namespace SafeViewModelTests
                     var expectedTags = _searchResults.ElementAt(i).Tags.Split(';').ToList();
                     CollectionAssert.AreEqual(expectedTags, listOfTags.ElementAt(i));
                 }
+            }
+
+            [Test]
+            public void When_serach_text_is_cleared_then_search_results_are_made_invisible()
+            {
+                _searchAndAddOperationViewModel.SearchText = String.Empty;
+                Assert.False(_searchResultVisibilityObserver.PropertyValue);
             }
         }
     }

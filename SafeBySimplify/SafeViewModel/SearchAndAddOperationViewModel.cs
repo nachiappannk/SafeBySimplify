@@ -21,6 +21,7 @@ namespace SafeViewModel
             AddCommand = new DelegateCommand(addNewRecordAction);
         }
 
+        private bool _isSearchResultVisible;
         public bool IsSearchResultVisible
         {
             get { return _isSearchResultVisible; }
@@ -64,16 +65,23 @@ namespace SafeViewModel
 
         private void OnSearchTextChanged(string value)
         {
-            var taskHolder = new TaskHolder((cts) => SearchAndUpdateSearchResults(value, cts));
             TaskHolder?.Cancel();
-            TaskHolder = taskHolder;
+            TaskHolder = null;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                IsSearchResultVisible = false;
+            }
+            else
+            {
+                var taskHolder = new TaskHolder((cts) => SearchAndUpdateSearchResults(value, cts));
+                TaskHolder = taskHolder;
+            }
         }
 
         public TaskHolder TaskHolder { get; set; }
 
 
         private ObservableCollection<RecordHeaderViewModel> _searchResult;
-        private bool _isSearchResultVisible;
 
         public ObservableCollection<RecordHeaderViewModel> SearchResults
         {
