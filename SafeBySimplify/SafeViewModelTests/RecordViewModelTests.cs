@@ -60,32 +60,7 @@ namespace SafeViewModelTests
 
             _recordViewModel = new RecordViewModel(record, _fileSafe, _fileIdGenerator);
         }
-
-        public class Initially : RecordViewModelTests
-        {
-            
-
-            [Test]
-            public void When_a_file_is_added_then_the_file_is_added_in_the_view_model()
-            {
-                var fileId = "FileID";
-                _fileIdGenerator.GetFileId().Returns(fileId);
-
-                var file = @"c:\temp\test.pdf";
-                _recordViewModel.AddFileRecord(file);
-
-                var fileRecordViewModel = _recordViewModel.FileRecords.Last();
-                Assert.AreEqual(fileId, fileRecordViewModel.FileRecordId);
-                Assert.AreEqual(_id, fileRecordViewModel.RecordId);
-                Assert.AreEqual("test", fileRecordViewModel.Name);
-                Assert.AreEqual(string.Empty, fileRecordViewModel.Description);
-                Assert.AreEqual("pdf", fileRecordViewModel.Extention);
-            }
-
-        }
-
-
-
+        
         private List<FileRecord> GetFileRecordsFromViewModel()
         {
             var fileRecords = _recordViewModel
@@ -158,6 +133,19 @@ namespace SafeViewModelTests
                 var fileRecords = GetFileRecordsFromViewModel();
                 CollectionAssert.AreEqual(_fileRecords, fileRecords);
             }
+
+            [Test]
+            public void Record_got_is_correct()
+            {
+                var record = _recordViewModel.GetRecord();
+                Assert.AreEqual(_name, record.Header.Name);
+                Assert.AreEqual(_id, record.Header.Id);
+                Assert.AreEqual(_tagString, record.Header.Tags);
+                Assert.AreEqual(_passwordRecords, record.PasswordRecords);
+                Assert.AreEqual(_fileRecords, record.FileRecords);
+            }
+
+
         }
 
         public class NameModification : RecordViewModelModification
@@ -214,5 +202,75 @@ namespace SafeViewModelTests
                 _passwordRecords.ElementAt(1).Value = value;
             }
         }
+
+        public class PasswordRecordIsDeleted : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                var passwordRecordViewModel = _recordViewModel.PasswordRecords.ElementAt(1);
+                passwordRecordViewModel.RemoveCommand.Execute();
+                _passwordRecords.Remove(_passwordRecords.ElementAt(1));
+            }
+        }
+
+        public class FileRecordIsAdded : RecordViewModelModification
+        {
+            private string _fileId = "FileID";
+            private string _fileUri = @"c:\temp\test.pdf";
+
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                _fileIdGenerator.GetFileId().Returns(_fileId);
+                _recordViewModel.AddFileRecord(_fileUri);
+
+                var fileRecord = new FileRecord()
+                {
+                    Name =  "test",
+                    Extention = "pdf",
+                    FileId = _fileId,
+                    AssociatedRecordId = _id,
+                    Description = string.Empty,
+
+                };
+                _fileRecords.Add(fileRecord);
+            }
+
+            [Test]
+            public void File_is_writtern_to_safe()
+            {
+                _fileSafe.Received(1).StoreFile(_id, _fileId, _fileUri);
+            }
+
+        }
+
+        public class FileRecordIsModified : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                var fileRecordViewModel = _recordViewModel.FileRecords.ElementAt(1);
+                var fileRecord = _fileRecords.ElementAt(1);
+
+                var name = "name";
+                fileRecordViewModel.Name = name;
+                fileRecord.Name = name;
+
+                var description = "desc";
+                fileRecordViewModel.Description = description;
+                fileRecord.Description = description;
+            }
+        }
+
+        public class FileRecordIsDeleted : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                var fileRecordViewModel = _recordViewModel.FileRecords.ElementAt(1);
+                var fileRecord = _fileRecords.ElementAt(1);
+
+                fileRecordViewModel.DeleteCommand.Execute();
+                _fileRecords.Remove(fileRecord);
+            }
+        }
+
     }
 }

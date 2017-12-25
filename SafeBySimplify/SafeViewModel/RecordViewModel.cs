@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using SafeModel;
@@ -93,6 +94,35 @@ namespace SafeViewModel
             {
                 AddNewPasswordRecord(string.Empty, string.Empty);
             }
+        }
+
+        public Record GetRecord()
+        {
+            var record = new Record
+            {
+                Header = new RecordHeader(),
+                FileRecords = new List<FileRecord>(),
+                PasswordRecords = new List<PasswordRecord>()
+            };
+            record.Header.Name = Name;
+            record.Header.Id = Id;
+            record.Header.Tags = Tags;
+            var fileRecords = FileRecords.Select(x => new FileRecord()
+            {
+                Name = x.Name,
+                Description = x.Description,
+                Extention = x.Extention,
+                FileId = x.FileRecordId,
+                AssociatedRecordId = x.RecordId,
+            }).ToList();
+            record.FileRecords.AddRange(fileRecords);
+
+            var passwordRecordViewModels = PasswordRecords.ToList();
+            passwordRecordViewModels.RemoveAt(PasswordRecords.Count - 1);
+            var passwordRecords = passwordRecordViewModels.Select(x => new PasswordRecord()
+                {Name = x.Name, Value = x.Value}).ToList();
+            record.PasswordRecords.AddRange(passwordRecords);
+            return record;
         }
     }
 }
