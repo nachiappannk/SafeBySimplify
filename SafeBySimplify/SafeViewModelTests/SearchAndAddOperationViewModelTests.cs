@@ -37,6 +37,7 @@ namespace SafeViewModelTests
         private SearchAndAddOperationViewModel _searchAndAddOperationViewModel;
         private ISafe _safe;
         private bool _isRecordCreationRequested = false;
+        private string _openedRecordId;
         private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
         private ViewModelPropertyObserver<ObservableCollection<RecordHeaderViewModel>> _searchResultPropertyObserver;
         private ViewModelPropertyObserver<bool> _searchProgressIndicatorObserver;
@@ -45,7 +46,7 @@ namespace SafeViewModelTests
         public void SetUp()
         {
             _safe = Substitute.For<ISafe>();
-            _searchAndAddOperationViewModel = new SearchAndAddOperationViewModel(_safe, (x) => { }, () =>
+            _searchAndAddOperationViewModel = new SearchAndAddOperationViewModel(_safe, (x) => { _openedRecordId = x; }, () =>
                 {
                     _isRecordCreationRequested = true;
                 });

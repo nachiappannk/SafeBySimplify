@@ -40,14 +40,16 @@ namespace SafeViewModelTests
         {
 
             private string _searchText = "ss";
+            private static string _searchResultRecordId = "some other id";
 
             private List<RecordHeader> _searchResults = new List<RecordHeader>()
             {
                 new RecordHeader() {Name = "record name 1", Id = "some id", Tags = "tag11;tag12;tag13"},
-                new RecordHeader() {Name = "record name 2", Id = "some other id", Tags = "tag21;tag22;tag23"}
+                new RecordHeader() {Name = "record name 2", Id = _searchResultRecordId, Tags = "tag21;tag22;tag23"}
             };
 
-            private int _timeTakenForSearching = 600;
+            private int _timeTakenForSearching = 300;
+            
 
             [SetUp]
             public void SearchTextEnteredSetUp()
@@ -116,7 +118,17 @@ namespace SafeViewModelTests
                         var expectedTags = _searchResults.ElementAt(i).Tags.Split(';').ToList();
                         CollectionAssert.AreEqual(expectedTags, listOfTags.ElementAt(i));
                     }
-                }   
+                }
+
+                [Test]
+                public void When_search_result_is_selected_then_the_search_result_is_requested_to_be_opened()
+                {
+                    var searchResult = _recordHeaderViewModels.Last(x => x.Id == _searchResultRecordId);
+                    Assume.That(searchResult.SelectCommand.CanExecute());
+                    searchResult.SelectCommand.Execute();
+                    Assert.AreEqual(_searchResultRecordId, _openedRecordId); 
+                }
+
             }
         }
     }
