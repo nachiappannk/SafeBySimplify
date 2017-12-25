@@ -38,20 +38,38 @@ namespace SafeViewModel
             Name = record.Header.Name;
             Tags = record.Header.Tags;
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
+            FileRecords = new ObservableCollection<FileRecordViewModel>();
+
             foreach (var passwordRecord in record.PasswordRecords)
             {
                 AddNewPasswordRecord(passwordRecord.Name, passwordRecord.Value);
             }
-            FileRecords = new ObservableCollection<FileRecordViewModel>();
+
+            foreach (var fileRecord in record.FileRecords)
+            {
+                var fileRecordViewModel = new FileRecordViewModel(FileRecords, _fileSafe, fileRecord.AssociatedRecordId,
+                    fileRecord.FileId)
+                {
+                    Name = fileRecord.Name,
+                    Description = fileRecord.Description,
+                    Extention = fileRecord.Extention
+                };
+                FileRecords.Add(fileRecordViewModel);
+            }
+
             _initialized = true;
             AddNewPasswordRecord(string.Empty, string.Empty);
         }
 
         public void AddFileRecord(string fileUri)
         {
-            var fileRecordViewModel = new FileRecordViewModel(FileRecords, _fileSafe, Id);
-            fileRecordViewModel.Name = Path.GetFileNameWithoutExtension(fileUri);
-            fileRecordViewModel.Extention = Path.GetExtension(fileUri)?.Replace(".", "");
+            var fileRecordViewModel =
+                new FileRecordViewModel(FileRecords, _fileSafe, Id, _fileIdGenerator.GetFileId())
+                {
+                    Name = Path.GetFileNameWithoutExtension(fileUri),
+                    Extention = Path.GetExtension(fileUri)?.Replace(".", ""),
+                    Description = string.Empty,
+                };
             FileRecords.Add(fileRecordViewModel);
             _fileSafe.StoreFile(Id, _fileIdGenerator.GetFileId(), fileUri);
         }

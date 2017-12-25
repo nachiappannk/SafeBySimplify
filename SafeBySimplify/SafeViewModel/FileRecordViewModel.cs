@@ -8,13 +8,14 @@ namespace SafeViewModel
     public class FileRecordViewModel
     {
         private readonly IFileSafe _safe;
-        private readonly string _recordId;
+        
 
         public FileRecordViewModel(ObservableCollection<FileRecordViewModel> fileRecordViewModels, 
-            IFileSafe safe, string recordId)
+            IFileSafe safe, string recordId, string fileId)
         {
             _safe = safe;
-            _recordId = recordId;
+            RecordId = recordId;
+            FileRecordId = fileId;
             DeleteCommand = new DelegateCommand(() => fileRecordViewModels.Remove(this));
         }
 
@@ -23,10 +24,11 @@ namespace SafeViewModel
         public string Extention { get; set; }
         public string FileRecordId { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
+        public string RecordId { get; set; }
 
         public void DownloadFileAs(string uri)
         {
-            _safe.RetreiveFile(_recordId, FileRecordId, uri);
+            _safe.RetreiveFile(RecordId, FileRecordId, uri);
         }
     }
 }
