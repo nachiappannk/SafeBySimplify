@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SafeBySimplify"
+             xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance safeViewModel:RecordAlteringOperationViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
@@ -29,14 +31,14 @@
                     </Image.Source>
                 </Image>
             </Button>
-            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding SaveCommand}">
+            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding DeleteCommand}">
                 <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>
                         <BitmapImage UriSource="images/delete.png" />
                     </Image.Source>
                 </Image>
             </Button>
-            <Button DockPanel.Dock="Right" Margin="4,0"  Command="{Binding SaveCommand}">
+            <Button DockPanel.Dock="Right" Margin="4,0"  Command="{Binding GoToSearchCommand}">
                 <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>
                         <BitmapImage UriSource="images/search.png" />

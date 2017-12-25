@@ -50,7 +50,10 @@ namespace SafeViewModelTests
                     Id = addedRecordId,
                     Name = recordName,
                     Tags = "Tag1;Tag2"
-                }
+                },
+                FileRecords = new List<FileRecord>(),
+                PasswordRecords = new List<PasswordRecord>(),
+                
             };
             _safe.GetRecord(addedRecordId).Returns(record);
         }

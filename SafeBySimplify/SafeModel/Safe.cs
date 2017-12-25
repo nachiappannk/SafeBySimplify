@@ -46,5 +46,10 @@ namespace SafeModel
         public void UpsertRecord(Record record)
         {
         }
+
+        public void DeleteRecord(string recordId)
+        {
+
+        }
     }
 }

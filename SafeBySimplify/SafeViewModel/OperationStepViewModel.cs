@@ -13,6 +13,7 @@ namespace SafeViewModel
     {
         public OperationStepViewModel(string userName, ISafe safe, Action goToEntryStepAction)
         {
+            _idGenerator = new IdGenerator();
             Safe = safe;
             UserName = userName;
             SignOutCommand = new DelegateCommand(() =>
@@ -26,8 +27,7 @@ namespace SafeViewModel
 
         private void GoToAddOperation()
         {
-            var idGenerator = new IdGenerator();
-            SelectedOperation = new AddOperationViewModel(GoToSearchAndAddOperation, GoToAlteringOperation, idGenerator, idGenerator, Safe);
+            SelectedOperation = new AddOperationViewModel(GoToSearchAndAddOperation, GoToAlteringOperation, _idGenerator, _idGenerator, Safe);
         }
 
         private void GoToSearchAndAddOperation()
@@ -42,10 +42,14 @@ namespace SafeViewModel
         
         private void GoToAlteringOperation(string recordId)
         {
-            SelectedOperation = new RecordAlteringOperationViewModel(Safe, recordId);
+            SelectedOperation = new RecordAlteringOperationViewModel(
+                Safe, recordId, _idGenerator, 
+                ()=>GoToAlteringOperation(recordId),
+                GoToSearchAndAddOperation);
         }
 
         private SingleOperationViewModel _selectedOperation;
+        private IdGenerator _idGenerator;
 
         public SingleOperationViewModel SelectedOperation
         {

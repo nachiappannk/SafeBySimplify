@@ -11,6 +11,8 @@ namespace SafeModel
 
         void ReoganizeFiles(string recordId);
         void UpsertRecord(Record record);
+
+        void DeleteRecord(string recordId);
     }
 
     public interface IFileSafe
