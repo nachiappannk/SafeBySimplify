@@ -70,6 +70,9 @@
     <Compile Include="RecordHeaderViewModelTests.cs" />
     <Compile Include="SafeProviderForNonExistingUserTestExtententions.cs" />
     <Compile Include="SearchAndAddOperationViewModelTests.cs" />
+    <Compile Include="SearchAndAddOperationViewModelTests.Initially.cs" />
+    <Compile Include="SearchAndAddOperationViewModelTests.SearchTextEntered.cs" />
+    <Compile Include="SearchAndAddOperationViewModelTests.SearchTextEntered.Tests.cs" />
     <Compile Include="SignInViewModelTests.cs" />
     <Compile Include="SignInViewModelTests.NoRegisteredUsersTests.cs" />
     <Compile Include="SignInViewModelTests.RegisteredUserAvailableTests.cs" />
