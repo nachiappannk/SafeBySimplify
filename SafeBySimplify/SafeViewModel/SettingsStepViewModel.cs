@@ -35,7 +35,6 @@ namespace SafeViewModel
         private readonly Action _completedAction;
         private string _savedValueOfWorkingDirectory;
 
-
         private bool _isInSavedState = true;
         private bool IsInSavedState
         {
@@ -52,27 +51,26 @@ namespace SafeViewModel
             }
         }
 
-        public DelegateCommand SaveCommand { get; set; }
-
-        public DelegateCommand DiscardCommand { get; set; }
-
-        public DelegateCommand OkCommand { get; set; }
-
-
         private string _workingDirectory;
         public string WorkSpaceDirectory
         {
             get { return _workingDirectory; }
             set
             {
-                if(value != _workingDirectory)
-                { 
+                if (value != _workingDirectory)
+                {
                     _workingDirectory = value;
                     FirePropertyChanged();
                 }
                 IsInSavedState = _savedValueOfWorkingDirectory == _workingDirectory;
             }
         }
+
+        public DelegateCommand SaveCommand { get; set; }
+
+        public DelegateCommand DiscardCommand { get; set; }
+
+        public DelegateCommand OkCommand { get; set; }
 
         public SettingsStepViewModel(IHasWorkingDirectory hasWorkingDirectory, Action completedAction)
         {
