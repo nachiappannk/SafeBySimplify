@@ -9,15 +9,17 @@ namespace SafeViewModel
 {
     public class AddOperationViewModel : SingleOperationViewModel
     {
+        private readonly IFileIdGenerator _fileIdGenerator;
         private readonly ISafe _safe;
 
-        public AddOperationViewModel(Action discardAction, Action<string> saveAction, IUniqueIdGenerator uniqueIdGenerator, ISafe safe)
+        public AddOperationViewModel(Action discardAction, Action<string> saveAction, IUniqueIdGenerator uniqueIdGenerator, IFileIdGenerator fileIdGenerator, ISafe safe)
         {
+            _fileIdGenerator = fileIdGenerator;
             _safe = safe;
-            Record = new RecordViewModel(safe, uniqueIdGenerator)
+            Record = new RecordViewModel(safe, uniqueIdGenerator, fileIdGenerator)
             {
                 Name = string.Empty,
-                Tags = string.Empty,
+                Tags = string.Empty, 
             };
 
             Record.Id = uniqueIdGenerator.GetUniqueId();

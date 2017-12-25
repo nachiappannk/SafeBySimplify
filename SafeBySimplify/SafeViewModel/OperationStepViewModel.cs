@@ -26,7 +26,8 @@ namespace SafeViewModel
 
         private void GoToAddOperation()
         {
-            SelectedOperation = new AddOperationViewModel(GoToSearchAndAddOperation, GoToAlteringOperation, new UniqueIdGenerator(), Safe);
+            var idGenerator = new IdGenerator();
+            SelectedOperation = new AddOperationViewModel(GoToSearchAndAddOperation, GoToAlteringOperation, idGenerator, idGenerator, Safe);
         }
 
         private void GoToSearchAndAddOperation()

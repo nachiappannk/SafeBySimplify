@@ -12,6 +12,7 @@ namespace SafeViewModel
     {
         private readonly ISafe _safe;
         private readonly IUniqueIdGenerator _uniqueIdGenerator;
+        private readonly IFileIdGenerator _fileIdGenerator;
         private string _name;
         public string Name
         {
@@ -38,13 +39,14 @@ namespace SafeViewModel
             fileRecordViewModel.Name = Path.GetFileNameWithoutExtension(fileUri);
             fileRecordViewModel.Extention = Path.GetExtension(fileUri).Replace(".","");
             FileRecords.Add(fileRecordViewModel);
-            _safe.StoreFile(Id, _uniqueIdGenerator.GetSemiUniqueId(), fileUri);
+            _safe.StoreFile(Id, _fileIdGenerator.GetFileId(), fileUri);
         }
 
-        public RecordViewModel(ISafe safe, IUniqueIdGenerator uniqueIdGenerator)
+        public RecordViewModel(ISafe safe, IUniqueIdGenerator uniqueIdGenerator, IFileIdGenerator fileIdGenerator)
         {
             _safe = safe;
             _uniqueIdGenerator = uniqueIdGenerator;
+            _fileIdGenerator = fileIdGenerator;
             Id = uniqueIdGenerator.GetUniqueId();
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
             FileRecords = new ObservableCollection<FileRecordViewModel>();

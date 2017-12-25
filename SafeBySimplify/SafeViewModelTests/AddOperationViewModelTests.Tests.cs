@@ -56,13 +56,6 @@ namespace SafeViewModelTests
             }
 
             [Test]
-            public void When_discard_command_is_made_then_discard_action_is_performed()
-            {
-                _addOperationViewModel.DiscardCommand.Execute();
-                Assert.True(_isDiscardActionPerformed);
-            }
-
-            [Test]
             public void When_name_is_non_empty_then_save_command_is_enabled()
             {
                 _addOperationViewModel.Record.Name = "SomeName";

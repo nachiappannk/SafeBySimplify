@@ -20,11 +20,13 @@ namespace SafeViewModelTests
         private IUniqueIdGenerator _uniqueIdGenerator;
         private string _uniqueId = "SomeUniqueID";
         private ISafe _safe;
+        private IFileIdGenerator _fileIdGenerator;
 
         [SetUp]
         public void SetUp()
         {
             _uniqueIdGenerator = Substitute.For<IUniqueIdGenerator>();
+            _fileIdGenerator = Substitute.For<IFileIdGenerator>();
             _uniqueIdGenerator.GetUniqueId().Returns(_uniqueId);
 
             _safe = Substitute.For<ISafe>();
@@ -33,13 +35,14 @@ namespace SafeViewModelTests
                 {
                     _idAtSaveAction = x;
                 }, 
-                _uniqueIdGenerator, 
+                _uniqueIdGenerator,
+                _fileIdGenerator,
                 _safe);
             _saveCommandObserver = _addOperationViewModel.SaveCommand.GetDelegateCommandObserver();
         }
 
         [Test]
-        public void When_discarded_then_the_record_is_reoganized_in_safe()
+        public void When_discarded_then_the_record_is_reoganized_in_safe_and_discard_action_is_executed()
         {
             _addOperationViewModel.DiscardCommand.Execute();
             _safe.Received(1).ReoganizeFiles(_uniqueId);
@@ -50,12 +53,13 @@ namespace SafeViewModelTests
         public void When_file_is_added_then_correct_file_record_is_added()
         {
             bool _isCollectionModified = false;
+            _addOperationViewModel.Record.FileRecords.CollectionChanged += (a, b) => { _isCollectionModified = true; };
 
             var fileId = "fileId";
 
-            _uniqueIdGenerator.GetSemiUniqueId().Returns(fileId);
+            _fileIdGenerator.GetFileId().Returns(fileId);
 
-            _addOperationViewModel.Record.FileRecords.CollectionChanged += (a, b) => { _isCollectionModified = true; };
+            
             var file = @"D:\Test\One.pdf";
             _addOperationViewModel.Record.AddFileRecord(file);
             var correspondingFileRecord = _addOperationViewModel.Record.FileRecords.Last();

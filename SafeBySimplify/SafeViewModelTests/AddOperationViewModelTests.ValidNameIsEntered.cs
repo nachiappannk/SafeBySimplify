@@ -31,7 +31,7 @@ namespace SafeViewModelTests
             [Test]
             public void When_saved_the_record_is_written_in_safe_the_files_are_reoganized()
             {
-                _uniqueIdGenerator.GetSemiUniqueId().Returns("ssss");
+                _fileIdGenerator.GetFileId().Returns("ssss");
 
                 var recordName = "RecordName";
                 _addOperationViewModel.Record.Name = recordName;

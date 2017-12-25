@@ -61,6 +61,7 @@
     <Compile Include="SafeProvider.cs" />
     <Compile Include="SettingGateway.cs" />
     <Compile Include="SettingGatewayForTests.cs" />
+    <Compile Include="IdGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
