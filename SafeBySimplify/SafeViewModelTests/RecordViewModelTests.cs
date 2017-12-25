@@ -153,9 +153,6 @@ namespace SafeViewModelTests
                 fileRecordViewModel.DownloadFileAs(fileUri);
                 _fileSafe.Received(1).RetreiveFile(_id, fileRecordViewModel.FileRecordId, fileUri);
             }
-
-
-
         }
 
         public class NameModification : RecordViewModelModification
