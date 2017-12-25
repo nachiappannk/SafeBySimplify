@@ -17,7 +17,7 @@ namespace SafeViewModelTests
         private bool _isDiscardActionPerformed = false;
         private string _idAtSaveAction;
         private CommandObserver _saveCommandObserver;
-        private IUniqueIdGenerator _uniqueIdGenerator;
+        private IRecordIdGenerator _recordIdGenerator;
         private string _uniqueId = "SomeUniqueID";
         private ISafe _safe;
         private IFileIdGenerator _fileIdGenerator;
@@ -25,9 +25,9 @@ namespace SafeViewModelTests
         [SetUp]
         public void SetUp()
         {
-            _uniqueIdGenerator = Substitute.For<IUniqueIdGenerator>();
+            _recordIdGenerator = Substitute.For<IRecordIdGenerator>();
             _fileIdGenerator = Substitute.For<IFileIdGenerator>();
-            _uniqueIdGenerator.GetUniqueId().Returns(_uniqueId);
+            _recordIdGenerator.GetRecordId().Returns(_uniqueId);
 
             _safe = Substitute.For<ISafe>();
 
@@ -35,7 +35,7 @@ namespace SafeViewModelTests
                 {
                     _idAtSaveAction = x;
                 }, 
-                _uniqueIdGenerator,
+                _recordIdGenerator,
                 _fileIdGenerator,
                 _safe);
             _saveCommandObserver = _addOperationViewModel.SaveCommand.GetDelegateCommandObserver();

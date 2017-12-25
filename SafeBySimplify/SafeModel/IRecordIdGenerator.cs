@@ -2,9 +2,9 @@
 
 namespace SafeModel
 {
-    public interface IUniqueIdGenerator
+    public interface IRecordIdGenerator
     {
-        string GetUniqueId();
+        string GetRecordId();
     }
 
 

@@ -27,11 +27,11 @@ namespace SafeViewModel
         public DelegateCommand SaveCommand { get; set; }
 
 
-        public AddOperationViewModel(Action discardAction, Action<string> saveAction, IUniqueIdGenerator uniqueIdGenerator, IFileIdGenerator fileIdGenerator, ISafe safe)
+        public AddOperationViewModel(Action discardAction, Action<string> saveAction, IRecordIdGenerator recordIdGenerator, IFileIdGenerator fileIdGenerator, ISafe safe)
         {
-            Record = new RecordViewModel(safe, uniqueIdGenerator, fileIdGenerator);
+            Record = new RecordViewModel(safe, recordIdGenerator, fileIdGenerator);
 
-            Record.Id = uniqueIdGenerator.GetUniqueId();
+            Record.Id = recordIdGenerator.GetRecordId();
 
             Record.PropertyChanged += (sender, args) =>
             {

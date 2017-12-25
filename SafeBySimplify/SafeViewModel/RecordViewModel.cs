@@ -12,7 +12,7 @@ namespace SafeViewModel
     public class RecordViewModel : NotifiesPropertyChanged
     {
         private readonly ISafe _safe;
-        private readonly IUniqueIdGenerator _uniqueIdGenerator;
+        private readonly IRecordIdGenerator _recordIdGenerator;
         private readonly IFileIdGenerator _fileIdGenerator;
         private string _name;
         public string Name
@@ -43,12 +43,12 @@ namespace SafeViewModel
             _safe.StoreFile(Id, _fileIdGenerator.GetFileId(), fileUri);
         }
 
-        public RecordViewModel(ISafe safe, IUniqueIdGenerator uniqueIdGenerator, IFileIdGenerator fileIdGenerator)
+        public RecordViewModel(ISafe safe, IRecordIdGenerator recordIdGenerator, IFileIdGenerator fileIdGenerator)
         {
             _safe = safe;
-            _uniqueIdGenerator = uniqueIdGenerator;
+            _recordIdGenerator = recordIdGenerator;
             _fileIdGenerator = fileIdGenerator;
-            Id = uniqueIdGenerator.GetUniqueId();
+            Id = recordIdGenerator.GetRecordId();
             Name = String.Empty;
             Tags = string.Empty;
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();

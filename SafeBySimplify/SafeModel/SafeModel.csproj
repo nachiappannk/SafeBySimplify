@@ -54,7 +54,7 @@
     <Compile Include="ISafeProviderForExistingUser.cs" />
     <Compile Include="ISafeProviderForNonExistingUser.cs" />
     <Compile Include="ISettingGateway.cs" />
-    <Compile Include="IUniqueIdGenerator.cs" />
+    <Compile Include="IRecordIdGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordHeader.cs" />
     <Compile Include="Safe.cs" />

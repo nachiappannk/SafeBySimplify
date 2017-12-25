@@ -4,9 +4,9 @@ using System.Net.NetworkInformation;
 
 namespace SafeModel
 {
-    public class IdGenerator : IUniqueIdGenerator, IFileIdGenerator
+    public class IdGenerator : IRecordIdGenerator, IFileIdGenerator
     {
-        public string GetUniqueId()
+        public string GetRecordId()
         {
             return GetMacId() + "-" + GetTimeBasedId();
         }
