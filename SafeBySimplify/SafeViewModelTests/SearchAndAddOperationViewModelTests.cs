@@ -61,7 +61,7 @@ namespace SafeViewModelTests
             }
         }
 
-        public class SearchTextEnteredAndNumberOfSearchResultsAreCorrect : SearchAndAddOperationViewModelTests
+        public class SearchTextEntered : SearchAndAddOperationViewModelTests
         {
 
             private string _searchText = "ss";
@@ -73,47 +73,16 @@ namespace SafeViewModelTests
             };
 
             private int _timeTakenForSearching = 100;
-            private ObservableCollection<RecordHeaderViewModel> _recordHeaderViewModels;
 
             [SetUp]
-            public void SearchTextEnteredAndNumberOfSearchResultsAreCorrectSetUp()
+            public void SearchTextEnteredSetUp()
             {
                 _safe.GetRecordHeaders(_searchText).Returns(x =>
                 {
                     Thread.Sleep(_timeTakenForSearching);
                     return _searchResults;
                 });
-
                 _searchAndAddOperationViewModel.SearchText = _searchText;
-                _searchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
-                Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
-
-                _recordHeaderViewModels = _searchResultPropertyObserver.PropertyValue;
-            }
-
-            [Test]
-            public void Search_result_has_the_correct_names_in_correct_order()
-            {
-                var headerNames = _recordHeaderViewModels.Select(x => x.Name).ToList();
-                CollectionAssert.AreEqual(_searchResults.Select(x => x.Name), headerNames);
-            }
-
-            [Test]
-            public void Search_result_has_the_correct_ids_in_correct_order()
-            {
-                var ids = _recordHeaderViewModels.Select(x => x.Id).ToList();
-                CollectionAssert.AreEqual(_searchResults.Select(x => x.Id), ids);
-            }
-
-            [Test]
-            public void Search_result_has_the_correct_tags_in_correct_order()
-            {
-                var listOfTags = _recordHeaderViewModels.Select(x => x.Tags).ToList();
-                for (int i = 0; i < listOfTags.Count; i++)
-                {
-                    var expectedTags = _searchResults.ElementAt(i).Tags.Split(';').ToList();
-                    CollectionAssert.AreEqual(expectedTags, listOfTags.ElementAt(i));
-                }
             }
 
             [Test]
@@ -121,6 +90,47 @@ namespace SafeViewModelTests
             {
                 _searchAndAddOperationViewModel.SearchText = String.Empty;
                 Assert.False(_searchResultVisibilityObserver.PropertyValue);
+            }
+
+            public class SearchResultsAreAvailable : SearchTextEntered
+            {
+
+                private ObservableCollection<RecordHeaderViewModel> _recordHeaderViewModels;
+
+                [SetUp]
+                public void SearchTextEnteredAndNumberOfSearchResultsAreCorrectSetUp()
+                {
+                    _searchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
+                    Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
+                    _recordHeaderViewModels = _searchResultPropertyObserver.PropertyValue;
+                }
+
+                [Test]
+                public void Search_result_has_the_correct_names_in_correct_order()
+                {
+                    var headerNames = _recordHeaderViewModels.Select(x => x.Name).ToList();
+                    CollectionAssert.AreEqual(_searchResults.Select(x => x.Name), headerNames);
+                }
+
+                [Test]
+                public void Search_result_has_the_correct_ids_in_correct_order()
+                {
+                    var ids = _recordHeaderViewModels.Select(x => x.Id).ToList();
+                    CollectionAssert.AreEqual(_searchResults.Select(x => x.Id), ids);
+                }
+
+                [Test]
+                public void Search_result_has_the_correct_tags_in_correct_order()
+                {
+                    var listOfTags = _recordHeaderViewModels.Select(x => x.Tags).ToList();
+                    for (int i = 0; i < listOfTags.Count; i++)
+                    {
+                        var expectedTags = _searchResults.ElementAt(i).Tags.Split(';').ToList();
+                        CollectionAssert.AreEqual(expectedTags, listOfTags.ElementAt(i));
+                    }
+                }
+
+                
             }
         }
     }
