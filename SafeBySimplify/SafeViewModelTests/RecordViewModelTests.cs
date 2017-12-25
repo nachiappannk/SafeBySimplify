@@ -10,10 +10,9 @@ namespace SafeViewModelTests
     [TestFixture]
     public class RecordViewModelTests
     {
-        private string _id = "someId";
-        private string _name = "someName";
-        private string _tagString = "tag1;tag2";
-        private List<string> _tags;
+        private string _id;
+        private string _name;
+        private string _tagString;
         private RecordViewModel _recordViewModel;
         private List<PasswordRecord> _passwordRecords;
         private List<FileRecord> _fileRecords;
@@ -24,7 +23,9 @@ namespace SafeViewModelTests
         [SetUp]
         public void SetUp()
         {
-            _tags = _tagString.Split(';').ToList();
+            _id = "someId";
+            _name = "someName";
+            _tagString = "tag1;tag2";
 
             _passwordRecords = new List<PasswordRecord>()
             {
@@ -60,82 +61,30 @@ namespace SafeViewModelTests
             _recordViewModel = new RecordViewModel(record, _fileSafe, _fileIdGenerator);
         }
 
-        [Test]
-        public void View_model_name_depends_on_record()
+        public class Initially : RecordViewModelTests
         {
-            Assert.AreEqual(_recordViewModel.Name, _name);
-        }
-
-        [Test]
-        public void View_model_id_depends_on_record()
-        {
-            Assert.AreEqual(_recordViewModel.Id, _id);
-        }
-
-        [Test]
-        public void View_model_tags_depends_on_record()
-        {
-            Assert.AreEqual(_recordViewModel.Tags, _tagString);
-        }
-
-        [Test]
-        public void View_model_password_records_is_same_as_password_records_of_the_seed_record_plus_one_empty_at_last()
-        {
-            var passwordRecords = GetPasswordRecordsFromViewModel();
-            var expectedPasswordRecords = CopyListAndAddRecordAtEnd(_passwordRecords, string.Empty, string.Empty);
-            CollectionAssert.AreEqual(expectedPasswordRecords, passwordRecords);
-        }
-
-        private List<PasswordRecord> GetPasswordRecordsFromViewModel()
-        {
-            var passwordRecords = _recordViewModel.PasswordRecords
-                .Select(x => new PasswordRecord() {Name = x.Name, Value = x.Value}).ToList();
-            return passwordRecords;
-        }
-
-        [Test]
-        public void When_the_last_password_record_is_filled_then_an_empty_password_record_is_added()
-        {
-            var name = "someName";
-            var value = "someValue";
-
-            var lastRecord = _recordViewModel.PasswordRecords.Last();
             
-            lastRecord.Name = name;
-            lastRecord.Value = value;
-            var list = CopyListAndAddRecordAtEnd(_passwordRecords, name, value);
-            var expectedList = CopyListAndAddRecordAtEnd(list, string.Empty, string.Empty);
 
-            CollectionAssert.AreEqual(expectedList, _recordViewModel.PasswordRecords.Select(x => new PasswordRecord()
+            [Test]
+            public void When_a_file_is_added_then_the_file_is_added_in_the_view_model()
             {
-                Name = x.Name,
-                Value =  x.Value,
-            }));
+                var fileId = "FileID";
+                _fileIdGenerator.GetFileId().Returns(fileId);
+
+                var file = @"c:\temp\test.pdf";
+                _recordViewModel.AddFileRecord(file);
+
+                var fileRecordViewModel = _recordViewModel.FileRecords.Last();
+                Assert.AreEqual(fileId, fileRecordViewModel.FileRecordId);
+                Assert.AreEqual(_id, fileRecordViewModel.RecordId);
+                Assert.AreEqual("test", fileRecordViewModel.Name);
+                Assert.AreEqual(string.Empty, fileRecordViewModel.Description);
+                Assert.AreEqual("pdf", fileRecordViewModel.Extention);
+            }
+
         }
 
-        [Test]
-        public void View_model_file_record_is_same_as_that_of_records()
-        {
-            var fileRecords = GetFileRecordsFromViewModel();
-            CollectionAssert.AreEqual(_fileRecords, fileRecords);
-        }
 
-        [Test]
-        public void When_a_file_is_added_then_the_file_is_added_in_the_view_model()
-        {
-            var fileId = "FileID";
-            _fileIdGenerator.GetFileId().Returns(fileId);
-
-            var file = @"c:\temp\test.pdf";
-            _recordViewModel.AddFileRecord(file);
-
-            var fileRecordViewModel = _recordViewModel.FileRecords.Last();
-            Assert.AreEqual(fileId, fileRecordViewModel.FileRecordId);
-            Assert.AreEqual(_id, fileRecordViewModel.RecordId);
-            Assert.AreEqual("test",fileRecordViewModel.Name);
-            Assert.AreEqual(string.Empty, fileRecordViewModel.Description);
-            Assert.AreEqual("pdf",fileRecordViewModel.Extention);
-        }
 
         private List<FileRecord> GetFileRecordsFromViewModel()
         {
@@ -151,11 +100,119 @@ namespace SafeViewModelTests
             return fileRecords;
         }
 
+        private List<PasswordRecord> GetPasswordRecordsFromViewModel()
+        {
+            var passwordRecords = _recordViewModel.PasswordRecords
+                .Select(x => new PasswordRecord() { Name = x.Name, Value = x.Value }).ToList();
+            return passwordRecords;
+        }
+
+
         private List<PasswordRecord> CopyListAndAddRecordAtEnd(List<PasswordRecord> passwordRecords, string name, string value)
         {
             var expectedPasswordRecords = passwordRecords.ToList();
             expectedPasswordRecords.Add(new PasswordRecord() {Name = name, Value = value});
             return expectedPasswordRecords;
+        }
+
+        public abstract class RecordViewModelModification : RecordViewModelTests
+        {
+            [SetUp]
+            public void RecordViewModelModificationSetUp()
+            {
+                ModifyViewModelAndExpectedValue();
+            }
+
+
+            protected abstract void ModifyViewModelAndExpectedValue();
+
+            [Test]
+            public void Name_is_correct()
+            {
+                Assert.AreEqual(_recordViewModel.Name, _name);
+            }
+
+            [Test]
+            public void Id_is_correct()
+            {
+                Assert.AreEqual(_recordViewModel.Id, _id);
+            }
+
+            [Test]
+            public void Tag_is_correct()
+            {
+                Assert.AreEqual(_recordViewModel.Tags, _tagString);
+            }
+
+            [Test]
+            public void Password_records_are_correct()
+            {
+                var passwordRecords = GetPasswordRecordsFromViewModel();
+                _passwordRecords = CopyListAndAddRecordAtEnd(_passwordRecords, string.Empty, string.Empty);
+                CollectionAssert.AreEqual(_passwordRecords, passwordRecords);
+            }
+
+            [Test]
+            public void View_model_file_record_is_same_as_that_of_records()
+            {
+                var fileRecords = GetFileRecordsFromViewModel();
+                CollectionAssert.AreEqual(_fileRecords, fileRecords);
+            }
+        }
+
+        public class NameModification : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                var modifiedName = "newName";
+                _recordViewModel.Name = modifiedName;
+                _name = modifiedName;
+            }
+        }
+
+        public class TagModification : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                var modifiedTagString = "Tag11;Tag12";
+                _recordViewModel.Tags = modifiedTagString;
+                _tagString = modifiedTagString;
+            }
+        }
+
+        public class NoModification : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+            }
+        }
+
+
+        public class AddingPasswordRecordAtEnd : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                var name = "ssss";
+                var lastPasswordRecordViewModel = _recordViewModel.PasswordRecords.Last();
+                lastPasswordRecordViewModel.Name = name;
+
+
+                _passwordRecords.Add(new PasswordRecord() {Name = name, Value = string.Empty});
+            }
+        }
+
+        public class PasswordRecordModified : RecordViewModelModification
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+                var name = "ssss";
+                var value = "5555";
+                var passwordRecordViewModel = _recordViewModel.PasswordRecords.ElementAt(1);
+                passwordRecordViewModel.Name = name;
+                passwordRecordViewModel.Value = value;
+                _passwordRecords.ElementAt(1).Name = name;
+                _passwordRecords.ElementAt(1).Value = value;
+            }
         }
     }
 }
