@@ -17,8 +17,8 @@ namespace SafeViewModelTests
 
         private List<RecordHeader> _searchResults = new List<RecordHeader>()
         {
-            new RecordHeader() {Name = "1", Tags = string.Empty},
-            new RecordHeader() {Name = "2", Tags = string.Empty}
+            new RecordHeader() {Name = "record name 1", Id = "some id", Tags = string.Empty},
+            new RecordHeader() {Name = "record name 2", Id = "some other id", Tags = string.Empty}
         };
 
         private int _timeTakenForSearching = 100;
@@ -26,7 +26,7 @@ namespace SafeViewModelTests
         [SetUp]
         public void SetUp()
         {
-            _safe = NSubstitute.Substitute.For<ISafe>();
+            _safe = Substitute.For<ISafe>();
             _searchAndAddOperationViewModel = new SearchAndAddOperationViewModel(_safe, (x) => { }, () => { });
         }
 
@@ -62,7 +62,5 @@ namespace SafeViewModelTests
             }
 
         }
-
-       
     }
 }
