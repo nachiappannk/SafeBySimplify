@@ -19,6 +19,7 @@ namespace SafeViewModelTests
         private bool _isRecordCreationRequested = false;
         private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
         private ViewModelPropertyObserver<ObservableCollection<RecordHeaderViewModel>> _searchResultPropertyObserver;
+        private ViewModelPropertyObserver<bool> _searchProgressIndicatorObserver;
 
         [SetUp]
         public void SetUp()
@@ -35,6 +36,9 @@ namespace SafeViewModelTests
             _searchResultPropertyObserver = _searchAndAddOperationViewModel
                 .GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>(
                     nameof(_searchAndAddOperationViewModel.SearchResults));
+
+            _searchProgressIndicatorObserver = _searchAndAddOperationViewModel
+                .GetPropertyObserver<bool>(nameof(_searchAndAddOperationViewModel.IsSearchInProgress));
         }
 
         [Test]
@@ -44,7 +48,6 @@ namespace SafeViewModelTests
             _searchAndAddOperationViewModel.AddCommand.Execute();
             Assert.True(_isRecordCreationRequested);
         }
-
 
         public class Initially : SearchAndAddOperationViewModelTests
         {
@@ -59,6 +62,12 @@ namespace SafeViewModelTests
             {
                 Assert.AreEqual(string.Empty, _searchAndAddOperationViewModel.SearchText);
             }
+
+            [Test]
+            public void Search_in_progress_indicator_is_disabled()
+            {
+                Assert.False(_searchAndAddOperationViewModel.IsSearchInProgress);
+            }
         }
 
         public class SearchTextEntered : SearchAndAddOperationViewModelTests
@@ -72,7 +81,7 @@ namespace SafeViewModelTests
                 new RecordHeader() {Name = "record name 2", Id = "some other id", Tags = "tag21;tag22;tag23"}
             };
 
-            private int _timeTakenForSearching = 100;
+            private int _timeTakenForSearching = 600;
 
             [SetUp]
             public void SearchTextEnteredSetUp()
@@ -92,6 +101,22 @@ namespace SafeViewModelTests
                 Assert.False(_searchResultVisibilityObserver.PropertyValue);
             }
 
+            [Test]
+            public void When_serach_text_is_cleared_then_search_progress_indicator_is_disabled()
+            {
+                _searchAndAddOperationViewModel.SearchText = String.Empty;
+                Assert.False(_searchProgressIndicatorObserver.PropertyValue);
+            }
+
+            public class Tests : SearchTextEntered
+            {
+                [Test]
+                public void Seach_in_progress_indicator_is_enabled()
+                {
+                    Assert.True(_searchProgressIndicatorObserver.PropertyValue); 
+                }
+            }
+
             public class SearchResultsAreAvailable : SearchTextEntered
             {
 
@@ -103,6 +128,12 @@ namespace SafeViewModelTests
                     _searchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
                     Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
                     _recordHeaderViewModels = _searchResultPropertyObserver.PropertyValue;
+                }
+
+                [Test]
+                public void Seach_in_progress_indicator_is_disabled()
+                {
+                    Assert.False(_searchProgressIndicatorObserver.PropertyValue);
                 }
 
                 [Test]
@@ -128,9 +159,7 @@ namespace SafeViewModelTests
                         var expectedTags = _searchResults.ElementAt(i).Tags.Split(';').ToList();
                         CollectionAssert.AreEqual(expectedTags, listOfTags.ElementAt(i));
                     }
-                }
-
-                
+                }   
             }
         }
     }

@@ -6,10 +6,14 @@
              xmlns:local="clr-namespace:SafeBySimplify"
              xmlns:safeUiLib="clr-namespace:SafeUiLib;assembly=SafeUiLib"
              xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
+             xmlns:gif="http://wpfanimatedgif.codeplex.com"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance safeViewModel:SearchAndAddOperationViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
@@ -27,9 +31,17 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" safeUiLib:HintingTextProvidingObject.HintText="Search"  
                  Style="{StaticResource TextBoxWithHintStyle}"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                <Image Grid.Column="1" Height="25"  gif:ImageBehavior.AnimatedSource="images/InProgress.gif" Width="25" 
+                       Visibility="{Binding IsSearchInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Grid>
             <Button Grid.Column="1" Grid.Row="0" Command="{Binding AddCommand}">
                 <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>

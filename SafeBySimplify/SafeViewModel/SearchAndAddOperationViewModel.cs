@@ -19,6 +19,7 @@ namespace SafeViewModel
             _recordSelectionAction = recordSelectionAction;
             IsSearchResultVisible = false;
             AddCommand = new DelegateCommand(addNewRecordAction);
+            IsSearchInProgress = false;
         }
 
         private bool _isSearchResultVisible;
@@ -41,6 +42,7 @@ namespace SafeViewModel
             SearchResults = new ObservableCollection<RecordHeaderViewModel>
                 (headers.Select(x => new RecordHeaderViewModel(x, () => { _recordSelectionAction(x.Id); })));
             IsSearchResultVisible = true;
+            IsSearchInProgress = false;
         }
 
         private string _searchString = String.Empty;
@@ -70,9 +72,11 @@ namespace SafeViewModel
             if (string.IsNullOrWhiteSpace(value))
             {
                 IsSearchResultVisible = false;
+                IsSearchInProgress = false;
             }
             else
             {
+                IsSearchInProgress = true;
                 var taskHolder = new TaskHolder((cts) => SearchAndUpdateSearchResults(value, cts));
                 TaskHolder = taskHolder;
             }
@@ -82,6 +86,7 @@ namespace SafeViewModel
 
 
         private ObservableCollection<RecordHeaderViewModel> _searchResult;
+        private bool _isSearchInProgress;
 
         public ObservableCollection<RecordHeaderViewModel> SearchResults
         {
@@ -97,5 +102,16 @@ namespace SafeViewModel
         }
 
         public DelegateCommand AddCommand { get; set; }
+
+        public bool IsSearchInProgress
+        {
+            get { return _isSearchInProgress; }
+            set
+            {
+                if(_isSearchInProgress == value) return;
+                _isSearchInProgress = value;
+                FirePropertyChanged();
+            }
+        }
     }
 }
