@@ -8,11 +8,11 @@ namespace SafeViewModel
     public class FileRecordViewModel
     {
         private readonly ObservableCollection<FileRecordViewModel> _fileRecordViewModels;
-        private readonly ISafe _safe;
+        private readonly IFileSafe _safe;
         private readonly string _recordId;
 
         public FileRecordViewModel(ObservableCollection<FileRecordViewModel> fileRecordViewModels, 
-            ISafe safe, string recordId)
+            IFileSafe safe, string recordId)
         {
             _fileRecordViewModels = fileRecordViewModels;
             _safe = safe;

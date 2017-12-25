@@ -29,10 +29,7 @@ namespace SafeViewModel
 
         public AddOperationViewModel(Action discardAction, Action<string> saveAction, IRecordIdGenerator recordIdGenerator, IFileIdGenerator fileIdGenerator, ISafe safe)
         {
-            Record = new RecordViewModel(safe, recordIdGenerator, fileIdGenerator);
-
-            Record.Id = recordIdGenerator.GetRecordId();
-
+            Record = new RecordViewModel(CreateEmptyRecord(recordIdGenerator.GetRecordId()), safe, fileIdGenerator);
             Record.PropertyChanged += (sender, args) =>
             {
                 CanExecuteSaveCommand = !string.IsNullOrWhiteSpace(Record.Name);
@@ -80,6 +77,16 @@ namespace SafeViewModel
             },() => CanExecuteSaveCommand );
         }
 
-        
+        private Record CreateEmptyRecord(string recordId)
+        {
+            var record = new Record
+            {
+                Header = new RecordHeader(),
+                FileRecords = new List<FileRecord>(),
+                PasswordRecords = new List<PasswordRecord>()
+            };
+            record.Header.Id = recordId;
+            return record;
+        }
     }
 }

@@ -2,18 +2,22 @@
 
 namespace SafeModel
 {
-    public interface ISafe
+    public interface ISafe : IFileSafe
     {
         List<RecordHeader> GetRecordHeaders(string searchText);
         Record GetRecord(string recordId);
         string WorkingDirectory { get; set; }
         string UserName { get; set; }
-        void StoreFile(string recordId, string fileId, string fileUri);
-        void RetreiveFile(string recordId, string fileId, string fileUri);
+
         void ReoganizeFiles(string recordId);
         void UpsertRecord(Record record);
     }
 
+    public interface IFileSafe
+    {
+        void StoreFile(string recordId, string fileId, string fileUri);
+        void RetreiveFile(string recordId, string fileId, string fileUri);
+    }
 
     public class PasswordRecord
     {

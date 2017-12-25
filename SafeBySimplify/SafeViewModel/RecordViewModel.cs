@@ -11,7 +11,7 @@ namespace SafeViewModel
 {
     public class RecordViewModel : NotifiesPropertyChanged
     {
-        private readonly ISafe _safe;
+        private readonly IFileSafe _fileSafe;
         private readonly IRecordIdGenerator _recordIdGenerator;
         private readonly IFileIdGenerator _fileIdGenerator;
         private string _name;
@@ -36,19 +36,18 @@ namespace SafeViewModel
 
         public void AddFileRecord(string fileUri)
         {
-            var fileRecordViewModel = new FileRecordViewModel(FileRecords, _safe, Id);
+            var fileRecordViewModel = new FileRecordViewModel(FileRecords, _fileSafe, Id);
             fileRecordViewModel.Name = Path.GetFileNameWithoutExtension(fileUri);
             fileRecordViewModel.Extention = Path.GetExtension(fileUri).Replace(".","");
             FileRecords.Add(fileRecordViewModel);
-            _safe.StoreFile(Id, _fileIdGenerator.GetFileId(), fileUri);
+            _fileSafe.StoreFile(Id, _fileIdGenerator.GetFileId(), fileUri);
         }
 
-        public RecordViewModel(ISafe safe, IRecordIdGenerator recordIdGenerator, IFileIdGenerator fileIdGenerator)
+        public RecordViewModel(Record record, IFileSafe fileSafe, IFileIdGenerator fileIdGenerator)
         {
-            _safe = safe;
-            _recordIdGenerator = recordIdGenerator;
+            _fileSafe = fileSafe;
             _fileIdGenerator = fileIdGenerator;
-            Id = recordIdGenerator.GetRecordId();
+            Id = record.Header.Id;
             Name = String.Empty;
             Tags = string.Empty;
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
