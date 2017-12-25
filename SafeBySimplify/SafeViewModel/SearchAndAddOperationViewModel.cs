@@ -38,36 +38,16 @@ namespace SafeViewModel
         private readonly ISafe _safe;
         private readonly Action<string> _recordSelectionAction;
 
-        public SearchAndAddOperationViewModel(ISafe safe, Action<string> recordSelectionAction, Action addNewRecordAction)
-        {
-            _safe = safe;
-            _recordSelectionAction = recordSelectionAction;
-            IsSearchResultVisible = false;
-            AddCommand = new DelegateCommand(addNewRecordAction);
-            IsSearchInProgress = false;
-        }
-
         private bool _isSearchResultVisible;
         public bool IsSearchResultVisible
         {
             get { return _isSearchResultVisible; }
             set
             {
-                if(_isSearchResultVisible == value)return;
+                if (_isSearchResultVisible == value) return;
                 _isSearchResultVisible = value;
                 FirePropertyChanged();
             }
-        }
-
-        private void SearchAndUpdateSearchResults(string value, CancellationTokenSource cancellationTokenSource)
-        {
-            cancellationTokenSource.Token.ThrowIfCancellationRequested();
-            var headers = GetRecordHeaders(value);
-            cancellationTokenSource.Token.ThrowIfCancellationRequested();
-            SearchResults = new ObservableCollection<RecordHeaderViewModel>
-                (headers.Select(x => new RecordHeaderViewModel(x, () => { _recordSelectionAction(x.Id); })));
-            IsSearchResultVisible = true;
-            IsSearchInProgress = false;
         }
 
         private string _searchString = String.Empty;
@@ -83,6 +63,58 @@ namespace SafeViewModel
                     FirePropertyChanged();
                 }
             }
+        }
+        public TaskHolder TaskHolder { get; set; }
+
+        public DelegateCommand AddCommand { get; set; }
+
+
+        private ObservableCollection<RecordHeaderViewModel> _searchResult;
+        public ObservableCollection<RecordHeaderViewModel> SearchResults
+        {
+            get { return _searchResult; }
+            set
+            {
+                if (_searchResult != value)
+                {
+                    _searchResult = value;
+                    FirePropertyChanged();
+                }
+            }
+        }
+
+
+        private bool _isSearchInProgress;
+
+        public bool IsSearchInProgress
+        {
+            get { return _isSearchInProgress; }
+            set
+            {
+                if (_isSearchInProgress == value) return;
+                _isSearchInProgress = value;
+                FirePropertyChanged();
+            }
+        }
+
+        public SearchAndAddOperationViewModel(ISafe safe, Action<string> recordSelectionAction, Action addNewRecordAction)
+        {
+            _safe = safe;
+            _recordSelectionAction = recordSelectionAction;
+            IsSearchResultVisible = false;
+            AddCommand = new DelegateCommand(addNewRecordAction);
+            IsSearchInProgress = false;
+        }
+
+        private void SearchAndUpdateSearchResults(string value, CancellationTokenSource cancellationTokenSource)
+        {
+            cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            var headers = GetRecordHeaders(value);
+            cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            SearchResults = new ObservableCollection<RecordHeaderViewModel>
+                (headers.Select(x => new RecordHeaderViewModel(x, () => { _recordSelectionAction(x.Id); })));
+            IsSearchResultVisible = true;
+            IsSearchInProgress = false;
         }
 
         private List<RecordHeader> GetRecordHeaders(string searchText)
@@ -104,38 +136,6 @@ namespace SafeViewModel
                 IsSearchInProgress = true;
                 var taskHolder = new TaskHolder((cts) => SearchAndUpdateSearchResults(value, cts));
                 TaskHolder = taskHolder;
-            }
-        }
-
-        public TaskHolder TaskHolder { get; set; }
-
-
-        private ObservableCollection<RecordHeaderViewModel> _searchResult;
-        private bool _isSearchInProgress;
-
-        public ObservableCollection<RecordHeaderViewModel> SearchResults
-        {
-            get { return _searchResult; }
-            set
-            {
-                if (_searchResult != value)
-                {
-                    _searchResult = value;
-                    FirePropertyChanged();
-                }
-            }
-        }
-
-        public DelegateCommand AddCommand { get; set; }
-
-        public bool IsSearchInProgress
-        {
-            get { return _isSearchInProgress; }
-            set
-            {
-                if(_isSearchInProgress == value) return;
-                _isSearchInProgress = value;
-                FirePropertyChanged();
             }
         }
     }
