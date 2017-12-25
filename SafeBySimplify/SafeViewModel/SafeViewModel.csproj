@@ -62,7 +62,6 @@
     <Compile Include="NotifiesPropertyChanged.cs" />
     <Compile Include="OperationStepViewModel.cs" />
     <Compile Include="PasswordRecordViewModel.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordAlteringOperationViewModel.cs" />
     <Compile Include="RecordHeaderViewModel.cs" />
