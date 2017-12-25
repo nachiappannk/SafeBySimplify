@@ -9,18 +9,27 @@ namespace SafeViewModel
 {
     public class AddOperationViewModel : SingleOperationViewModel
     {
-        private readonly IFileIdGenerator _fileIdGenerator;
-        private readonly ISafe _safe;
+
+        private bool _canExecuteSaveCommand;
+        private bool CanExecuteSaveCommand
+        {
+            get { return _canExecuteSaveCommand; }
+            set
+            {
+                if (_canExecuteSaveCommand == value) return;
+                _canExecuteSaveCommand = value;
+                SaveCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public RecordViewModel Record { get; set; }
+        public DelegateCommand DiscardCommand { get; set; }
+        public DelegateCommand SaveCommand { get; set; }
+
 
         public AddOperationViewModel(Action discardAction, Action<string> saveAction, IUniqueIdGenerator uniqueIdGenerator, IFileIdGenerator fileIdGenerator, ISafe safe)
         {
-            _fileIdGenerator = fileIdGenerator;
-            _safe = safe;
-            Record = new RecordViewModel(safe, uniqueIdGenerator, fileIdGenerator)
-            {
-                Name = string.Empty,
-                Tags = string.Empty, 
-            };
+            Record = new RecordViewModel(safe, uniqueIdGenerator, fileIdGenerator);
 
             Record.Id = uniqueIdGenerator.GetUniqueId();
 
@@ -71,20 +80,6 @@ namespace SafeViewModel
             },() => CanExecuteSaveCommand );
         }
 
-        private bool _canExecuteSaveCommand;
-        private bool CanExecuteSaveCommand
-        {
-            get { return _canExecuteSaveCommand; }
-            set
-            {
-                if(_canExecuteSaveCommand == value) return;
-                _canExecuteSaveCommand = value;
-                SaveCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public RecordViewModel Record { get; set; }
-        public DelegateCommand DiscardCommand { get; set; }
-        public DelegateCommand SaveCommand { get; set; }
+        
     }
 }

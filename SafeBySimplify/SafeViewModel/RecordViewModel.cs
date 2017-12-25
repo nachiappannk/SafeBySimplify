@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -48,6 +49,8 @@ namespace SafeViewModel
             _uniqueIdGenerator = uniqueIdGenerator;
             _fileIdGenerator = fileIdGenerator;
             Id = uniqueIdGenerator.GetUniqueId();
+            Name = String.Empty;
+            Tags = string.Empty;
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
             FileRecords = new ObservableCollection<FileRecordViewModel>();
             AddNewEmptyPasswordRecord();
