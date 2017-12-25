@@ -10,7 +10,7 @@ namespace SafeViewModelTests.TestTools
         public static CommandObserver GetDelegateCommandObserver(this DelegateCommand command)
         {
             CommandObserver observer = new CommandObserver();
-            
+            observer.ValueOfCanExecuteOnLatestEvent = command.CanExecute();
             command.CanExecuteChanged += (obj, e) =>
             {
                 if (command == obj) observer.WasTheSendersCorrect.Add(true);

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using SafeModel;
 
 namespace SafeViewModel
@@ -20,16 +22,43 @@ namespace SafeViewModel
                 { 
                     _name = value;
                     FirePropertyChanged();
+                    IsRecordModified = true;
                 }
             }
         }
 
         public string Id { get; set; }
-        public string Tags { get; set; }
+
+        public string Tags
+        {
+            get { return _tags; }
+            set
+            {
+                IsRecordModified = true;
+                _tags = value; 
+                
+            }
+        }
+
         public ObservableCollection<PasswordRecordViewModel> PasswordRecords { get; set; }
         public ObservableCollection<FileRecordViewModel> FileRecords { get; set; }
 
+        public bool IsRecordModified
+        {
+            get { return _isRecordModified; }
+            set
+            {
+                
+                _isRecordModified = value;
+                RecordChanged?.Invoke();
+            }
+        }
+
+        public event Action RecordChanged;
+
         private bool _initialized = false;
+        private string _tags;
+        private bool _isRecordModified;
 
         public RecordViewModel(Record record, IFileSafe fileSafe, IFileIdGenerator fileIdGenerator)
         {
@@ -41,6 +70,9 @@ namespace SafeViewModel
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
             FileRecords = new ObservableCollection<FileRecordViewModel>();
 
+            PasswordRecords.CollectionChanged += (sender, args) => { IsRecordModified = true; };
+            FileRecords.CollectionChanged += (sender, args) => { IsRecordModified = true; };
+
             foreach (var passwordRecord in record.PasswordRecords)
             {
                 AddNewPasswordRecord(passwordRecord.Name, passwordRecord.Value);
@@ -49,7 +81,7 @@ namespace SafeViewModel
             foreach (var fileRecord in record.FileRecords)
             {
                 var fileRecordViewModel = new FileRecordViewModel(FileRecords, _fileSafe, fileRecord.AssociatedRecordId,
-                    fileRecord.FileId)
+                    fileRecord.FileId, () => { IsRecordModified = true; })
                 {
                     Name = fileRecord.Name,
                     Description = fileRecord.Description,
@@ -60,12 +92,14 @@ namespace SafeViewModel
 
             _initialized = true;
             AddNewPasswordRecord(string.Empty, string.Empty);
+            IsRecordModified = false;
         }
 
         public void AddFileRecord(string fileUri)
         {
+            IsRecordModified = false;
             var fileRecordViewModel =
-                new FileRecordViewModel(FileRecords, _fileSafe, Id, _fileIdGenerator.GetFileId())
+                new FileRecordViewModel(FileRecords, _fileSafe, Id, _fileIdGenerator.GetFileId(),() => { IsRecordModified = true; })
                 {
                     Name = Path.GetFileNameWithoutExtension(fileUri),
                     Extention = Path.GetExtension(fileUri)?.Replace(".", ""),
@@ -78,7 +112,7 @@ namespace SafeViewModel
         private void AddNewPasswordRecord(string name, string value)
         {
             var passwordRecordViewModel =
-                new PasswordRecordViewModel(InsertEmptyRecordIfNecessary, PasswordRecords)
+                new PasswordRecordViewModel(OnPasswordRecordModification, PasswordRecords)
                 {
                     Name = name,
                     Value = value
@@ -86,8 +120,9 @@ namespace SafeViewModel
             PasswordRecords.Add(passwordRecordViewModel);
         }
 
-        private void InsertEmptyRecordIfNecessary()
+        private void OnPasswordRecordModification()
         {
+            IsRecordModified = true;
             if(!_initialized) return;
             var lastRecord = PasswordRecords.Last();
             if ((string.Empty != lastRecord.Name) || (string.Empty != lastRecord.Value))

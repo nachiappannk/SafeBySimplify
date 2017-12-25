@@ -4,6 +4,7 @@ using NSubstitute;
 using NUnit.Framework;
 using SafeModel;
 using SafeViewModel;
+using SafeViewModelTests.TestTools;
 
 namespace SafeViewModelTests
 {
@@ -135,6 +136,23 @@ namespace SafeViewModelTests
             _recordAlteringOperationViewModel.GoToSearchCommand.Execute();
             _safe.Received(1).ReoganizeFiles(_recordid);
             Assert.True(_isCloseActionCalled);
+        }
+
+        [Test]
+        public void When_record_is_modified_then_go_to_search_is_disabled()
+        {
+            var observer = _recordAlteringOperationViewModel.GoToSearchCommand.GetDelegateCommandObserver();
+            _recordAlteringOperationViewModel.Record.Name = "newName";
+            Assert.False(_recordAlteringOperationViewModel.GoToSearchCommand.CanExecute());
+            Assert.False(observer.ValueOfCanExecuteOnLatestEvent);
+        }
+
+        [Test]
+        public void Initially_go_to_search_is_enabled()
+        {
+            var observer = _recordAlteringOperationViewModel.GoToSearchCommand.GetDelegateCommandObserver();
+            Assert.True(_recordAlteringOperationViewModel.GoToSearchCommand.CanExecute());
+            Assert.True(observer.ValueOfCanExecuteOnLatestEvent);
         }
 
 

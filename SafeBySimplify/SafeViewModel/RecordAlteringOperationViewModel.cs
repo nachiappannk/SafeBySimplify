@@ -26,10 +26,13 @@ namespace SafeViewModel
             _closeAction = closeAction;
             var record = safe.GetRecord(recordId);
             Record = new RecordViewModel(record, safe, fileIdGenerator);
+
+
             SaveCommand = new DelegateCommand(Save);
             DeleteCommand = new DelegateCommand(Delete);
             DiscardCommand = new DelegateCommand(Discard);
-            GoToSearchCommand = new DelegateCommand(GoToSearch);
+            GoToSearchCommand = new DelegateCommand(GoToSearch, () => !Record.IsRecordModified);
+            Record.RecordChanged += () => { GoToSearchCommand.RaiseCanExecuteChanged(); };
         }
 
         private void GoToSearch()

@@ -18,6 +18,7 @@ namespace SafeViewModelTests
         private List<FileRecord> _fileRecords;
         private IFileSafe _fileSafe;
         private IFileIdGenerator _fileIdGenerator;
+        private bool _recordModificationStatus;
 
 
         [SetUp]
@@ -59,45 +60,21 @@ namespace SafeViewModelTests
             _fileIdGenerator = Substitute.For<IFileIdGenerator>();
 
             _recordViewModel = new RecordViewModel(record, _fileSafe, _fileIdGenerator);
-        }
-        
-        private List<FileRecord> GetFileRecordsFromViewModel()
-        {
-            var fileRecords = _recordViewModel
-                .FileRecords.Select(x => new FileRecord()
-                {
-                    Name = x.Name,
-                    Extention = x.Extention,
-                    FileId = x.FileRecordId,
-                    Description = x.Description,
-                    AssociatedRecordId = x.RecordId
-                }).ToList();
-            return fileRecords;
+            _recordModificationStatus = false;
+            _recordViewModel.RecordChanged += () =>
+            {
+                _recordModificationStatus = _recordViewModel.IsRecordModified;
+            };
+
         }
 
-        private List<PasswordRecord> GetPasswordRecordsFromViewModel()
-        {
-            var passwordRecords = _recordViewModel.PasswordRecords
-                .Select(x => new PasswordRecord() { Name = x.Name, Value = x.Value }).ToList();
-            return passwordRecords;
-        }
-
-
-        private List<PasswordRecord> CopyListAndAddRecordAtEnd(List<PasswordRecord> passwordRecords, string name, string value)
-        {
-            var expectedPasswordRecords = passwordRecords.ToList();
-            expectedPasswordRecords.Add(new PasswordRecord() {Name = name, Value = value});
-            return expectedPasswordRecords;
-        }
-
-        public abstract class RecordViewModelModification : RecordViewModelTests
+        public abstract class Tests : RecordViewModelTests
         {
             [SetUp]
-            public void RecordViewModelModificationSetUp()
+            public void TestsSetUp()
             {
                 ModifyViewModelAndExpectedValue();
             }
-
 
             protected abstract void ModifyViewModelAndExpectedValue();
 
@@ -155,7 +132,62 @@ namespace SafeViewModelTests
             }
         }
 
-        public class NameModification : RecordViewModelModification
+
+        private List<FileRecord> GetFileRecordsFromViewModel()
+        {
+            var fileRecords = _recordViewModel
+                .FileRecords.Select(x => new FileRecord()
+                {
+                    Name = x.Name,
+                    Extention = x.Extention,
+                    FileId = x.FileRecordId,
+                    Description = x.Description,
+                    AssociatedRecordId = x.RecordId
+                }).ToList();
+            return fileRecords;
+        }
+
+        private List<PasswordRecord> GetPasswordRecordsFromViewModel()
+        {
+            var passwordRecords = _recordViewModel.PasswordRecords
+                .Select(x => new PasswordRecord() { Name = x.Name, Value = x.Value }).ToList();
+            return passwordRecords;
+        }
+
+
+        private List<PasswordRecord> CopyListAndAddRecordAtEnd(List<PasswordRecord> passwordRecords, string name, string value)
+        {
+            var expectedPasswordRecords = passwordRecords.ToList();
+            expectedPasswordRecords.Add(new PasswordRecord() {Name = name, Value = value});
+            return expectedPasswordRecords;
+        }
+
+        public abstract class Modification : Tests
+        {
+            [Test]
+            public void Modification_status_is_set_to_true()
+            {
+                Assert.AreEqual(true,_recordViewModel.IsRecordModified);
+                Assert.AreEqual(true, _recordModificationStatus);
+            }
+        }
+
+        public class NoModification : Tests
+        {
+            protected override void ModifyViewModelAndExpectedValue()
+            {
+            }
+
+            [Test]
+            public void Modification_status_is_set_to_true()
+            {
+                Assert.AreEqual(false, _recordViewModel.IsRecordModified);
+                Assert.AreEqual(false, _recordModificationStatus);
+            }
+        }
+
+
+        public class NameModification : Modification
         {
             protected override void ModifyViewModelAndExpectedValue()
             {
@@ -165,7 +197,7 @@ namespace SafeViewModelTests
             }
         }
 
-        public class TagModification : RecordViewModelModification
+        public class TagModification : Modification
         {
             protected override void ModifyViewModelAndExpectedValue()
             {
@@ -175,15 +207,7 @@ namespace SafeViewModelTests
             }
         }
 
-        public class NoModification : RecordViewModelModification
-        {
-            protected override void ModifyViewModelAndExpectedValue()
-            {
-            }
-        }
-
-
-        public class AddingPasswordRecordAtEnd : RecordViewModelModification
+        public class AddingPasswordRecordAtEnd : Modification
         {
             protected override void ModifyViewModelAndExpectedValue()
             {
@@ -196,7 +220,7 @@ namespace SafeViewModelTests
             }
         }
 
-        public class PasswordRecordModified : RecordViewModelModification
+        public class PasswordRecordModified : Modification
         {
             protected override void ModifyViewModelAndExpectedValue()
             {
@@ -210,7 +234,7 @@ namespace SafeViewModelTests
             }
         }
 
-        public class PasswordRecordIsDeleted : RecordViewModelModification
+        public class PasswordRecordIsDeleted : Modification
         {
             protected override void ModifyViewModelAndExpectedValue()
             {
@@ -220,7 +244,7 @@ namespace SafeViewModelTests
             }
         }
 
-        public class FileRecordIsAdded : RecordViewModelModification
+        public class FileRecordIsAdded : Modification
         {
             private string _fileId = "FileID";
             private string _fileUri = @"c:\temp\test.pdf";
@@ -250,7 +274,7 @@ namespace SafeViewModelTests
 
         }
 
-        public class FileRecordIsModified : RecordViewModelModification
+        public class FileRecordIsModified : Modification
         {
             protected override void ModifyViewModelAndExpectedValue()
             {
@@ -267,7 +291,7 @@ namespace SafeViewModelTests
             }
         }
 
-        public class FileRecordIsDeleted : RecordViewModelModification
+        public class FileRecordIsDeleted : Modification
         {
             protected override void ModifyViewModelAndExpectedValue()
             {
