@@ -14,6 +14,7 @@ namespace SafeViewModel
             var record = safe.GetRecord(recordId);
             Record.Name = record.Header.Name;
             Record.Tags = record.Header.Tags;
+            Record.Id = record.Header.Id;
             Record.PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
             var passwordRecordViewModel = new PasswordRecordViewModel(() => { }, (x) => { }, (x) => { return true; });
         }

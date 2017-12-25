@@ -67,8 +67,5 @@ namespace SafeViewModelTests
             var actualRecordNameValues = _recordAlteringOperationViewModel.Record.PasswordRecords.Select(x => x.Name + "--" + x.Value);
             CollectionAssert.AreEquivalent(expectedRecordNameValues, actualRecordNameValues);
         }
-
-
-
     }
 }
