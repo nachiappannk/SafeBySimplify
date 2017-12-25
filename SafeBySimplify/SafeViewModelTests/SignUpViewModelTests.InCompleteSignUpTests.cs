@@ -1,4 +1,28 @@
-﻿using System;
+﻿/*
+MIT License
+
+Copyright(c) 2017 Nachiappan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -30,27 +54,25 @@ namespace SafeViewModelTests
             public static IEnumerable GetTestCaseData()
             {
                 yield return new TestCaseData(
-                    "unset username",
+                    "unset confirm password 1",
                     new List<Action<SignUpViewModel>>
                     {
                         signUpViewModel => signUpViewModel.SignUpPassword = ValidPassword,
                         signUpViewModel => signUpViewModel.SignUpUserName = ValidUserName,
                     }, false, false);
-
+                yield return new TestCaseData(
+                    "unset confirm password 2",
+                    new List<Action<SignUpViewModel>>
+                    {
+                        signUpViewModel => signUpViewModel.SignUpUserName = ValidUserName,
+                        signUpViewModel => signUpViewModel.SignUpPassword = ValidPassword,
+                    }, false, false);
                 yield return new TestCaseData(
                     "unset password",
                     new List<Action<SignUpViewModel>>
                     {
                         signUpViewModel => signUpViewModel.SignUpUserName = ValidUserName,
                         signUpViewModel => signUpViewModel.SignUpConfirmPassword = ValidPassword,
-                    }, false, false);
-
-                yield return new TestCaseData(
-                    "unset confirm password",
-                    new List<Action<SignUpViewModel>>
-                    {
-                        signUpViewModel => signUpViewModel.SignUpUserName = ValidUserName,
-                        signUpViewModel => signUpViewModel.SignUpPassword = ValidPassword,
                     }, false, false);
                 yield return new TestCaseData(
                     "null userName",
@@ -69,7 +91,7 @@ namespace SafeViewModelTests
                         signUpViewModel => signUpViewModel.SignUpConfirmPassword = ValidPassword,
                     }, false, false);
                 yield return new TestCaseData(
-                    "resetting username",
+                    "resetting username as empty",
                     new List<Action<SignUpViewModel>>
                     {
                         signUpViewModel => signUpViewModel.SignUpUserName = ValidUserName,

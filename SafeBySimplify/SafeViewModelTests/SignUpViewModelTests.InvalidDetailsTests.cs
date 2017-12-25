@@ -30,7 +30,6 @@ namespace SafeViewModelTests
             [Test]
             public void When_invalid_password_in_signup_form_is_invalid_then_command_is_disabled_with_error_message()
             {
-
                 SafeProviderForNonExistingUser.StubPasswordNameValidity(InvalidPassword, false, InvalidPasswordErrorMessage);
 
                 SignUpViewModel.SignUpUserName = ValidUserName;
