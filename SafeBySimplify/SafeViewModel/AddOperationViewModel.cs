@@ -86,6 +86,8 @@ namespace SafeViewModel
                 PasswordRecords = new List<PasswordRecord>()
             };
             record.Header.Id = recordId;
+            record.Header.Name = string.Empty;
+            record.Header.Tags = string.Empty;
             return record;
         }
     }

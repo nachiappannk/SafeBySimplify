@@ -33,8 +33,8 @@ namespace SafeViewModel
             _fileSafe = fileSafe;
             _fileIdGenerator = fileIdGenerator;
             Id = record.Header.Id;
-            Name = string.Empty;
-            Tags = string.Empty;
+            Name = record.Header.Name;
+            Tags = record.Header.Tags;
             PasswordRecords = new ObservableCollection<PasswordRecordViewModel>();
             FileRecords = new ObservableCollection<FileRecordViewModel>();
             AddNewEmptyPasswordRecord();
