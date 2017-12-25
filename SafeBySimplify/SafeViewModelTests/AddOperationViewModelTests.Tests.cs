@@ -17,7 +17,7 @@ namespace SafeViewModelTests
 
 
             [Test]
-            public void Initially_the_heading_is_empty()
+            public void Initially_the_name_is_empty()
             {
                 Assert.AreEqual(string.Empty, _addOperationViewModel.Record.Name);
             }

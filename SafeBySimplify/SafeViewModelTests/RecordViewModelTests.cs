@@ -36,9 +36,9 @@ namespace SafeViewModelTests
 
             _fileRecords = new List<FileRecord>()
             {
-                new FileRecord() {Name = "Name1", Extention = "pdf", Description = "Description1", AssociatedRecordId = "A1", FileId = "F1"},
-                new FileRecord() {Name = "Name2", Extention = "txt", Description = "Description2" , AssociatedRecordId = "A1" , FileId = "F2"},
-                new FileRecord() {Name = "Name3", Extention = "xlsx", Description = "Description3" , AssociatedRecordId = "A1" , FileId = "F3"},
+                new FileRecord() {Name = "Name1", Extention = "pdf", Description = "Description1", AssociatedRecordId = _id, FileId = "F1"},
+                new FileRecord() {Name = "Name2", Extention = "txt", Description = "Description2" , AssociatedRecordId = _id , FileId = "F2"},
+                new FileRecord() {Name = "Name3", Extention = "xlsx", Description = "Description3" , AssociatedRecordId = _id , FileId = "F3"},
             };
 
             var record = new Record
@@ -144,6 +144,16 @@ namespace SafeViewModelTests
                 Assert.AreEqual(_passwordRecords, record.PasswordRecords);
                 Assert.AreEqual(_fileRecords, record.FileRecords);
             }
+
+            [Test]
+            public void When_file_is_downloaded_then_file_is_retrieved()
+            {
+                var fileRecordViewModel = _recordViewModel.FileRecords.ElementAt(0);
+                var fileUri = @"C:\Temp\Tes.pdf";
+                fileRecordViewModel.DownloadFileAs(fileUri);
+                _fileSafe.Received(1).RetreiveFile(_id, fileRecordViewModel.FileRecordId, fileUri);
+            }
+
 
 
         }

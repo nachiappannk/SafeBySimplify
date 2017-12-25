@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using Prism.Commands;
 using SafeModel;
 
@@ -35,7 +33,6 @@ namespace SafeViewModel
                 CanExecuteSaveCommand = !string.IsNullOrWhiteSpace(Record.Name);
             };
 
-
             DiscardCommand = new DelegateCommand
                 (() =>
                     {
@@ -43,36 +40,12 @@ namespace SafeViewModel
                         discardAction.Invoke();
                     }
                 );
+
             SaveCommand = new DelegateCommand(() =>
             {
-                var record = new Record();
-                record.Header = new RecordHeader();
-                record.Header.Name = Record.Name;
-                record.Header.Id = Record.Id;
-                record.Header.Tags = Record.Tags;
-                record.PasswordRecords = new List<PasswordRecord>();
-
-                var passwordRecords = Record.PasswordRecords.ToList();
-                var last = passwordRecords.Last();
-                passwordRecords.Remove(last);
-
-                foreach (var passwordRecord in passwordRecords)
-                {
-                    record.PasswordRecords.Add(new PasswordRecord() {Name = passwordRecord.Name, Value = passwordRecord.Value});
-                }
-                record.FileRecords = new List<FileRecord>();
-                foreach (var fileRecord in Record.FileRecords)
-                {
-                    record.FileRecords.Add(new FileRecord()
-                    {
-                        Name = fileRecord.Name,
-                        Extention = fileRecord.Extention,
-                        FileId = fileRecord.FileRecordId,
-                    });
-                }
-
-
+                var record = Record.GetRecord();
                 safe.UpsertRecord(record);
+                safe.ReoganizeFiles(Record.Id);
                 saveAction.Invoke(Record.Id);
             },() => CanExecuteSaveCommand );
         }
