@@ -13,33 +13,27 @@ namespace SafeModel
             _password = password;
             Cryptor = new Cryptor();
             DataGateway = new DataGateway();
+            Searcher = new Searcher();
         }
 
         public ICryptor Cryptor { get; set; }
 
         public IDataGateway DataGateway { get; set; }
 
+        public ISearcher Searcher { get; set; }
+
         public List<RecordHeader> GetRecordHeaders(string searchText)
         {
 
             var files = DataGateway.GetRecordNames(GetEffectiveWorkingDirectory(), "*.rcd");
+            var recordHeaders = files.Select(f => GetRecordFromUri(f).Header).ToList();
+            return Searcher.Search(recordHeaders, searchText);
 
-            return files.Select(f => GetRecordFromUri(f).Header).ToList();
 
-
-            Thread.Sleep(1000);
-            var charArray = searchText.ToCharArray();
-            var stringArray = charArray.Select((x, y) => x.ToString() + y.ToString());
-            var recordHeaders = stringArray.Select(x => new RecordHeader()
-            {
-                Name = x,
-                Tags = "one;two;three",
-            }).ToList();
-            return recordHeaders;
-
+            
         }
 
-        public void ReoganizeFiles(string recordId)
+        public void ReorganizeFiles(string recordId)
         {
 
         }

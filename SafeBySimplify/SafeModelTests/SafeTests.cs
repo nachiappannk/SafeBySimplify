@@ -52,8 +52,13 @@ namespace SafeModelTests
 
         private string GetFileUri(string workingDirectory, string userName, string fileName, string extention)
         {
-            var fileUri = workingDirectory + "\\" + userName + "\\" + fileName + "." + extention;
+            var fileUri = GetEffectiveWorkingDirectory(workingDirectory, userName) + "\\" + fileName + "." + extention;
             return fileUri;
+        }
+
+        private string GetEffectiveWorkingDirectory(string workingDirectory, string userName)
+        {
+            return workingDirectory + "\\" + userName;
         }
 
         private string GetRecordFileUri(string recordId)

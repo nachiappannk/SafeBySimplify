@@ -9,7 +9,7 @@ namespace SafeModel
         string WorkingDirectory { get; set; }
         string UserName { get; set; }
 
-        void ReoganizeFiles(string recordId);
+        void ReorganizeFiles(string recordId);
         void UpsertRecord(Record record);
 
         void DeleteRecord(string recordId);

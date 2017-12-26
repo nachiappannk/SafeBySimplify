@@ -36,7 +36,7 @@ namespace SafeViewModel
             DiscardCommand = new DelegateCommand
                 (() =>
                     {
-                        safe.ReoganizeFiles(Record.Id);
+                        safe.ReorganizeFiles(Record.Id);
                         discardAction.Invoke();
                     }
                 );
@@ -45,7 +45,7 @@ namespace SafeViewModel
             {
                 var record = Record.GetRecord();
                 safe.UpsertRecord(record);
-                safe.ReoganizeFiles(Record.Id);
+                safe.ReorganizeFiles(Record.Id);
                 saveAction.Invoke(Record.Id);
             },() => CanExecuteSaveCommand );
         }

@@ -45,7 +45,7 @@ namespace SafeViewModelTests
         public void When_discarded_then_the_record_is_reoganized_in_safe_and_discard_action_is_executed()
         {
             _addOperationViewModel.DiscardCommand.Execute();
-            _safe.Received(1).ReoganizeFiles(_uniqueId);
+            _safe.Received(1).ReorganizeFiles(_uniqueId);
             Assert.True(_isDiscardActionPerformed);
         }
     }

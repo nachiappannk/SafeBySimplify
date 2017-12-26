@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using SafeModel;
@@ -9,6 +11,62 @@ namespace SafeModelTests
     {
         public class Tests : SafeTests
         {
+
+            [Test]
+            public void When_record_headers_are_requested_with_a_search_string()
+            {
+
+                var searcher = Substitute.For<ISearcher>();
+                _safe.Searcher = searcher;
+
+                var fileUris = new string[]
+                {
+                    @"C:\Temp\good.rcd",
+                    @"C:\Temp\bad.rcd",
+                };
+                
+                Record[] records = new Record[]
+                {
+                    new Record()
+                    {
+                        Header = new RecordHeader() {Id = "id1", Name = "some Name", Tags = "sssss"},
+                    },
+
+                    new Record()
+                    {
+                        Header = new RecordHeader() {Id = "ss", Name = "sssss", Tags = "sss;sss;"},
+                    }, 
+                };
+
+                var encryptedFileBytes = new byte[][]
+                {
+                    new byte[] {2,3,42,12,3,12,3},
+                    new byte[] {2,3,4,4,2,3,43,2, 4,23,22,12,3,12,3},
+                };
+
+                _dataGateway.GetRecordNames(GetEffectiveWorkingDirectory(_safeWorkingDirectory, _userName), "*.rcd")
+                    .Returns(fileUris.ToList());
+
+                for (int i = 0; i < fileUris.Length; i++)
+                {
+                    _dataGateway.GetBytes(fileUris[i]).Returns(encryptedFileBytes[i]);
+                    _cryptor.GetDecryptedContent<Record>(encryptedFileBytes[i], _password).Returns(records[i]);
+                }
+
+                var searchText = "ssomething";
+
+                searcher.Search(Arg.Any<List<RecordHeader>>(), searchText).Returns(x =>
+                {
+                    var recordHeaders = x[0] as List<RecordHeader>;
+                    recordHeaders.RemoveAt(0);
+                    return recordHeaders;
+                });
+
+                var recordHeadersAtSafe = _safe.GetRecordHeaders(searchText);
+                var expected = records.Select(x => x.Header).ToList();
+                expected.RemoveAt(0);
+                CollectionAssert.AreEqual(expected, recordHeadersAtSafe);
+            }
 
 
             [Test]
@@ -40,7 +98,6 @@ namespace SafeModelTests
                 _cryptor.GetDecryptedContent<Record>(_recordEncryptedBytes, _password).Returns(_record);
                 _dataGateway.GetBytes(GetRecordFileUri(_recordId)).Returns(_recordEncryptedBytes);
                 var record = _safe.GetRecord(_recordId);
-                
                 Assert.AreEqual(_record, record);
             }
 

@@ -38,7 +38,7 @@ namespace SafeViewModelTests
 
                 _safe.Received(1).UpsertRecord(Arg.Is<Record>(x => x.Header.Id == _uniqueId));
 
-                _safe.Received(1).ReoganizeFiles(_uniqueId);
+                _safe.Received(1).ReorganizeFiles(_uniqueId);
                 Assert.AreEqual(_uniqueId, _idAtSaveAction);
             }
         }

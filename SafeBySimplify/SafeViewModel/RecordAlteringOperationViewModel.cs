@@ -37,28 +37,28 @@ namespace SafeViewModel
 
         private void GoToSearch()
         {
-            _safe.ReoganizeFiles(_recordId);
+            _safe.ReorganizeFiles(_recordId);
             _closeAction.Invoke();
 
         }
 
         private void Discard()
         {
-            _safe.ReoganizeFiles(_recordId);
+            _safe.ReorganizeFiles(_recordId);
             _reloadAction.Invoke();
         }
 
         private void Delete()
         {
             _safe.DeleteRecord(_recordId);
-            _safe.ReoganizeFiles(_recordId);
+            _safe.ReorganizeFiles(_recordId);
             _closeAction.Invoke();
         }
 
         private void Save()
         {
             _safe.UpsertRecord(Record.GetRecord());
-            _safe.ReoganizeFiles(_recordId);
+            _safe.ReorganizeFiles(_recordId);
             _reloadAction.Invoke();
         }
     }

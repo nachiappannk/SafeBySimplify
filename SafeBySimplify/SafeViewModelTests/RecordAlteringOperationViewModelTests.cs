@@ -106,7 +106,7 @@ namespace SafeViewModelTests
             _recordAlteringOperationViewModel.SaveCommand.Execute();
 
             _safe.Received(1).UpsertRecord(Arg.Is<Record>(r => r.Header.Id == _recordid));
-            _safe.Received(1).ReoganizeFiles(_recordid);
+            _safe.Received(1).ReorganizeFiles(_recordid);
             Assert.True(_isReloadActionCalled);
         }
 
@@ -116,7 +116,7 @@ namespace SafeViewModelTests
             Assume.That(_recordAlteringOperationViewModel.DeleteCommand.CanExecute());
             _recordAlteringOperationViewModel.DeleteCommand.Execute();
             _safe.Received(1).DeleteRecord(_recordid);
-            _safe.Received(1).ReoganizeFiles(_recordid);
+            _safe.Received(1).ReorganizeFiles(_recordid);
             Assert.True(_isCloseActionCalled);
         }
 
@@ -125,7 +125,7 @@ namespace SafeViewModelTests
         {
             Assume.That(_recordAlteringOperationViewModel.DiscardCommand.CanExecute());
             _recordAlteringOperationViewModel.DiscardCommand.Execute();
-            _safe.Received(1).ReoganizeFiles(_recordid);
+            _safe.Received(1).ReorganizeFiles(_recordid);
             Assert.True(_isReloadActionCalled);
         }
 
@@ -134,7 +134,7 @@ namespace SafeViewModelTests
         {
             Assume.That(_recordAlteringOperationViewModel.GoToSearchCommand.CanExecute());
             _recordAlteringOperationViewModel.GoToSearchCommand.Execute();
-            _safe.Received(1).ReoganizeFiles(_recordid);
+            _safe.Received(1).ReorganizeFiles(_recordid);
             Assert.True(_isCloseActionCalled);
         }
 
