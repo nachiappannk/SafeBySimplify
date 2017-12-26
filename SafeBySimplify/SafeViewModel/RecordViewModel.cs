@@ -98,15 +98,16 @@ namespace SafeViewModel
         public void AddFileRecord(string fileUri)
         {
             IsRecordModified = false;
+            var fileId = _fileIdGenerator.GetFileId();
             var fileRecordViewModel =
-                new FileRecordViewModel(FileRecords, _fileSafe, Id, _fileIdGenerator.GetFileId(),() => { IsRecordModified = true; })
+                new FileRecordViewModel(FileRecords, _fileSafe, Id, fileId,() => { IsRecordModified = true; })
                 {
                     Name = Path.GetFileNameWithoutExtension(fileUri),
                     Extention = Path.GetExtension(fileUri)?.Replace(".", ""),
                     Description = string.Empty,
                 };
             FileRecords.Add(fileRecordViewModel);
-            _fileSafe.StoreFile(Id, _fileIdGenerator.GetFileId(), fileUri);
+            _fileSafe.StoreFile(Id, fileId, fileUri);
         }
 
         private void AddNewPasswordRecord(string name, string value)

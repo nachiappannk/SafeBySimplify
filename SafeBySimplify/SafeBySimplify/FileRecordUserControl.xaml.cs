@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using SafeViewModel;
 
 namespace SafeBySimplify
 {
@@ -23,6 +25,26 @@ namespace SafeBySimplify
         public FileRecordUserControl()
         {
             InitializeComponent();
+        }
+
+        private void Download(object sender, RoutedEventArgs e)
+        {
+            var viewModel = this.DataContext as FileRecordViewModel;
+            if(viewModel == null) throw new Exception();
+
+            var extention = viewModel.Extention;
+
+            var filter = extention + "|*." + extention;
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = filter;
+            saveFileDialog.Title = "Save file";
+            saveFileDialog.FileName = viewModel.Name;
+            var result = saveFileDialog.ShowDialog();
+            if (result == true)
+            {
+                var resultFile = saveFileDialog.FileName;
+                viewModel.DownloadFileAs(resultFile);
+            }
         }
     }
 }

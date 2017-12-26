@@ -29,7 +29,7 @@
                     <TextBlock Grid.Column="0" Text="Extn:" Margin="2,0" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="1" Text="{Binding Extention}" Margin="2,0" VerticalAlignment="Center"/>
                 </Grid>
-                <Button Grid.Column="2" Margin="0,1" ToolTip="Download">
+                <Button Grid.Column="2" Margin="0,1" ToolTip="Download" Click="Download">
                     <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Image.Source>
                             <BitmapImage UriSource="images/download.png" />
