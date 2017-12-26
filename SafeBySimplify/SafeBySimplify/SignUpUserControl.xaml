@@ -27,7 +27,7 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <TextBox safeUiLib:HintingTextProvidingObject.HintText="Username" 
-                             Style="{StaticResource TextBoxWithHintStyle}" Text="{Binding SignUpUserName}"/>
+                             Style="{StaticResource TextBoxWithHintStyle}" Text="{Binding SignUpUserName, UpdateSourceTrigger=PropertyChanged}"/>
                     <PasswordBox Grid.Row="1" x:Name="PasswordBox"
                                  safeUiLib:HintingTextProvidingObject.HintText="Password" 
                                  Margin="{StaticResource NormalElementSpacingMargin}" Height="20"/>

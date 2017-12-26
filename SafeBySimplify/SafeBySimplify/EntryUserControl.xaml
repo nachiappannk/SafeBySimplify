@@ -23,15 +23,23 @@
                 </Image>
             </Button>
         </DockPanel>
-        <Grid Row="1">
-            <Grid Margin="30">
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" MinHeight="30"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="1*" MinHeight="30"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*" MinWidth="30"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*" MinWidth="30"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*" MinWidth="30"/>
                 </Grid.ColumnDefinitions>
-                <local:SignUpUserControl Grid.Column="0" Margin="0,0,15,0" DataContext="{Binding SignUpViewModel}"/>
-                <local:SignInUserControl Grid.Column="1" Margin="15,0,0,0" DataContext="{Binding SignInViewModel}"/>
+                <local:SignUpUserControl Grid.Column="1" Grid.Row="1" DataContext="{Binding SignUpViewModel}" Height="220" Width="180"/>
+                <local:SignInUserControl Grid.Column="3" Grid.Row="1" DataContext="{Binding SignInViewModel}" Height="220" Width="180"/>
             </Grid>
-        </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
