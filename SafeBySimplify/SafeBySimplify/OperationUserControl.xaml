@@ -26,12 +26,12 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Style="{StaticResource Level1HeadingDockPanelStyle}">
-            <Button DockPanel.Dock="Right" Command="{Binding SignOutCommand}">
-                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button DockPanel.Dock="Right" Command="{Binding SignOutCommand}" Content="Logout">
+                <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>
                         <BitmapImage UriSource="images/logout.png" />
                     </Image.Source>
-                </Image>
+                </Image>-->
             </Button>
             <TextBlock Text="{Binding UserName}" Style="{StaticResource Level1HeadingTextBlockStyle}"/>
         </DockPanel>

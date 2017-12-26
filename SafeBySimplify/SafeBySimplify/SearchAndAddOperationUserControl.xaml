@@ -42,12 +42,12 @@
                 <Image Grid.Column="1" Height="25"  gif:ImageBehavior.AnimatedSource="images/InProgress.gif" Width="25" 
                        Visibility="{Binding IsSearchInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </Grid>
-            <Button Grid.Column="1" Grid.Row="0" Command="{Binding AddCommand}">
-                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button Grid.Column="1" Grid.Row="0" Command="{Binding AddCommand}" Content="Add New Record">
+                <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>
                         <BitmapImage UriSource="images/add.png" />
                     </Image.Source>
-                </Image>
+                </Image>-->
             </Button>
             <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Top" Background="White" 
                 Visibility="{Binding IsSearchResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}">

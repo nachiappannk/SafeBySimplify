@@ -17,19 +17,19 @@
         <Label Content="New Record Creation" Style="{StaticResource Level2HeadingLableStyle}" Grid.Row="0"/>
         <local:RecordViewUserControl DataContext="{Binding Record}" Grid.Row="1"/>
         <DockPanel LastChildFill="False" Margin="0,5" Grid.Row="2">
-            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding DiscardCommand}">
-                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="Discard changes">
+            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding DiscardCommand}" Content="Discard">
+                <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="Discard changes">
                     <Image.Source>
                         <BitmapImage UriSource="images/undo.png" />
                     </Image.Source>
-                </Image>
+                </Image>-->
             </Button>
-            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding SaveCommand}"  ToolTip="Save">
-                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button DockPanel.Dock="Right" Margin="4,0" Command="{Binding SaveCommand}"  ToolTip="Save" Content="Save">
+                <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Image.Source>
                         <BitmapImage UriSource="images/save.png" />
                     </Image.Source>
-                </Image>
+                </Image>-->
             </Button>
         </DockPanel>
     </Grid>
