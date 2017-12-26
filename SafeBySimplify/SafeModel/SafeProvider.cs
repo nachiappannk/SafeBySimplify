@@ -87,7 +87,7 @@ namespace SafeModel
             };
             AccountGateway.WriteUserRecord(WorkingDirectory, userName, account);
 
-            var safeForNonExistingUser = new Safe();
+            var safeForNonExistingUser = new Safe(masterpassword);
             safeForNonExistingUser.UserName = userName;
             safeForNonExistingUser.WorkingDirectory = WorkingDirectory;
             return safeForNonExistingUser;
@@ -102,7 +102,7 @@ namespace SafeModel
         {
             var account = AccountGateway.ReadUserAccount(WorkingDirectory, userName);
             var verifyingWordBytesForCurrentPassword = Cryptor.GetEncryptedBytes(account.VerifyingWord, password);
-
+            var masterPassword = Cryptor.GetDecryptedContent<string>(account.MasterEncryptedPassBytes, password);
             safe = null;
 
             if (account.VeryifyingWordEncryptedBytes.Length != verifyingWordBytesForCurrentPassword.Length) return false;
@@ -110,7 +110,7 @@ namespace SafeModel
             {
                 if (account.VeryifyingWordEncryptedBytes[i] != verifyingWordBytesForCurrentPassword[i]) return false;
             }
-            safe = new Safe();
+            safe = new Safe(masterPassword);
             safe.UserName = userName;
             safe.WorkingDirectory = WorkingDirectory;
             return true;

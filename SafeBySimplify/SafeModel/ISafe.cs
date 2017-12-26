@@ -15,12 +15,6 @@ namespace SafeModel
         void DeleteRecord(string recordId);
     }
 
-    public interface IFileSafe
-    {
-        void StoreFile(string recordId, string fileId, string fileUri);
-        void RetreiveFile(string recordId, string fileId, string fileUri);
-    }
-
     public class PasswordRecord
     {
         public string Name { get; set; }

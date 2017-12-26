@@ -48,6 +48,9 @@
     <Compile Include="Cryptor.cs" />
     <Compile Include="IAccountGateway.cs" />
     <Compile Include="ICryptor.cs" />
+    <Compile Include="IDataGateway.cs" />
+    <Compile Include="IFileIdGenerator.cs" />
+    <Compile Include="IFileSafe.cs" />
     <Compile Include="IHasWorkingDirectory.cs" />
     <Compile Include="ISafe.cs" />
     <Compile Include="ISafeProvider.cs" />

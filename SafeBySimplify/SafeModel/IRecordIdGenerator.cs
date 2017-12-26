@@ -6,10 +6,4 @@ namespace SafeModel
     {
         string GetRecordId();
     }
-
-
-    public interface IFileIdGenerator
-    {
-        string GetFileId();
-    }
 }
