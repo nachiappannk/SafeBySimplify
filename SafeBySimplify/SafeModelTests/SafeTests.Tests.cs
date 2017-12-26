@@ -44,7 +44,7 @@ namespace SafeModelTests
                     new byte[] {2,3,4,4,2,3,43,2, 4,23,22,12,3,12,3},
                 };
 
-                _dataGateway.GetRecordNames(GetEffectiveWorkingDirectory(_safeWorkingDirectory, _userName), "*.rcd")
+                _dataGateway.GetFileNames(GetEffectiveWorkingDirectory(_safeWorkingDirectory, _userName), "*.rcd")
                     .Returns(fileUris.ToList());
 
                 for (int i = 0; i < fileUris.Length; i++)
@@ -75,7 +75,7 @@ namespace SafeModelTests
                 _safe.DeleteRecord(_recordId);
 
                 var fileUri = GetRecordFileUri(_recordId);
-                _dataGateway.Received(1).DeleteRecordIfAvailable(fileUri);
+                _dataGateway.Received(1).DeleteFileIfAvailable(fileUri);
             }
 
             [Test]
@@ -87,7 +87,7 @@ namespace SafeModelTests
                 _safe.UpsertRecord(_record);
 
                 var fileUri = GetRecordFileUri(_recordId);
-                _dataGateway.Received(1).DeleteRecordIfAvailable(fileUri);
+                _dataGateway.Received(1).DeleteFileIfAvailable(fileUri);
                 _dataGateway.Received(1).PutBytes(fileUri, _recordEncryptedBytes);
             }
 

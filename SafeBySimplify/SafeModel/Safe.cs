@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -25,17 +26,30 @@ namespace SafeModel
         public List<RecordHeader> GetRecordHeaders(string searchText)
         {
 
-            var files = DataGateway.GetRecordNames(GetEffectiveWorkingDirectory(), "*.rcd");
+            var files = DataGateway.GetFileNames(GetEffectiveWorkingDirectory(), "*.rcd");
             var recordHeaders = files.Select(f => GetRecordFromUri(f).Header).ToList();
             return Searcher.Search(recordHeaders, searchText);
-
-
-            
         }
 
         public void ReorganizeFiles(string recordId)
         {
 
+            var validFiles = new List<string>();
+            var recordFiles = DataGateway.GetFileNames(GetEffectiveWorkingDirectory(), recordId + ".rcd");
+            if (recordFiles.Count != 0)
+            {
+                var record = GetRecord(recordId);
+                validFiles.AddRange(record.FileRecords.Select(x => x.AssociatedRecordId + "_" + x.FileId).ToList());
+            }
+
+            var pattern = recordId+ "_*.encfile";
+            var files = DataGateway.GetFileNames(GetEffectiveWorkingDirectory(), pattern);
+            foreach (var file in files)
+            {
+                var fileWithOutPath = Path.GetFileName(file);
+                var fileNameWithoutExtention = Path.GetFileNameWithoutExtension(fileWithOutPath);
+                if (!validFiles.Contains(fileNameWithoutExtention)) DataGateway.DeleteFileIfAvailable(file);
+            }
         }
 
         public Record GetRecord(string recordId)
@@ -62,14 +76,14 @@ namespace SafeModel
             var recordFileUri = GetRecordFileUri(record.Header.Id);
             var encryptedRecordBytes = Cryptor.GetEncryptedBytes(record, _password);
 
-            DataGateway.DeleteRecordIfAvailable(recordFileUri);
+            DataGateway.DeleteFileIfAvailable(recordFileUri);
             DataGateway.PutBytes(recordFileUri, encryptedRecordBytes);
         }
 
         public void DeleteRecord(string recordId)
         {
             var recordFile = GetRecordFileUri(recordId);
-            DataGateway.DeleteRecordIfAvailable(recordFile);
+            DataGateway.DeleteFileIfAvailable(recordFile);
         }
 
 

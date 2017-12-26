@@ -8,9 +8,9 @@ namespace SafeModel
     {
         byte[] GetBytes(string fileUri);
         void PutBytes(string fileUri, byte[] bytes);
-        void DeleteRecordIfAvailable(string fileUri);
+        void DeleteFileIfAvailable(string fileUri);
 
-        List<string> GetRecordNames(string directory, string pattern);
+        List<string> GetFileNames(string directory, string pattern);
     }
 
 
@@ -28,12 +28,12 @@ namespace SafeModel
             File.WriteAllBytes(fileUri, bytes);
         }
 
-        public void DeleteRecordIfAvailable(string fileUri)
+        public void DeleteFileIfAvailable(string fileUri)
         {
             if(File.Exists(fileUri)) File.Delete(fileUri);
         }
 
-        public List<string> GetRecordNames(string directory, string pattern)
+        public List<string> GetFileNames(string directory, string pattern)
         {
             return Directory.GetFiles(directory, pattern).ToList();
         }
