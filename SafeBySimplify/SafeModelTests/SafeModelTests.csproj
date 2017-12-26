@@ -64,6 +64,7 @@
     <Compile Include="SafeProviderTests.Tests.cs" />
     <Compile Include="SafeTests.cs" />
     <Compile Include="SafeTests.FileTests.cs" />
+    <Compile Include="SafeTests.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

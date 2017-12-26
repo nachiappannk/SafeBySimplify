@@ -12,6 +12,7 @@ namespace SafeModel
         {
             _password = password;
             Cryptor = new Cryptor();
+            DataGateway = new DataGateway();
         }
 
         public ICryptor Cryptor { get; set; }
@@ -20,6 +21,12 @@ namespace SafeModel
 
         public List<RecordHeader> GetRecordHeaders(string searchText)
         {
+
+            var files = DataGateway.GetRecordNames(GetEffectiveWorkingDirectory(), "*.rcd");
+
+            return files.Select(f => GetRecordFromUri(f).Header).ToList();
+
+
             Thread.Sleep(1000);
             var charArray = searchText.ToCharArray();
             var stringArray = charArray.Select((x, y) => x.ToString() + y.ToString());
@@ -29,15 +36,24 @@ namespace SafeModel
                 Tags = "one;two;three",
             }).ToList();
             return recordHeaders;
+
+        }
+
+        public void ReoganizeFiles(string recordId)
+        {
+
         }
 
         public Record GetRecord(string recordId)
         {
-            var record = new Record();
-            record.Header = new RecordHeader();
-            record.FileRecords = new List<FileRecord>();
-            record.PasswordRecords = new List<PasswordRecord>();
-            record.Header.Id = recordId;
+            var recordFileUri = GetRecordFileUri(recordId);
+            return GetRecordFromUri(recordFileUri);
+        }
+
+        private Record GetRecordFromUri(string recordFileUri)
+        {
+            var encryptedBytes = DataGateway.GetBytes(recordFileUri);
+            var record = Cryptor.GetDecryptedContent<Record>(encryptedBytes, _password);
             return record;
         }
 
@@ -45,12 +61,15 @@ namespace SafeModel
         public string UserName { get; set; }
 
 
-        public void ReoganizeFiles(string recordId)
-        {
-        }
+
 
         public void UpsertRecord(Record record)
         {
+            var recordFileUri = GetRecordFileUri(record.Header.Id);
+            var encryptedRecordBytes = Cryptor.GetEncryptedBytes(record, _password);
+
+            DataGateway.DeleteRecordIfAvailable(recordFileUri);
+            DataGateway.PutBytes(recordFileUri, encryptedRecordBytes);
         }
 
         public void DeleteRecord(string recordId)
@@ -82,9 +101,15 @@ namespace SafeModel
 
         private string GetFileUri(string fileName, string extention)
         {
-            var effectiveWorkingDirectory = WorkingDirectory + "\\" + UserName;
+            var effectiveWorkingDirectory = GetEffectiveWorkingDirectory();
             var effictiveFile = effectiveWorkingDirectory + "\\" + fileName + "." + extention;
             return effictiveFile;
+        }
+
+        private string GetEffectiveWorkingDirectory()
+        {
+            var effectiveWorkingDirectory = WorkingDirectory + "\\" + UserName;
+            return effectiveWorkingDirectory;
         }
 
         public void RetreiveFile(string recordId, string fileId, string fileUri)
@@ -94,7 +119,5 @@ namespace SafeModel
             var fileByes = Cryptor.GetDecryptedContent<byte[]>(encryptedBytes, _password);
             DataGateway.PutBytes(fileUri, fileByes);
         }
-
-        
     }
 }

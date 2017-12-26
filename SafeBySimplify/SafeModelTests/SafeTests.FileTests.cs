@@ -39,7 +39,7 @@ namespace SafeModelTests
 
             }
 
-            private static string GetEncryptedFileUri(string workingDirectory, string userName, string recordId, string fileId)
+            private string GetEncryptedFileUri(string workingDirectory, string userName, string recordId, string fileId)
             {
                 return GetFileUri(workingDirectory, userName, recordId + "_" + fileId, "encfile");
             }
