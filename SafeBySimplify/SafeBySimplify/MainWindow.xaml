@@ -4,11 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SafeBySimplify"
-        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance  safeViewModel:WorkFlowViewModel }"
-        Title="Safe By Simplify" Height="350" Width="525">
+        Title="Safe By Simplify" Height="420" Width="525">
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type safeViewModel:EntryStepViewModel}">

@@ -18,37 +18,37 @@
         </DockPanel>
         <DockPanel Grid.Row="1" LastChildFill="False">
             <DockPanel DockPanel.Dock="Top" Margin="10,20" >
-                <Button DockPanel.Dock="Right" Click="FolderSelectionButtonClicked">
-                    <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button DockPanel.Dock="Right" Click="FolderSelectionButtonClicked" Content="Pick">
+                    <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Image.Source>
                             <BitmapImage UriSource="images/folder.png" />
                         </Image.Source>
-                    </Image>
+                    </Image>-->
                 </Button>
                 <TextBlock Text="Working Directory" VerticalAlignment="Center" DockPanel.Dock="Left"/>
                 <TextBox DockPanel.Dock="Left" IsReadOnly="True" Text="{Binding WorkSpaceDirectory, UpdateSourceTrigger=PropertyChanged}" x:Name="FolderTextBox"/>
             </DockPanel>
             <DockPanel LastChildFill="False" DockPanel.Dock="Bottom">
-                <Button DockPanel.Dock="Right" Command="{Binding OkCommand }">
-                    <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button DockPanel.Dock="Right" Command="{Binding OkCommand }" Content="Okay">
+                    <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Image.Source>
                             <BitmapImage UriSource="images/ok.png" />
                         </Image.Source>
-                    </Image>
+                    </Image>-->
                 </Button>
-                <Button DockPanel.Dock="Right" Command="{Binding DiscardCommand }">
-                    <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button DockPanel.Dock="Right" Command="{Binding DiscardCommand }" Content="Discard">
+                    <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Image.Source>
                             <BitmapImage UriSource="images/undo.png" />
                         </Image.Source>
-                    </Image>
+                    </Image>-->
                 </Button>
-                <Button DockPanel.Dock="Right" Command="{Binding SaveCommand }">
-                    <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button DockPanel.Dock="Right" Command="{Binding SaveCommand }" Content="Save">
+                    <!--<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Image.Source>
                             <BitmapImage UriSource="images/save.png" />
                         </Image.Source>
-                    </Image>
+                    </Image>-->
                 </Button>
             </DockPanel>
         </DockPanel>
