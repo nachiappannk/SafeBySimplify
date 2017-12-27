@@ -7,7 +7,7 @@
         xmlns:safeViewModel="clr-namespace:SafeViewModel;assembly=SafeViewModel"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance  safeViewModel:WorkFlowViewModel }"
-        Title="Safe By Simplify" Height="420" Width="525">
+        Title="Safe By Simplify" Height="420" Width="560">
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type safeViewModel:EntryStepViewModel}">

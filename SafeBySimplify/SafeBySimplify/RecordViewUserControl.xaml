@@ -14,26 +14,29 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-            <Border Grid.Row="0" BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
+            <Border Grid.Row="0" BorderThickness="2" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Record Name and Search Tags" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
-                    <TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" safeUiLib:HintingTextProvidingObject.HintText="Add Record Name" 
-                         Style="{StaticResource TextBoxWithHintStyle}"/>
-                    <DockPanel Grid.Row="2" Height="25">
+                    <TextBlock Text="Record Name and Search Tags" FontWeight="DemiBold" Margin="0,5,0,2"/>
+                    <DockPanel Grid.Row="1">
+                        <TextBlock Text="Record Name:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
+                        <TextBox  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" safeUiLib:HintingTextProvidingObject.HintText="Record name is used to identify record eg Xxx Bank Account" 
+                             Style="{StaticResource TextBoxWithHintStyle}"/>
+                    </DockPanel>
+                    <DockPanel Grid.Row="2" Height="25" Visibility="Collapsed">
                         <TextBlock Text="Search Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
                         <Grid>
-                            <TextBlock Text="Add search tag. Used for searching records. The tag delimiter is (;) semicolon" VerticalAlignment="Center" Margin="5,0,5,0" 
-                                   Style="{StaticResource HintTextBlockStyle}"/>
+                            <TextBlock Text="Used for searching records. The tag delimiter is semicolon. Ex bank;Xxx" VerticalAlignment="Center" Margin="5,0,5,0" 
+                                           Style="{StaticResource HintTextBlockStyle}"/>
                             <safeUiLib:TagsControl Height="20" 
-                                                   Tags="{Binding Tags}"
-                                                   ToolTip="Used for searching records. The tag delimiter is (;) semicolon" 
-                                                   Margin="0,0,5,0" 
-                                                   FontSize="8">
+                                                           Tags="{Binding Tags}"
+                                                           ToolTip="Used for searching records. The tag delimiter is (;) semicolon" 
+                                                           Margin="0,0,5,0" 
+                                                           FontSize="8">
                                 <safeUiLib:TagsControl.TagTemplate>
                                     <DataTemplate>
                                         <Border BorderThickness="2" CornerRadius="4" Background="#FFFFD0A0" BorderBrush="SandyBrown" Margin="2,0">
@@ -44,7 +47,7 @@
                             </safeUiLib:TagsControl>
                         </Grid>
                     </DockPanel>
-                </Grid>
+            </Grid>
             </Border>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="1">
             <Grid>
