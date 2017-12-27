@@ -41,6 +41,7 @@ namespace SafeViewModelTests
         private ViewModelPropertyObserver<bool> _searchResultVisibilityObserver;
         private ViewModelPropertyObserver<ObservableCollection<RecordHeaderViewModel>> _searchResultPropertyObserver;
         private ViewModelPropertyObserver<bool> _searchProgressIndicatorObserver;
+        private ViewModelPropertyObserver<bool> _searchResultNonEmptyPropertyObserver;
 
         [SetUp]
         public void SetUp()
@@ -53,6 +54,9 @@ namespace SafeViewModelTests
 
             _searchResultVisibilityObserver = _searchAndAddOperationViewModel
                 .GetPropertyObserver<bool>(nameof(_searchAndAddOperationViewModel.IsSearchResultVisible));
+
+            _searchResultNonEmptyPropertyObserver = _searchAndAddOperationViewModel
+                .GetPropertyObserver<bool>(nameof(_searchAndAddOperationViewModel.IsSearchResultNonEmpty));
 
             _searchResultPropertyObserver = _searchAndAddOperationViewModel
                 .GetPropertyObserver<ObservableCollection<RecordHeaderViewModel>>(

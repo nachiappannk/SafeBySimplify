@@ -21,7 +21,7 @@
                     <Button Content="Select" DockPanel.Dock="Right" Height="20" Margin="2,1" Command="{Binding SelectCommand}" ToolTip="You can also select by double clicking the result"/>
                     <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="DemiBold"/>
                 </DockPanel>
-                <ItemsControl ItemsSource="{Binding Tags}" Grid.Row="1">
+                <!--<ItemsControl ItemsSource="{Binding Tags}" Grid.Row="1">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Background="Yellow" CornerRadius="5" Margin="2,0">
@@ -34,7 +34,7 @@
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                </ItemsControl>-->
             </Grid>
         </Border>
     </Grid>

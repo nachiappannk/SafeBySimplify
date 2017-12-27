@@ -36,16 +36,57 @@ namespace SafeViewModelTests
 {
     public partial class SearchAndAddOperationViewModelTests
     {
+        public class NoRecordsAreAvailableOnSearch : SearchAndAddOperationViewModelTests
+        {
+            private string _searchText = "ss";
+
+            private List<RecordHeader> _searchResults = new List<RecordHeader>()
+            {
+            };
+
+            private int _timeTakenForSearching = 300;
+
+
+            [SetUp]
+            public void SearchTextEnteredSetUp()
+            {
+                _safe.GetRecordHeaders(_searchText).Returns(x =>
+                {
+                    Thread.Sleep(_timeTakenForSearching);
+                    return _searchResults;
+                });
+                _searchAndAddOperationViewModel.SearchText = _searchText;
+
+                _searchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
+            }
+
+            [Test]
+            public void Search_results_are_visible()
+            {
+                Assert.True(_searchResultVisibilityObserver.PropertyValue);
+            }
+
+            [Test]
+            public void Search_results_empty_status()
+            {
+                Assert.False(_searchResultNonEmptyPropertyObserver.PropertyValue);
+            }
+
+
+        }
+
+
+
         public partial class SearchTextEntered : SearchAndAddOperationViewModelTests
         {
 
             private string _searchText = "ss";
-            private static string _searchResultRecordId = "some other id";
+            private static string _selectableSearchRecordId = "some other id";
 
             private List<RecordHeader> _searchResults = new List<RecordHeader>()
             {
                 new RecordHeader() {Name = "record name 1", Id = "some id", Tags = "tag11;tag12;tag13"},
-                new RecordHeader() {Name = "record name 2", Id = _searchResultRecordId, Tags = "tag21;tag22;tag23"}
+                new RecordHeader() {Name = "record name 2", Id = _selectableSearchRecordId, Tags = "tag21;tag22;tag23"}
             };
 
             private int _timeTakenForSearching = 300;
@@ -70,6 +111,13 @@ namespace SafeViewModelTests
             }
 
             [Test]
+            public void When_serach_text_is_cleared_then_search_results_are_made_empty()
+            {
+                _searchAndAddOperationViewModel.SearchText = String.Empty;
+                Assert.False(_searchResultNonEmptyPropertyObserver.PropertyValue);
+            }
+
+            [Test]
             public void When_serach_text_is_cleared_then_search_progress_indicator_is_disabled()
             {
                 _searchAndAddOperationViewModel.SearchText = String.Empty;
@@ -86,6 +134,7 @@ namespace SafeViewModelTests
                 {
                     _searchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
                     Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
+                    Assume.That(_searchResultNonEmptyPropertyObserver.PropertyValue, "The search result are empty property is wrongly set");
                     _recordHeaderViewModels = _searchResultPropertyObserver.PropertyValue;
                 }
 
@@ -123,10 +172,10 @@ namespace SafeViewModelTests
                 [Test]
                 public void When_search_result_is_selected_then_the_search_result_is_requested_to_be_opened()
                 {
-                    var searchResult = _recordHeaderViewModels.Last(x => x.Id == _searchResultRecordId);
+                    var searchResult = _recordHeaderViewModels.Last(x => x.Id == _selectableSearchRecordId);
                     Assume.That(searchResult.SelectCommand.CanExecute());
                     searchResult.SelectCommand.Execute();
-                    Assert.AreEqual(_searchResultRecordId, _openedRecordId); 
+                    Assert.AreEqual(_selectableSearchRecordId, _openedRecordId); 
                 }
 
             }
