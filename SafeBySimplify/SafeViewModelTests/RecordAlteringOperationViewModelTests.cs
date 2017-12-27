@@ -17,6 +17,7 @@ namespace SafeViewModelTests
         private string _recordid;
         private bool _isReloadActionCalled = false;
         private bool _isCloseActionCalled = false;
+        private CommandObserver _saveCommandObserver;
 
         [SetUp]
         public void SetUp()
@@ -49,6 +50,8 @@ namespace SafeViewModelTests
                 new IdGenerator(),
                 () => { _isReloadActionCalled = true; }, () => { _isCloseActionCalled = true; });
 
+            _saveCommandObserver = _recordAlteringOperationViewModel.SaveCommand.GetDelegateCommandObserver();
+
         }
 
 
@@ -57,6 +60,28 @@ namespace SafeViewModelTests
         {
             Assert.AreEqual(_record.Header.Name, _recordAlteringOperationViewModel.Record.Name);
         }
+
+        [Test]
+        public void Initially_save_commmand_is_enabled()
+        {
+            Assert.True(_saveCommandObserver.ValueOfCanExecuteOnLatestEvent);
+        }
+
+        [Test]
+        public void When_name_is_made_empty_then_save_command_is_disabled()
+        {
+            _recordAlteringOperationViewModel.Record.Name = string.Empty;
+            Assert.False(_saveCommandObserver.ValueOfCanExecuteOnLatestEvent);
+        }
+
+        [Test]
+        public void When_name_is_made_non_empty_then_save_command_is_enabled()
+        {
+            _recordAlteringOperationViewModel.Record.Name = string.Empty;
+            _recordAlteringOperationViewModel.Record.Name = "some name";
+            Assert.True(_saveCommandObserver.ValueOfCanExecuteOnLatestEvent);
+        }
+
 
         [Test]
         public void Initially_the_record_tags_is_as_per_safe()

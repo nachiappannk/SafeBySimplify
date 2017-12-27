@@ -27,12 +27,20 @@ namespace SafeViewModel
             var record = safe.GetRecord(recordId);
             Record = new RecordViewModel(record, safe, fileIdGenerator);
 
+            
 
-            SaveCommand = new DelegateCommand(Save);
+            SaveCommand = new DelegateCommand(Save, CanSave);
             DeleteCommand = new DelegateCommand(Delete);
             DiscardCommand = new DelegateCommand(Discard);
             GoToSearchCommand = new DelegateCommand(GoToSearch, () => !Record.IsRecordModified);
             Record.RecordChanged += () => { GoToSearchCommand.RaiseCanExecuteChanged(); };
+
+            Record.PropertyChanged += (a, b) => { SaveCommand.RaiseCanExecuteChanged();};
+        }
+
+        private bool CanSave()
+        {
+            return !string.IsNullOrWhiteSpace(Record.Name);
         }
 
         private void GoToSearch()
