@@ -14,98 +14,103 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-            <Border Grid.Row="0" BorderThickness="2" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Record Name and Search Tags" FontWeight="DemiBold" Margin="0,5,0,2"/>
-                    <DockPanel Grid.Row="1">
-                        <TextBlock Text="Record Name:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
-                        <TextBox  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" safeUiLib:HintingTextProvidingObject.HintText="Record name is used to identify record eg Xxx Bank Account" 
-                             Style="{StaticResource TextBoxWithHintStyle}"/>
-                    </DockPanel>
-                    <DockPanel Grid.Row="2" Height="25" Visibility="Collapsed">
-                        <TextBlock Text="Search Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
-                        <Grid>
-                            <TextBlock Text="Used for searching records. The tag delimiter is semicolon. Ex bank;Xxx" VerticalAlignment="Center" Margin="5,0,5,0" 
-                                           Style="{StaticResource HintTextBlockStyle}"/>
-                            <safeUiLib:TagsControl Height="20" 
-                                                           Tags="{Binding Tags}"
-                                                           ToolTip="Used for searching records. The tag delimiter is (;) semicolon" 
-                                                           Margin="0,0,5,0" 
-                                                           FontSize="8">
-                                <safeUiLib:TagsControl.TagTemplate>
-                                    <DataTemplate>
-                                        <Border BorderThickness="2" CornerRadius="4" Background="#FFFFD0A0" BorderBrush="SandyBrown" Margin="2,0">
-                                            <TextBlock Text="{Binding}" Width="Auto" Height="Auto" FontSize="8"/>
-                                        </Border>
-                                    </DataTemplate>
-                                </safeUiLib:TagsControl.TagTemplate>
-                            </safeUiLib:TagsControl>
-                        </Grid>
-                    </DockPanel>
-            </Grid>
-            </Border>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="{StaticResource NormalElementSpacingMargin}" Grid.Row="1">
+        <Border Grid.Row="0" BorderThickness="2" CornerRadius="4" Margin="1" HorizontalAlignment="Stretch" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1">
+                <!--<TextBlock Text="Record Name and Search Tags" FontWeight="DemiBold" Margin="0,5,0,2"/>-->
+                <DockPanel Grid.Row="1">
+                    <TextBlock Text="Record Name:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
+                    <TextBox  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" safeUiLib:HintingTextProvidingObject.HintText="Record name is used to identify record eg Xxx Bank Account" 
+                            Style="{StaticResource TextBoxWithHintStyle}"/>
+                </DockPanel>
+                <DockPanel Grid.Row="2" Height="25" Visibility="Collapsed">
+                    <TextBlock Text="Search Tags:" DockPanel.Dock="Left" Margin="5,0" VerticalAlignment="Center"/>
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Username and Password Records" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
-                        <ItemsControl ItemsSource="{Binding PasswordRecords}" Grid.Row="1">
+                        <TextBlock Text="Used for searching records. The tag delimiter is semicolon. Ex bank;Xxx" VerticalAlignment="Center" Margin="5,0,5,0" 
+                                        Style="{StaticResource HintTextBlockStyle}"/>
+                        <safeUiLib:TagsControl Height="20" 
+                                                        Tags="{Binding Tags}"
+                                                        ToolTip="Used for searching records. The tag delimiter is (;) semicolon" 
+                                                        Margin="0,0,5,0" 
+                                                        FontSize="8">
+                            <safeUiLib:TagsControl.TagTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="2" CornerRadius="4" Background="#FFFFD0A0" BorderBrush="SandyBrown" Margin="2,0">
+                                        <TextBlock Text="{Binding}" Width="Auto" Height="Auto" FontSize="8"/>
+                                    </Border>
+                                </DataTemplate>
+                            </safeUiLib:TagsControl.TagTemplate>
+                        </safeUiLib:TagsControl>
+                    </Grid>
+                </DockPanel>
+        </Grid>
+        </Border>
+         <Grid Grid.Row="1">
+             <Grid.ColumnDefinitions>
+                 <ColumnDefinition Width="1*"/>
+                 <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="2" BorderBrush="Brown" CornerRadius="4" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Username and Password Records" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
+                    <ScrollViewer
+                        Grid.Row="1"
+                        HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding PasswordRecords}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <local:NameValueUserControl/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
 
-                </Border>
-                <Border Grid.Row="1" BorderBrush="Brown" BorderThickness="2" CornerRadius="4" Margin="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="File Records" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
-                        <ItemsControl  ItemsSource="{Binding FileRecords}" Grid.Row="1">
+
+            <Border Grid.Column="1" BorderBrush="Brown" BorderThickness="2" CornerRadius="4" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="File Records" FontWeight="DemiBold" Margin="0,5,0,2"></TextBlock>
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl  ItemsSource="{Binding FileRecords}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <local:FileRecordUserControl/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Border Grid.Row="2" Height="60" HorizontalAlignment="Stretch" Background="Bisque" 
+                    </ScrollViewer>
+                    <Border Grid.Row="2" Height="60" HorizontalAlignment="Stretch" Background="Bisque" 
                                 Drop="OnFileDrop" AllowDrop="true"
                                 BorderThickness="2" BorderBrush="SandyBrown" CornerRadius="5" Margin="2,5">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock  Grid.Column="0" Text="Drag and drop file to be added here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <Image Grid.Column="1" Height="32" Width="32" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="images/upload.png" />
-                                    </Image.Source>
-                                </Image>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </Border>
-            </Grid>
-        </ScrollViewer>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock  Grid.Column="0" Text="Drag and drop file to be added here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Image Grid.Column="1" Height="32" Width="32" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Image.Source>
+                                    <BitmapImage UriSource="images/upload.png" />
+                                </Image.Source>
+                            </Image>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>   
     </Grid>
 </UserControl>
