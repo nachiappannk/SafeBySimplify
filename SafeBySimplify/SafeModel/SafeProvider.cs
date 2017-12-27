@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -102,18 +103,31 @@ namespace SafeModel
         {
             var account = AccountGateway.ReadUserAccount(WorkingDirectory, userName);
             var verifyingWordBytesForCurrentPassword = Cryptor.GetEncryptedBytes(account.VerifyingWord, password);
-            var masterPassword = Cryptor.GetDecryptedContent<string>(account.MasterEncryptedPassBytes, password);
-            safe = null;
-
-            if (account.VeryifyingWordEncryptedBytes.Length != verifyingWordBytesForCurrentPassword.Length) return false;
-            for (var i = 0; i < account.VeryifyingWordEncryptedBytes.Length; i++)
+            try
             {
-                if (account.VeryifyingWordEncryptedBytes[i] != verifyingWordBytesForCurrentPassword[i]) return false;
+                var masterPassword = Cryptor.GetDecryptedContent<string>(account.MasterEncryptedPassBytes, password);
+                safe = null;
+
+                if (account.VeryifyingWordEncryptedBytes.Length != verifyingWordBytesForCurrentPassword.Length)
+                    return false;
+                for (var i = 0; i < account.VeryifyingWordEncryptedBytes.Length; i++)
+                {
+                    if (account.VeryifyingWordEncryptedBytes[i] != verifyingWordBytesForCurrentPassword[i])
+                        return false;
+                }
+                safe = new Safe(masterPassword);
+                safe.UserName = userName;
+                safe.WorkingDirectory = WorkingDirectory;
+                return true;
             }
-            safe = new Safe(masterPassword);
-            safe.UserName = userName;
-            safe.WorkingDirectory = WorkingDirectory;
-            return true;
+            catch (Exception e)
+            {
+                safe = null;
+                return false;
+            }
+
+
+
         }
 
         public List<string> GetUserNames()
