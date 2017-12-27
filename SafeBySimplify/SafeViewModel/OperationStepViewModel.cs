@@ -20,10 +20,16 @@ namespace SafeViewModel
             {
                 goToEntryStepAction.Invoke();
                 Safe = null;
-            });
+            }, CanSignOut);
             //AddCommand = new DelegateCommand(GoToAddOperation);
             GoToSearchAndAddOperation();
         }
+
+        private bool CanSignOut()
+        {
+            return SelectedOperation.GetType() == typeof(SearchAndAddOperationViewModel);
+        }
+
 
         private void GoToAddOperation()
         {
@@ -59,6 +65,7 @@ namespace SafeViewModel
                 if (_selectedOperation != value)
                 {
                     _selectedOperation = value;
+                    SignOutCommand.RaiseCanExecuteChanged();
                     FirePropertyChanged();
                 }
             }

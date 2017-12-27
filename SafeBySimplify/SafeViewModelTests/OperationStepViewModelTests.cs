@@ -20,6 +20,7 @@ namespace SafeViewModelTests
         private List<string> _searchedTexts = new List<string>();
         private ISafe _safe;
         private ViewModelPropertyObserver<SingleOperationViewModel> _selectedOperationPropertyObserver;
+        private CommandObserver _signOutCommandObserver;
 
         [TearDown]
         public void TestDown()
@@ -37,7 +38,9 @@ namespace SafeViewModelTests
 
             _selectedOperationPropertyObserver = _operationStepViewModel
                 .GetPropertyObserver<SingleOperationViewModel>
-                (nameof(_operationStepViewModel.SelectedOperation)); 
+                (nameof(_operationStepViewModel.SelectedOperation));
+
+            _signOutCommandObserver = _operationStepViewModel.SignOutCommand.GetDelegateCommandObserver();
 
         }
 
@@ -77,6 +80,7 @@ namespace SafeViewModelTests
             TimeTakenForSearching = 100,
         };
 
+        
 
 
         public class SearchAndAddOperationIsTheSelectionOperation : OperationStepViewModelTests
@@ -89,6 +93,15 @@ namespace SafeViewModelTests
                 Assume.That(typeof(SearchAndAddOperationViewModel) == _operationStepViewModel.SelectedOperation.GetType());
                 _serarchAndAddOperationViewModel =
                     _operationStepViewModel.SelectedOperation as SearchAndAddOperationViewModel;
+            }
+
+            public class Tests : SearchAndAddOperationIsTheSelectionOperation
+            {
+                [Test]
+                public void Logout_button_is_enabled()
+                {
+                    Assert.True(_signOutCommandObserver.ValueOfCanExecuteOnLatestEvent);
+                }
             }
 
             public class SearchTextEnteredAndSearchResultsAreCorrect : SearchAndAddOperationIsTheSelectionOperation
@@ -128,7 +141,13 @@ namespace SafeViewModelTests
                 }
 
                 [Test]
-                public void When_search_result_is_selected_then_search_result_is_displayed_in_detail_and_search_text_is_reset()
+                public void Logout_button_is_enabled()
+                {
+                    Assert.True(_signOutCommandObserver.ValueOfCanExecuteOnLatestEvent);
+                }
+
+                [Test]
+                public void When_search_result_is_selected_then_search_result_is_displayed_in_detail_and_logout_is_disabled()
                 {
                     var oneSearchResult = _serarchAndAddOperationViewModel.SearchResults.ElementAt(1);
                     var idOfSearchResult = oneSearchResult.Id;
@@ -139,6 +158,8 @@ namespace SafeViewModelTests
 
                     Assert.NotNull(alteringOperationViewModel);
                     Assert.AreEqual(idOfSearchResult, alteringOperationViewModel.Record.Id);
+                    
+                    Assert.False(_signOutCommandObserver.ValueOfCanExecuteOnLatestEvent);
                     
 
                 }
@@ -159,11 +180,20 @@ namespace SafeViewModelTests
                 }
 
                 [Test]
-                public void When_record_is_discarded_then_selected_operation_is_search_and_add_operation()
+                public void Logout_is_disabled()
+                {
+                    Assert.False(_signOutCommandObserver.ValueOfCanExecuteOnLatestEvent);
+                }
+
+
+                [Test]
+                public void When_record_is_discarded_then_selected_operation_is_search_and_add_operation_with_logout_enabled()
                 {
                     Assert.True(_addOperationViewModel.DiscardCommand.CanExecute());
                     _addOperationViewModel.DiscardCommand.Execute();
                     Assert.AreEqual(typeof(SearchAndAddOperationViewModel), _selectedOperationPropertyObserver.PropertyValue.GetType());
+
+                    Assert.True(_signOutCommandObserver.ValueOfCanExecuteOnLatestEvent);
                 }
 
                 [Test]
@@ -181,9 +211,9 @@ namespace SafeViewModelTests
 
                     Assert.NotNull(viewModel);
                     Assert.AreEqual(recordId, viewModel.Record.Id);
-                }
 
-                
+                    Assert.False(_signOutCommandObserver.ValueOfCanExecuteOnLatestEvent);
+                }
             }
 
         }

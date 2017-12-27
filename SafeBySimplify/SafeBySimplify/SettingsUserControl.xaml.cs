@@ -24,6 +24,13 @@ namespace SafeBySimplify
         public SettingsUserControl()
         {
             InitializeComponent();
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("");
+            sb.AppendLine("");
+            sb.AppendLine();
+            sb.AppendLine("If you have a feature request, feel free to mail it to nachiapan@gmail.com");
+            sb.AppendLine("Alternatively you can register it at the below url");
+            sb.AppendLine();
         }
 
         private void FolderSelectionButtonClicked(object sender, RoutedEventArgs e)
