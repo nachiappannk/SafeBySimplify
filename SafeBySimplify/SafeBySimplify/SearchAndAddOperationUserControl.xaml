@@ -64,8 +64,8 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         <DockPanel Grid.Row="1" Visibility="{Binding IsSearchResultEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Border BorderThickness="1" BorderBrush="Azure" CornerRadius="4" Margin="1" Background="BlanchedAlmond">
-                                <TextBlock Text="Search results are empty" FontSize="14" FontWeight="DemiBold"/>
+                            <Border BorderThickness="1" BorderBrush="Azure" CornerRadius="4" Margin="1" Background="Red">
+                                <TextBlock Text="There are no search results!!!" FontSize="14" FontWeight="DemiBold"/>
                             </Border>
                         </DockPanel>
                     </Grid>
