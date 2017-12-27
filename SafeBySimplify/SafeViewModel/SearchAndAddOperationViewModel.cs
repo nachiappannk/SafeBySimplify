@@ -50,13 +50,13 @@ namespace SafeViewModel
             }
         }
 
-        public bool IsSearchResultNonEmpty
+        public bool IsSearchResultEmpty
         {
-            get { return _isSearchResultNonEmpty; }
+            get { return _isSearchResultEmpty; }
             set
             {
-                if(_isSearchResultNonEmpty == value) return;
-                _isSearchResultNonEmpty = value;
+                if(_isSearchResultEmpty == value) return;
+                _isSearchResultEmpty = value;
                 FirePropertyChanged();
             }
         }
@@ -97,7 +97,7 @@ namespace SafeViewModel
 
 
         private bool _isSearchInProgress;
-        private bool _isSearchResultNonEmpty;
+        private bool _isSearchResultEmpty;
 
         public bool IsSearchInProgress
         {
@@ -115,7 +115,7 @@ namespace SafeViewModel
             _safe = safe;
             _recordSelectionAction = recordSelectionAction;
             IsSearchResultVisible = false;
-            IsSearchResultNonEmpty = false;
+            IsSearchResultEmpty = true;
             AddCommand = new DelegateCommand(addNewRecordAction);
             IsSearchInProgress = false;
         }
@@ -128,7 +128,7 @@ namespace SafeViewModel
             SearchResults = new ObservableCollection<RecordHeaderViewModel>
                 (headers.Select(x => new RecordHeaderViewModel(x, () => { _recordSelectionAction(x.Id); })));
             IsSearchResultVisible = true;
-            IsSearchResultNonEmpty = SearchResults.Count != 0;
+            IsSearchResultEmpty = SearchResults.Count == 0;
             IsSearchInProgress = false;
         }
 
@@ -145,7 +145,7 @@ namespace SafeViewModel
             {
                 IsSearchResultVisible = false;
                 IsSearchInProgress = false;
-                IsSearchResultNonEmpty = false;
+                IsSearchResultEmpty = true;
             }
             else
             {

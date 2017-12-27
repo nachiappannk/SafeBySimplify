@@ -19,7 +19,7 @@ namespace SafeViewModelTests.TestTools
                 observer.PropertyValue =  (T)property.GetValue(s, null);
                 observer.NumberOfTimesPropertyChanged++;
             };
-
+            observer.PropertyValue = (T) property.GetValue(notifyPropertyChanged, null);
             return observer;
         }
 

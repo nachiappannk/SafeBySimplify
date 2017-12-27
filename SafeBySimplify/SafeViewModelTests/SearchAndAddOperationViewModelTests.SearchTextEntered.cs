@@ -36,7 +36,7 @@ namespace SafeViewModelTests
 {
     public partial class SearchAndAddOperationViewModelTests
     {
-        public class NoRecordsAreAvailableOnSearch : SearchAndAddOperationViewModelTests
+        public class SearchWasMadeAndResultsWereEmpty : SearchAndAddOperationViewModelTests
         {
             private string _searchText = "ss";
 
@@ -69,7 +69,7 @@ namespace SafeViewModelTests
             [Test]
             public void Search_results_empty_status()
             {
-                Assert.False(_searchResultNonEmptyPropertyObserver.PropertyValue);
+                Assert.True(_searchResultEmptyPropertyObserver.PropertyValue);
             }
 
 
@@ -114,7 +114,7 @@ namespace SafeViewModelTests
             public void When_serach_text_is_cleared_then_search_results_are_made_empty()
             {
                 _searchAndAddOperationViewModel.SearchText = String.Empty;
-                Assert.False(_searchResultNonEmptyPropertyObserver.PropertyValue);
+                Assert.True(_searchResultEmptyPropertyObserver.PropertyValue);
             }
 
             [Test]
@@ -134,7 +134,7 @@ namespace SafeViewModelTests
                 {
                     _searchAndAddOperationViewModel.TaskHolder.WaitOnHoldingTask();
                     Assume.That(_searchResultVisibilityObserver.PropertyValue, "The search results are invisible");
-                    Assume.That(_searchResultNonEmptyPropertyObserver.PropertyValue, "The search result are empty property is wrongly set");
+                    Assume.That(_searchResultEmptyPropertyObserver.PropertyValue == false, "The search result are empty property is wrongly set");
                     _recordHeaderViewModels = _searchResultPropertyObserver.PropertyValue;
                 }
 

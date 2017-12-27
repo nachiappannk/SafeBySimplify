@@ -39,7 +39,7 @@ namespace SafeViewModelTests
             [Test]
             public void Search_result_is_empty()
             {
-                Assert.AreEqual(false, _searchAndAddOperationViewModel.IsSearchResultNonEmpty);
+                Assert.AreEqual(true, _searchAndAddOperationViewModel.IsSearchResultEmpty);
             }
 
             [Test]
