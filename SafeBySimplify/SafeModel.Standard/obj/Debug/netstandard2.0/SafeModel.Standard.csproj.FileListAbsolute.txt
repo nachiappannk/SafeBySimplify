@@ -1,0 +1,9 @@
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\bin\Debug\netstandard2.0\SafeModel.Standard.deps.json
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\bin\Debug\netstandard2.0\SafeModel.Standard.dll
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\obj\Debug\netstandard2.0\SafeModel.Standard.csprojResolveAssemblyReference.cache
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\obj\Debug\netstandard2.0\SafeModel.Standard.csproj.CoreCompileInputs.cache
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\obj\Debug\netstandard2.0\SafeModel.Standard.AssemblyInfoInputs.cache
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\obj\Debug\netstandard2.0\SafeModel.Standard.AssemblyInfo.cs
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\bin\Debug\netstandard2.0\SafeModel.Standard.pdb
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\obj\Debug\netstandard2.0\SafeModel.Standard.dll
+C:\Users\Suchendra\Source\Repos\SafeBySimplify\SafeBySimplify\SafeModel.Standard\obj\Debug\netstandard2.0\SafeModel.Standard.pdb
