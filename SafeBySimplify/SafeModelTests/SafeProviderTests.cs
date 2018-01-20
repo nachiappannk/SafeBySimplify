@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
-using SafeModel;
+using SafeModel.Standard;
 
 namespace SafeModelTests
 {

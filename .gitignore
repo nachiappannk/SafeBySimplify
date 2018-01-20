@@ -20,3 +20,6 @@
 /.vs
 /SafeBySimplify/.vs/SafeBySimplify/v15
 /SafeBySimplify/SimplifyUiLibrary/obj
+/SafeBySimplify/SafeModel.Standard/bin/
+/SafeBySimplify/SafeModel.Standard/obj/
+/SafeBySimplify/SafeBySimplify.sln.DotSettings.user

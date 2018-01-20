@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
-using SafeModel;
+using SafeModel.Standard;
 
 namespace SafeModelTests
 {
